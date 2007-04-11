@@ -1,0 +1,10 @@
+{TODO :
+Build a new list base class that provides quicker finding by ID - perhaps
+use a hashtable based on the ID.}
+{TODO : 
+Class properties need to have setters/getters that are Integer based
+which will be used to find the item within the datastore}
+{DONE : 
+Introduce BaseServer and BaseClient classes.  These classes should 
+contain the Server and Client Communications classes.  Remove the creation
+from the inherited classes}

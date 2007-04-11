@@ -1,0 +1,8 @@
+<configuration>
+	<appSettings>
+		<add key="InboundPort" value="6665"/>
+		<add key="OutboundPort" value="7777"/>
+		<add key="OutboundHost" value="127.0.0.1"/>
+        <add key="UserName" value="benny"/>
+	</appSettings>
+</configuration>
