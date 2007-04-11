@@ -1,0 +1,421 @@
+<%@ CodeTemplate Language="C#" TargetLanguage="C#" Debug="False" Description="Creates a simplistic entity object." %>
+<%-- The XmlProperty directive must be registered so that the XML object model is generated. --%>
+<%@ XmlProperty Name="EntityMap" Schema="RiskMap.xsd" Optional="True" Category="Context" %>
+<%@ Property Name="EntityName" Type="System.String" Optional="True" Category="Context" Description="If this template is being called directly, then specify the element name to target." %>
+<%@ Assembly Name="CodeSmith.BaseTemplates" %>
+<%@ Import Namespace="CodeSmith.BaseTemplates" %>
+using System;
+using System.IO;
+using System.Diagnostics;
+
+using Laan.GameLibrary;
+using Laan.GameLibrary.Data;
+using Laan.GameLibrary.Entity;
+
+<%
+    int width = MaxWidthType();
+    
+    foreach (Requirement req in EntityElement.Requirements)
+    {
+        Response.WriteLine(String.Format("using {0};", req.Namespace));
+    }
+%>
+
+namespace <%= EntityElement.Namespace %>
+{
+    class Fields
+    {
+        <%
+            Response.IndentLevel = 2;
+            width = MaxWidthName();
+            int index = 1;
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+                    Response.WriteLine(
+                        String.Format("internal const int {0} = {1};",
+                            FormattedWidth(property.Name, width),
+                            index
+                        )
+                    );
+                    index++;
+                }
+            Response.IndentLevel = 0;
+        %>
+    }
+    
+    public interface I<%= EntityElement.Name %> : IBaseEntity
+    {
+        <%
+            Response.IndentLevel = 2;
+            width = MaxWidthType() + 1;  // + 1 for "I"
+            
+            string sName;
+            
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+                    if(IsPrimitiveType(property.Type))
+                        sName = property.Type;
+                    else
+                        sName = "I" + property.Type;
+                        
+                    Response.WriteLine(
+                        String.Format("{0} {1} {{ get; }}",
+                            FormattedWidth(sName, width),
+                            property.Name
+                        )
+                    );
+                }
+            Response.IndentLevel = 0;
+        %>
+    }
+ 
+    public interface I<%= EntityElement.Name%>List : IBaseEntity
+    {
+        I<%= EntityElement.Name%> this [int index] { get; }
+    }
+
+    namespace Server
+    {
+        public class <%= EntityElement.Name %>List : ServerEntityList, I<%= EntityElement.Name%>List
+        {
+            public new <%= "I" + EntityElement.Name %> this[int index]
+            {
+                get {
+                    return (<%= "I" + EntityElement.Name %>)base[index];
+                }
+            }
+        }
+
+        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Server") %>, I<%= EntityElement.Name %>
+        {
+            // --------------- Private -------------------------------------------------
+
+       <%
+            Response.IndentLevel = 3;
+            width = MaxWidthType();
+            index = 1;
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+                    if(!IsPrimitiveType(property.Type))
+                        Response.WriteLine(
+                            String.Format("internal Int32 {0};",
+                                GetModifyValue(property))
+                        );
+                    index++;
+                }
+
+            Response.WriteLine("");
+
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+                    Response.WriteLine(
+                        String.Format("internal {0} _{1};",
+                            FormattedWidth(GetInterfaceType(property.Type), width),
+                            StringUtility.ToCamelCase(property.Name)
+                        )
+                    );
+                    index++;
+                }
+            Response.IndentLevel = 0;
+        %>
+
+            public override void Serialise(BinaryStreamWriter writer)
+            {
+                base.Serialise(writer);
+                <%
+                    Response.IndentLevel = 4;
+                    foreach (Property property in EntityElement.Properties)
+                    {
+                        string type = property.ShortType != null ? property.ShortType : property.Type;
+                        if(!property.Inherited)
+                            if(IsPrimitiveType(property.Type))
+                                Response.WriteLine(String.Format("writer.Write{0}(this.{1});", type, property.Name));
+                    }
+                    
+                    Response.IndentLevel = 0;
+                %>
+            }
+
+            // --------------- Public -----------------------------------------------
+
+            public Base<%= EntityElement.Name %><%= GetConstructor(false) %>
+            {
+                <%
+                    Response.IndentLevel = 4;
+                    foreach (Property property in EntityElement.Properties)
+                    {
+                        string type = property.ShortType != null ? property.ShortType : property.Type;
+                        if(!property.Inherited)
+                            if(!IsPrimitiveType(property.Type))
+                                Response.WriteLine(
+                                    String.Format("_{0} = new {1}.Server.{2}();", 
+                                        StringUtility.ToCamelCase(property.Name), property.Type.Replace("List", ""), property.Type));
+
+                    }
+                    
+                    Response.IndentLevel = 0;
+                %>
+            }
+
+            public static implicit operator GameLibrary.Entity.Server(Base<%= EntityElement.Name %> <%= StringUtility.ToCamelCase(EntityElement.Name) %>)
+            {
+                // allows the class to be cast to an Entity.Server class
+                return <%= StringUtility.ToCamelCase(EntityElement.Name) %>.CommServer;
+            }
+            
+<%
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+%>
+            public <%=GetInterfaceType(property.Type)%> <%= property.Name %>
+            {
+                get { return _<%= StringUtility.ToCamelCase(property.Name)%>; }
+                set {
+                    _<%= StringUtility.ToCamelCase(property.Name)%> = value;
+                    <%=GetModifyUpdate(property) %>
+                    CommServer.Modify(this.ID, Fields.<%=property.Name%>, <%=GetModifyValue(property)%>);
+                }
+            }
+
+<%              } %>
+        }
+    }
+
+    namespace Client
+    {
+        public class <%= EntityElement.Name %>List: ClientEntityList, I<%= EntityElement.Name%>List
+        {
+            public new <%= "I" + EntityElement.Name %> this[int index]
+            {
+                get {
+                    return (<%= "I" + EntityElement.Name %>)base[index];
+                }
+            }
+        }
+
+        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Client") %>, I<%= EntityElement.Name %>
+        {
+
+            // ------------ Private ---------------------------------------------------------
+
+        <%
+            Response.IndentLevel = 3;
+            width = MaxWidthName();
+            index = 1;
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+                    Response.WriteLine(
+                        String.Format("internal {0} _{1}{2};",
+                            FormattedWidth(GetInterfaceType(property.Type), width),
+                            StringUtility.ToCamelCase(property.Name),
+                            IsPrimitiveType(property.Type) ? "" : " = null"
+                        )
+                    );
+                    index++;
+                }
+
+            Response.IndentLevel = 0;
+        %>
+
+            public override void Deserialise(BinaryStreamReader reader)
+            {
+                base.Deserialise(reader);
+                <%
+                    Response.IndentLevel = 4;
+                    int max = MaxWidthName();
+                    foreach (Property property in EntityElement.Properties)
+
+                        if(!property.Inherited)
+                            if(IsPrimitiveType(property.Type))
+                            Response.WriteLine(
+                                    String.Format("_{0} = reader.Read{1}();",
+                                        FormattedWidth(StringUtility.ToCamelCase(property.Name), max),
+                                        property.ShortType != null ? property.ShortType : property.Type
+                                    ));
+                         //   else
+                         //       Response.WriteLine(String.Format("this.{0}.Deserialise(reader);", property.Name));
+                   
+                     Response.IndentLevel = 0;
+                %>
+            }
+
+            // ------------ Public ----------------------------------------------------------
+
+            public Base<%= EntityElement.Name %><%= GetConstructor(false) %>
+            {
+            }
+
+            // when a change is caught (by the client), ensure the correct field is updated
+            public <%=IsNew()%>void OnModify(byte field, BinaryStreamReader reader)
+            {
+
+                // move this to the call site of the delegate that calls this (OnUpdate) event
+                CommClient.UpdateRecency(field);
+
+                // update the appropriate field
+                switch (field)
+                {
+                <%
+                    Response.IndentLevel = 5;
+                    foreach (Property property in EntityElement.Properties)
+                        if(!property.Inherited && !property.List)
+                        {
+                            Response.WriteLine(String.Format("case Fields.{0}:", property.Name));
+
+                            if(IsPrimitiveType(property.Type))
+                            {
+                                Response.WriteLine(String.Format("    _{0} = reader.Read{1}();",
+                                    StringUtility.ToCamelCase(property.Name),
+                                    property.ShortType != null ? property.ShortType : property.Type));
+                            }
+                            else
+                            {
+                                Response.WriteLine(String.Format("    _{0}.Deserialise(reader);",
+                                    StringUtility.ToCamelCase(property.Name)));
+                            }
+            
+                            Response.WriteLine("    break;");
+                        }
+                    Response.IndentLevel = 0;
+                %>
+                    default:
+                        throw new Exception("Illegal field value");
+                }
+            }
+
+        <%
+            foreach (Property property in EntityElement.Properties)
+                if(!property.Inherited)
+                {
+        %>        
+            public <%=GetInterfaceType(property.Type)%> <%=property.Name %>
+            {
+                get { return _<%= StringUtility.ToCamelCase(property.Name)%>; }
+            }
+
+        <%      } %>
+        }
+    }
+}
+
+<script runat="template">
+
+    private Entity _entityElement = null;
+
+    [Browsable(false)]
+    public Entity EntityElement
+    {
+        get {return _entityElement;}
+        set {_entityElement = value;}
+    }
+
+    int MaxWidthType()
+    {
+        int max = 0;
+        foreach (Property property in EntityElement.Properties)
+            max = max > property.Type.Length ? max : property.Type.Length;
+        return max;
+    }
+
+    int MaxWidthName()
+    {
+        int max = 0;
+        foreach (Property property in EntityElement.Properties)
+            max = max > property.Name.Length ? max : property.Name.Length;
+        return max;
+    }
+
+    string FormattedWidth(string text, int width)
+    {
+        string format = String.Format("{{0, -{0}}}", width);
+        return String.Format(format, text);
+    }
+
+    string GetConstructor(bool getAll)
+    {
+        string constructor = "";
+        string baseConstructor = "";
+        
+        foreach (Property property in EntityElement.Properties)
+        {
+            if(!property.List)
+            {
+                if(property.InConstructor)
+                {
+                    constructor += String.Format("{0} {1}, ", property.Type, StringUtility.ToCamelCase(property.Name));
+
+                    baseConstructor += String.Format("{0}, ", StringUtility.ToCamelCase(property.Name));
+                }
+            }
+        }
+        Char[] trim = new Char[] {' ', ','};
+        return String.Format("({0}) : base({1})", constructor.TrimEnd(trim), baseConstructor.TrimEnd(trim));
+    }
+
+    string GetBase(string name, string origin)
+    {
+        return String.Format("{0}.{1}.{0}", name, origin);
+    }
+
+    string GetBaseClass(string origin)
+    {
+        string result;
+        if(EntityElement.BaseClass != "")
+            result = String.Format("{0}.{1}.{2}", EntityElement.BaseClass, origin, EntityElement.BaseClass);
+        else
+            result = "BaseEntity" + origin;
+        return result;
+    }
+
+    string IsNew()
+    {
+        return EntityElement.BaseClass != "" ? "new " : "";
+    }
+    
+    string GetInterfaceType(string propType)
+    {
+        if(!IsPrimitiveType(propType))
+            return "I" + propType;
+        else
+            return propType; 
+    }
+    
+    string GetModifyValue(Property prop)
+    {
+        if(IsPrimitiveType(prop.Type))
+            return "value";
+        else
+            return String.Format("_{0}ID", StringUtility.ToCamelCase(prop.Name)); 
+    }
+
+    string GetModifyUpdate(Property prop)
+    {
+        if(!IsPrimitiveType(prop.Type)) 
+            return GetModifyValue(prop) + " = value.ID;";
+        else
+            return "";
+    }
+    
+    
+    bool IsPrimitiveType(string typeName)
+    {
+        switch(typeName)
+        {
+            case "Int32":
+            case "String":
+            case "DateTime":
+            case "Boolean":
+            case "System.Drawing.Color":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+</script>

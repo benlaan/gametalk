@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2006/01/10 20:03:18.031.cs,G:\Projects\GameTalk\Class.cs=</Transaction>
+    <Transaction>2006/01/10 21:15:17.953.cs,G:\Projects\GameTalk\Outline.cs=G:\Projects\GameTalk\Entity.cs</Transaction>
+    <Transaction>2006/01/10 21:32:04.296.cs,G:\Projects\Games\Riskier\GameLibrary\Message.cs=</Transaction>
+    <Transaction>2006/01/10 21:33:35.843.cs,G:\Projects\GameTalk\Class1.cs=G:\Projects\GameTalk\Server.cs</Transaction>
+    <Transaction>2006/01/10 21:33:54.406.cs,G:\Projects\Games\Riskier\GameLibrary\Socket.cs=G:\Projects\GameTalk\Socket.cs</Transaction>
+    <Transaction>2006/01/10 21:45:52.515.cs,G:\Projects\Games\Riskier\GameLibrary\Client.cs=</Transaction>
+    <Transaction>2006/01/10 21:45:54.671.cs,G:\Projects\Games\Riskier\GameLibrary\Server.cs=</Transaction>
+    <Transaction>2006/01/10 21:45:56.234.cs,G:\Projects\Games\Riskier\GameLibrary\StoredClient.cs=</Transaction>
+    <Transaction>2006/01/10 22:50:02.968.cs,G:\Projects\GameTalk\Class1.cs=G:\Projects\GameTalk\Packet.cs</Transaction>
+    <Transaction>2006/01/17 20:10:51.828.cs,G:\Projects\GameTalk\Packet.cs=</Transaction>
+    <Transaction>2006/01/19 18:58:16.625.cs,G:\Projects\GameTalk\DataStream.cs=</Transaction>
+    <Transaction>2006/01/23 14:03:44.871.txaPackage,F:\Projects\Games\Riskier\LibrarySupport\GameTalk\default.txaPackage=</Transaction>
+    <Transaction>2006/01/23 16:22:34.009.dll,c:\windows\microsoft.net\framework\v1.1.4322\System.Runtime.Serialization.Formatters.Soap.dll=</Transaction>
+    <Transaction>2006/02/01 11:43:33.647.cs,F:\Projects\GameTalk2\Nation.cs=</Transaction>
+    <Transaction>2006/05/09 22:44:59.390.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Armour.cs=D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseArmour.cs</Transaction>
+    <Transaction>2006/05/11 20:19:53.781.cs,D:\Programming\Projects\C#\GameTalk2\SocketPipeline.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:21.343.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseUnit.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:21.343.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseRegion.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:21.359.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BasePlayer.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:21.375.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseNation.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:21.375.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseInfantry.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:21.390.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseGame.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.843.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Unit.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.859.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Region.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.859.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Player.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.875.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Nation.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.875.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Infantry.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.890.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Game.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.906.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\BaseArmour.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:38.906.cs,D:\Programming\Projects\C#\GameTalk2\CodeGen\output\Armour.cs=</Transaction>
+    <Transaction>2006/05/13 15:39:58.000.xml,D:\Programming\Projects\C#\GameTalk2\CodeGen\RiskMap.xml=</Transaction>
+    <Transaction>2006/05/13 15:39:58.015.bat,D:\Programming\Projects\C#\GameTalk2\CodeGen\RiskBuild.bat=</Transaction>
+    <Transaction>2006/05/13 15:39:58.015.cst,D:\Programming\Projects\C#\GameTalk2\CodeGen\BaseEntity.cst=</Transaction>
+    <Transaction>2006/05/13 15:53:15.500.cs,D:\Programming\Projects\C#\GameTalk2\Person.cs=</Transaction>
+    <Transaction>2006/05/13 16:31:43.031.cs,D:\Programming\Projects\C#\GameTalk2\Message.cs=</Transaction>
+  </Transactions>
+</BorlandProject>

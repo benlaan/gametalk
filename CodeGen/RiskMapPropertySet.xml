@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<codeSmith>
+    <propertySet>
+        <property name="OutputDirectory">output\</property>
+        <property name="EntityMap" file="RiskMap.xml" />
+    </propertySet>
+</codeSmith>

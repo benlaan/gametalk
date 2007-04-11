@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2006/01/20 17:47:16.937.bdsproj,G:\Projects\GameTalk\Test\WinForm\PersonViewer.bdsproj=G:\Projects\GameTalk\Test\WinForm\PersonViewerServer.bdsproj</Transaction>
+    <Transaction>2006/01/20 17:54:56.125.cs,G:\Projects\GameTalk\Test\PersonServer\WinForm.cs=G:\Projects\GameTalk\Test\PersonServer\ServerMain.cs</Transaction>
+    <Transaction>2006/01/20 17:54:56.421.resx,G:\Projects\GameTalk\Test\PersonServer\WinForm.resx=G:\Projects\GameTalk\Test\PersonServer\ServerMain.resx</Transaction>
+    <Transaction>2006/01/20 18:07:40.796.dll,g:\projects\gametalk\bin\debug\GameTalk.dll=</Transaction>
+    <Transaction>2006/01/23 10:08:49.331.dll,c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.Delphi.dll=</Transaction>
+    <Transaction>2006/01/23 10:08:50.143.dll,c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.VclRtl.dll=</Transaction>
+    <Transaction>2006/01/23 14:03:52.996.txaPackage,F:\Projects\GameTalk2\Test\PersonServer\ModelSupport_PersonViewerServer\default.txaPackage=</Transaction>
+    <Transaction>2006/01/23 14:03:55.840.txaPackage,F:\Projects\GameTalk2\Test\PersonServer\ModelSupport_PersonViewerServer\PersonViewer\default.txaPackage=</Transaction>
+    <Transaction>2006/05/13 16:16:56.687.dll,c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll=</Transaction>
+    <Transaction>2006/05/13 16:16:58.484.dll,c:\program files\indy 10 for visual studio .net 2003\bin\Mono.Security.dll=</Transaction>
+    <Transaction>2006/05/13 16:16:59.531.dll,d:\programming\projects\c#\gametalk2\bin\debug\GameTalk.dll=</Transaction>
+    <Transaction>2006/05/13 16:19:07.625.dll,d:\programming\projects\c#\gametalk2\bin\debug\GameTalk.dll=</Transaction>
+    <Transaction>2006/05/13 16:23:37.515.txaPackage,D:\Programming\Projects\C#\GameTalk2\Test\PersonServer\ModelSupport_PersonViewerServer\default.txaPackage=</Transaction>
+    <Transaction>2006/05/13 16:32:40.187.cs,D:\Programming\Projects\C#\GameTalk2\Message.cs=</Transaction>
+  </Transactions>
+</BorlandProject>

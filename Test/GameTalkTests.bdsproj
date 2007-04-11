@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <PersonalityInfo>
+    <Option>
+      <Option Name="Personality">CSharp.Personality</Option>
+      <Option Name="ProjectType">Library</Option>
+      <Option Name="Version">2.0</Option>
+      <Option Name="GUID">{A1C3FBB1-2422-401E-8DE4-99EAD0745AD5}</Option>
+    </Option>
+  </PersonalityInfo>
+  <CSharp.Personality>
+    <Options>
+        <SelectedOptionSet>
+        <SelectedOptionSet Name="OptionsSet">Debug</SelectedOptionSet>
+      </SelectedOptionSet>
+    
+        <OptionsSet Name="Release">
+        <Options>
+          <Options Name="Warning">4</Options>
+          <Options Name="Incremental">False</Options>
+          <Options Name="DocumentationFile"></Options>
+          <Options Name="DefaultNamespace">GameTalkTests</Options>
+          <Options Name="DebugInformation">False</Options>
+          <Options Name="Optimization">True</Options>
+          <Options Name="Overflow">False</Options>
+          <Options Name="ivUnsafe">False</Options>
+          <Options Name="WarningAsError">False</Options>
+          <Options Name="Defines">TRACE</Options>
+          <Options Name="TargetName"></Options>
+          <Options Name="TargetType">Assembly</Options>
+          <Options Name="Main"></Options>
+          <Options Name="BaseAddress">285212672</Options>
+          <Options Name="BuildInOutput">False</Options>
+          <Options Name="OutputDirectory">bin\Release</Options>
+          <Options Name="RunParams"></Options>
+          <Options Name="HostApplication"></Options>
+          <Options Name="Launcher"></Options>
+          <Options Name="UseLauncher">False</Options>
+          <Options Name="DebugCWD"></Options>
+          <Options Name="LoadAllSymbols">True</Options>
+          <Options Name="LoadUnspecifiedSymbols">False</Options>
+          <Options Name="Debug Symbols Search Path"></Options>
+          <Options Name="AspNetUseHostServer">False</Options>
+          <Options Name="AspNetLaunchBrowser">False</Options>
+          <Options Name="AspNetStartPage"></Options>
+          <Options Name="AspNetHostServer">IIS</Options>
+          <Options Name="AspNetCassiniPortIndex">0</Options>
+          <Options Name="AspNetCassiniStartup"></Options>
+          <Options Name="AspNetIISVirtualDirectory"></Options>
+          <Options Name="AspNetHTTPAddress"></Options>
+          <Options Name="AspNetCassiniHTTPAddress"></Options>
+        </Options>
+      </OptionsSet>
+    
+        <OptionsSet Name="Debug">
+        <Options>
+          <Options Name="Warning">4</Options>
+          <Options Name="Incremental">True</Options>
+          <Options Name="DocumentationFile"></Options>
+          <Options Name="DefaultNamespace">GameTalkTests</Options>
+          <Options Name="DebugInformation">True</Options>
+          <Options Name="Optimization">False</Options>
+          <Options Name="Overflow">False</Options>
+          <Options Name="ivUnsafe">False</Options>
+          <Options Name="WarningAsError">False</Options>
+          <Options Name="Defines">TRACE;DEBUG</Options>
+          <Options Name="TargetName"></Options>
+          <Options Name="TargetType">Assembly</Options>
+          <Options Name="Main"></Options>
+          <Options Name="BaseAddress">285212672</Options>
+          <Options Name="BuildInOutput">False</Options>
+          <Options Name="OutputDirectory">bin\Debug</Options>
+          <Options Name="RunParams">GameTalkTests.dll</Options>
+          <Options Name="HostApplication">C:\Program Files\NUnit 2.2\bin\nunit-gui.exe</Options>
+          <Options Name="Launcher"></Options>
+          <Options Name="UseLauncher">False</Options>
+          <Options Name="DebugCWD"></Options>
+          <Options Name="LoadAllSymbols">True</Options>
+          <Options Name="LoadUnspecifiedSymbols">False</Options>
+          <Options Name="Debug Symbols Search Path"></Options>
+          <Options Name="AspNetUseHostServer">False</Options>
+          <Options Name="AspNetLaunchBrowser">False</Options>
+          <Options Name="AspNetStartPage"></Options>
+          <Options Name="AspNetHostServer">IIS</Options>
+          <Options Name="AspNetCassiniPortIndex">0</Options>
+          <Options Name="AspNetCassiniStartup"></Options>
+          <Options Name="AspNetIISVirtualDirectory"></Options>
+          <Options Name="AspNetHTTPAddress"></Options>
+          <Options Name="AspNetCassiniHTTPAddress"></Options>
+        </Options>
+      </OptionsSet>
+    
+    </Options>
+    
+    <FileList>
+      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="System" Version="1.0.5000.0"/>
+      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="System.Data" Version="1.0.5000.0"/>
+      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.XML.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="System.XML" Version="1.0.5000.0"/>
+      <File FileName="c:\program files\nunit 2.2\bin\nunit.framework.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="NUnit.Framework" Version="2.2.0.0"/>
+      <File FileName="AssemblyInfo.cs" ContainerId="CSharpCompiler" ModuleName="AssemblyInfo"/>
+      <File FileName="..\DataStream.cs" ContainerId="CSharpCompiler" ModuleName="DataStream"/>
+      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="System.Windows.Forms" Version="1.0.5000.0"/>
+      <File FileName="c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="Indy.Sockets" Version="1.0.1888.23859"/>
+      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Runtime.Serialization.Formatters.Soap.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="System.Runtime.Serialization.Formatters.Soap" Version="1.0.5000.0"/>
+      <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Delphi.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="Borland.Delphi" Version="10.0.4143.0"/>
+      <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.VclRtl.dll" ContainerId="DotNetAssemblyCompiler" AssemblyName="Borland.VclRtl" Version="10.0.4143.0"/>
+    </FileList>
+  </CSharp.Personality>
+  <UnitTesting>   <TestFramework>NUnit / C#</TestFramework>
+    <TestRunner>GUI</TestRunner>
+  </UnitTesting>
+</BorlandProject>

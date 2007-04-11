@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2006/01/22 14:56:06.906.cs,G:\Projects\GameTalk\Test\PersonClient\WinForm.cs=G:\Projects\GameTalk\Test\PersonClient\ClientMain.cs</Transaction>
+    <Transaction>2006/01/22 14:56:07.218.resx,G:\Projects\GameTalk\Test\PersonClient\WinForm.resx=G:\Projects\GameTalk\Test\PersonClient\ClientMain.resx</Transaction>
+    <Transaction>2006/01/23 10:08:58.206.dll,c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.Delphi.dll=</Transaction>
+    <Transaction>2006/01/23 10:08:59.019.dll,c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.VclRtl.dll=</Transaction>
+    <Transaction>2006/05/13 16:20:55.031.dll,c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll=</Transaction>
+    <Transaction>2006/05/13 16:20:56.312.dll,c:\program files\indy 10 for visual studio .net 2003\bin\Mono.Security.dll=</Transaction>
+  </Transactions>
+</BorlandProject>
