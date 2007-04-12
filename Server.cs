@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Threading;
 using Indy.Sockets;
 
+using Laan.GameLibrary.Data;
+
 namespace Laan.GameLibrary
 {
 	public class GameServer : GameSocket
@@ -15,10 +17,10 @@ namespace Laan.GameLibrary
 
 		/// Private Properties
 
-		private ClientList                    _clients;
-		private Queue                         _messages;
-		private System.Threading.Thread       _processor;
-		private UDPServer                     _udpServer;
+		private ClientList              _clients;
+		private Queue                   _messages;
+		private System.Threading.Thread _processor;
+		private UDPServer               _udpServer;
 
 		static private GameServer _instance = null;
 
@@ -45,12 +47,30 @@ namespace Laan.GameLibrary
 
 		protected override byte[] InternalOnServerExecute(Context context)
 		{
-			Debug.WriteLine("GameServer: Receiving Message");
+			Debug.WriteLine("GameServer: Receiving Client Message");
 
 			byte[] message = base.InternalOnServerExecute(context);
 
-			_messages.Enqueue(message);
+			using (BinaryStreamReader reader = new BinaryStreamReader(message))
+			{
+				int id = reader.ReadInt32();
+				if (id == Command.Login)
+				{
+					string clientName = reader.ReadString();
+					string hostName = reader.ReadString();
+					int port = reader.ReadInt32();
 
+					Debug.WriteLine(String.Format("Client {0} has connected from {1}:{2}", clientName, hostName, port));
+
+					AddClient(clientName, hostName, port);
+				}
+				else
+				{
+					// queue message to allow server implementation to process it
+					// (i.e. act on the command sent by the client)
+					_messages.Enqueue(message);
+				}
+			}
 			return message;
 		}
 
@@ -70,7 +90,6 @@ namespace Laan.GameLibrary
 
 			_processor = new System.Threading.Thread(new ThreadStart(ProcessQueue));
 
-			_tcpServer.OnConnect += new TIdServerThreadEvent(OnServerConnected);
 			_udpServer = new UDPServer();
 
 			_udpServer.DefaultPort = Config.RendezvousPort;
@@ -130,17 +149,6 @@ namespace Laan.GameLibrary
 			}
 		}
 
-		private void OnServerConnected(Context AContext)
-		{
-			string clientName = AContext.Connection.Socket.ReadLn();
-			string hostName = AContext.Connection.Socket.ReadLn();
-			int port = Int32.Parse(AContext.Connection.Socket.ReadLn());
-
-			Debug.WriteLine(String.Format("Client {0} has connected from {1}:{2}", clientName, hostName, port));
-
-			AddClient(clientName, hostName, port);
-		}
-
 		private void ProcessMessage(byte[] message)
 		{
 			if(OnProcessMessageEvent != null)
@@ -169,7 +177,7 @@ namespace Laan.GameLibrary
 					// allow custom game processing of message to occur
 					ProcessMessage(m);
 				}
-				// broadcase any updates that each client may have
+				// broadcast any updates that each client may have
 				// back to the client
 				UpdateClients();
 
@@ -261,7 +269,7 @@ namespace Laan.GameLibrary
 		/// Public Events
 		public event OnAllowClientUpdateEventHandler   OnAllowClientUpdateEvent;
 		public event OnNewClientConnectionEventHandler OnNewClientConnectionEvent;
-		public event OnMessageReceivedEventHandler     OnProcessMessageEvent;
+		public event OnProcessMessageEventHandler     OnProcessMessageEvent;
 		public event OnRendezvousReceivedEventHandler  OnRendezvousReceivedEvent;
-    }
+	}
 }

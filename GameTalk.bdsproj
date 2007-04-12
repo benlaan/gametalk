@@ -100,6 +100,17 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <FileList>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Data" AssemblyName="System.Data" Version="1.0.5000.0"/>
@@ -108,7 +119,7 @@
       <File FileName="Entity.cs" ContainerId="CSharpCompiler" ModuleName="Entity"/>
       <File FileName="Socket.cs" ContainerId="CSharpCompiler" ModuleName="Socket"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Windows.Forms" AssemblyName="System.Windows.Forms" Version="1.0.5000.0"/>
-      <File FileName="c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Indy.Sockets" AssemblyName="Indy.Sockets" Version="10.1.5.17875"/>
+      <File FileName="c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Indy.Sockets" AssemblyName="Indy.Sockets" CopyLocal="True" Version="10.1.5.17875"/>
       <File FileName="Server.cs" ContainerId="CSharpCompiler" ModuleName="Server"/>
       <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.Delphi.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Borland.Delphi" AssemblyName="Borland.Delphi" Version="9.0.1882.30496"/>
       <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.VclRtl.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Borland.VclRtl" AssemblyName="Borland.VclRtl" Version="9.0.1882.30496"/>

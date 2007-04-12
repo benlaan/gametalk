@@ -194,7 +194,7 @@ namespace PersonViewerClient
 			Debug.Listeners.Add(new FormDebugger(this));
 
 			_client = GameClient.Instance;
-			_client.OnClientMessageEvent  += new OnMessageReceivedEventHandler(OnClientMessageEvent);
+			_client.OnProcessMessageEvent += new OnProcessMessageEventHandler(OnProcessMessageEvent);
 
 			_dataStore = ClientDataStore.Instance;
 			_dataStore.AssemblyName = "Riskier";
@@ -276,7 +276,7 @@ namespace PersonViewerClient
 			UpdateOnMainThread();
 		}
 
-		private void OnClientMessageEvent(object sender, byte[] message)
+		private void OnProcessMessageEvent(object sender, byte[] message)
 		{
 			_dataStore.ProcessMessage(message);
 
