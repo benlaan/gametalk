@@ -265,11 +265,11 @@ namespace Laan.GameLibrary
 					_udpServer.DefaultPort = value;
 			}
 		}
-
+                                                                         
 		/// Public Events
 		public event OnAllowClientUpdateEventHandler   OnAllowClientUpdateEvent;
 		public event OnNewClientConnectionEventHandler OnNewClientConnectionEvent;
-		public event OnProcessMessageEventHandler     OnProcessMessageEvent;
+		public event OnProcessMessageEventHandler      OnProcessMessageEvent;
 		public event OnRendezvousReceivedEventHandler  OnRendezvousReceivedEvent;
 	}
 }
