@@ -318,7 +318,7 @@ namespace PersonViewer
 				int id = reader.ReadInt32();
 				((Server)_persons.Find(id)).ProcessCommand(reader);
 			}
-			UpdateForm();
+			UpdateOnMainThread();
 		}
 
 		private void OnNewClientConnectionEvent(object sender, ClientList clients)
@@ -347,10 +347,20 @@ namespace PersonViewer
 				grdDisplay.SelectedGridItem = selected;
 		}
 
-		private void UpdateForm()
+		// this method is called within a thread, hence it must call OnUpdate via
+		// the Invoke() method to allow the UI to be updated safely
+		private void UpdateOnMainThread()
 		{
-			viewer.Update();
+			this.Invoke(new EventHandler(OnUpdate), new object[] {this, new EventArgs()});
+		}
+
+		private void OnUpdate(object sender, EventArgs e)
+		{
+			if(viewer != null && viewer.Object != null)
+				viewer.Update();
+
 			EnableButtons();
+
 			this.Invalidate();
 		}
 
@@ -368,7 +378,7 @@ namespace PersonViewer
 			TimeSpan t = System.DateTime.Now - duration;
 			Debug.WriteLine("Time Taken: " + t);
 
-			UpdateForm();
+			UpdateOnMainThread();
 		}
 
 		private void btnDelete_Click(object sender, System.EventArgs e)
@@ -376,14 +386,14 @@ namespace PersonViewer
 			if(grdDisplay.SelectedObject is BaseEntity)
 				_persons.Remove((BaseEntity)grdDisplay.SelectedObject);
 
-			UpdateForm();
+			UpdateOnMainThread();
 		}
 
 		private void btnInitialise_Click(object sender, System.EventArgs e)
 		{
 			_persons = new PersonClasses.PersonList();
 			viewer.Object = _persons;
-			UpdateForm();
+			UpdateOnMainThread();
 		}
 
 		private void frmServer_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -395,7 +405,7 @@ namespace PersonViewer
 		private void frmServer_Load(object sender, System.EventArgs e)
 		{
 			_server = GameServer.Instance;
-			_server.OnClientMessageEvent += new OnMessageReceivedEventHandler(OnMessageReceivedEvent);
+			_server.OnProcessMessageEvent += new OnProcessMessageEventHandler(OnMessageReceivedEvent);
 			_server.OnNewClientConnectionEvent += new OnNewClientConnectionEventHandler(OnNewClientConnectionEvent);
 
 			_server.Active = true;

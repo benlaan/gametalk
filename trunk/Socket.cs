@@ -7,12 +7,19 @@ using System.Runtime.Serialization;
 
 namespace Laan.GameLibrary
 {
-    
-	public delegate void OnMessageReceivedEventHandler(object sender, byte[] message);
+
 	public delegate void OnRendezvousReceivedEventHandler(object sender, string data, ref bool isValid);
 	public delegate void OnBroadcastFoundEventHandler(object sender, string Host, int Port);
+
+	public delegate void OnProcessMessageEventHandler(object sender, byte[] message);
 	public delegate void OnAllowClientUpdateEventHandler(object sender, byte[] message, ref bool isValid);
 	public delegate void OnNewClientConnectionEventHandler(object sender, ClientList clients);
+
+    class Command
+	{
+		internal const int Login  = 0;
+		internal const int Logout = 1;
+	}
 
     public abstract class GameSocket
     {
@@ -24,20 +31,23 @@ namespace Laan.GameLibrary
             _tcpServer = new TCPServer();
 			_tcpServer.DefaultPort = Config.InboundPort;
 			_tcpServer.OnExecute += new TIdServerThreadEvent(OnServerExecute);
-            
-            _tcpClient = new TCPClient();
-            _tcpClient.Port = Config.OutboundPort;
-            _tcpClient.Host = Config.OutboundHost;
-        }
-        
-        protected Indy.Sockets.TCPServer _tcpServer;
+
+			_tcpServer.OnConnect += new TIdServerThreadEvent(OnServerConnect);
+			_tcpServer.OnDisconnect += new TIdServerThreadEvent(OnServerDisconnect);
+
+			_tcpClient = new TCPClient();
+			_tcpClient.Port = Config.OutboundPort;
+			_tcpClient.Host = Config.OutboundHost;
+		}
+
+		protected Indy.Sockets.TCPServer _tcpServer;
 		protected Indy.Sockets.TCPClient _tcpClient;
 
-        // ---------------- Private Events --------------------------------
+		// ---------------- Private Events --------------------------------
 
-		private void OnServerExecute(Context AContext)
+		private void OnServerExecute(Context context)
 		{
-			InternalOnServerExecute(AContext);
+			InternalOnServerExecute(context);          
 		}
 
 		// --------------- Protected Methods ------------------------------
@@ -64,15 +74,19 @@ namespace Laan.GameLibrary
 
 			Debug.WriteLine("GameSocket: Message Received: " +  Message.ToString(data));
 
-			if(OnClientMessageEvent != null)
-				OnClientMessageEvent(this, data);
-
 			return data;
 		}
 
 		// -------------- Public Events ----------------------------------
+		protected void OnServerConnect(Context context)
+		{
 
-		public event OnMessageReceivedEventHandler OnClientMessageEvent;
+		}
 
-    }
+		// -------------- Public Events ----------------------------------
+		public void OnServerDisconnect(Context context)
+		{
+			_tcpClient.Disconnect(false);
+		}
+	}
 }

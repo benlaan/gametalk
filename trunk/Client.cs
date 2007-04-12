@@ -5,10 +5,12 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Indy.Sockets;
 
+using Laan.GameLibrary.Data;
+
 namespace Laan.GameLibrary
 {
 
-    public class GameClient : GameSocket
+	public class GameClient : GameSocket
     {
         /// Public Constructor
 
@@ -32,8 +34,8 @@ namespace Laan.GameLibrary
         }
 
         private Timer _timer;
-        private OnBroadcastFoundEventHandler _onBroadcastFoundEvent;
-        private UDPClient _udpClient;
+
+		private UDPClient _udpClient;
         private string _rendezvousText = "Rendezvous";
         private bool _active = false;
 
@@ -62,13 +64,13 @@ namespace Laan.GameLibrary
 		{
 			// establish connection to GameServer
 			Debug.WriteLine(String.Format("Client Socket: attempting to connect to.. {0}:{1}", _tcpClient.Host, _tcpClient.Port));
+
 			_tcpClient.Connect();
+			SendConnectionProtocol();
 
 			// establish listener to get updates from Server
 			Debug.WriteLine(String.Format("Server Socket: commencing listening .. {0}", _tcpServer.DefaultPort));
 			_tcpServer.Active = true;
-
-			SendConnectionProtocol();
 
 			_active = true;
 
@@ -77,21 +79,20 @@ namespace Laan.GameLibrary
         }
 
         public bool Active
-        {
-            get {return _active;}
+		{
+			get { return _active; }
         }
 
-        // When the server is no longer required.
+		// When the server is no longer required.
         public void Disconnect()
-        {
-            StopRendezvous();
+		{
+			StopRendezvous();
             _tcpClient.Disconnect();
             _tcpServer.Active = false;
-            _active = false;
-        }
+			_active = false;
+		}
 
-        // The mechansim by which the client initiates a communication
-        // to the server
+		// The mechansim by which the client initiates a communication to the server
         public void SendMessage(byte[] message)
         {
             Debug.WriteLine(String.Format("Client: Sending Message: {0}: {1})", this, Message.ToString(message)));
@@ -111,18 +112,26 @@ namespace Laan.GameLibrary
         public void StopRendezvous()
         {
             _timer.Stop();
-        }
+		}
 
-        // After a connection is established, inform Server
+		// After a connection is established, inform Server
         // of client details, to allow server to establish Update mechanism
         private void SendConnectionProtocol()
-        {
-            // Connection protocol consists of user name,
-            // machine name and inbound message port (ie. for tcpServer)
-            _tcpClient.Socket.WriteLn(Config.UserName);
-            _tcpClient.Socket.WriteLn(Environment.MachineName);
-            _tcpClient.Socket.WriteLn(Config.InboundPort.ToString());
-        }
+		{
+			using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
+			{
+				// Connection protocol consists of user name,
+				// machine name and inbound message port (ie. for tcpServer)
+				writer.WriteInt32(Command.Login);
+				writer.WriteString(Config.UserName);
+				writer.WriteString(Environment.MachineName);
+				writer.WriteInt32(Config.InboundPort);
+
+				SendMessage(writer.DataStream);
+
+				Debug.WriteLine("MessageSent(Login)");
+			}
+		}
 
         // Called on the timer, to commencing searching for GameServer
         // listeners
@@ -144,18 +153,19 @@ namespace Laan.GameLibrary
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                StopRendezvous();
+				StopRendezvous();
+				throw;
             }
         }
 
         // Validates the input
         private void IsBroadcastFound(string sData)
         {
-            if((sData != "") && (_onBroadcastFoundEvent != null))
+            if((sData != "") && (OnBroadcastFoundEvent != null))
             {
                 string[] data = Regex.Split(sData, ":");
                 Debug.Assert(data.Length == 2, "Incorrect Broadcast Format - should be Host:Port");
-                _onBroadcastFoundEvent(this, data[0], Int32.Parse(data[1]));
+                OnBroadcastFoundEvent(this, data[0], Int32.Parse(data[1]));
             }
         }
 
@@ -163,7 +173,9 @@ namespace Laan.GameLibrary
         {
             byte[] message = base.InternalOnServerExecute(context);
 
-            /*
+			if (OnProcessMessageEvent != null)
+				OnProcessMessageEvent(this, message);
+			/*
                 need to respond to the message by either:
 
                 a) Building the instance (typed), and adding it to the correct list
@@ -175,14 +187,7 @@ namespace Laan.GameLibrary
             return message;
         }
 
-        public event OnBroadcastFoundEventHandler OnBroadcastFoundEvent
-        {
-            add {
-                _onBroadcastFoundEvent += value;
-            }
-            remove {
-                _onBroadcastFoundEvent -= value;
-            }
-        }
+		public event OnProcessMessageEventHandler OnProcessMessageEvent;
+		public event OnBroadcastFoundEventHandler OnBroadcastFoundEvent;
   }
 }
