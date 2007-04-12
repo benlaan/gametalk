@@ -2,6 +2,6 @@
 <BorlandProject>
 	<Transactions/>
 	<Default.Personality>
-		<Projects ActiveProject="PersonViewerClient.exe"/>
+		<Projects ActiveProject="PersonViewerServer.exe"/>
 	</Default.Personality>
 </BorlandProject>
