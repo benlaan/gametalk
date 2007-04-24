@@ -1,39 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-	<PersonalityInfo>
-		<Option>
-			<Option Name="Personality">Default.Personality</Option>
-			<Option Name="ProjectType"></Option>
-			<Option Name="Version">1.0</Option>
-			<Option Name="GUID">{0D6C1873-30EB-4B7E-B4C8-2E72A3D00CA9}</Option>
-		</Option>
-	</PersonalityInfo>
-	<Default.Personality>  
+  <PersonalityInfo>
+    <Option>
+      <Option Name="Personality">Default.Personality</Option>
+      <Option Name="ProjectType"></Option>
+      <Option Name="Version">1.0</Option>
+      <Option Name="GUID">{4D7DCFF7-D68A-47C3-BDBF-6BED984DAB28}</Option>
+    </Option>
+  </PersonalityInfo>
+  <Default.Personality>
+    
+    
     
     <Projects>
-      <Projects Name="Laan.Library.dll">..\..\Lib\Laan.Library.bdsproj</Projects>
       <Projects Name="Laan.GameLibrary.dll">Laan.GameLibrary.bdsproj</Projects>
       <Projects Name="Riskier.dll">CodeGen\Riskier.bdsproj</Projects>
-      <Projects Name="RiskServer.exe">Test\PersonServer\RiskServer.bdsproj</Projects>
-      <Projects Name="RiskClient.exe">Test\PersonClient\RiskClient.bdsproj</Projects>
-      <Projects Name="Targets">Laan.Library.dll Laan.GameLibrary.dll Riskier.dll RiskServer.exe RiskClient.exe</Projects>
+      <Projects Name="RiskClient.exe">Test\Client\RiskClient.bdsproj</Projects>
+      <Projects Name="RiskServer.exe">Test\Server\RiskServer.bdsproj</Projects>
+      <Projects Name="Targets">Laan.GameLibrary.dll Riskier.dll RiskClient.exe RiskServer.exe</Projects>
     </Projects>
     <Dependencies>
-      <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}">
-        <Dependency GUID="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}"/>
-      </Dependency>
       <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}">
         <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}"/>
-        <Dependency GUID="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}"/>
-      </Dependency>
-      <Dependency GUID="{D813A993-5F7E-49A8-91FE-3CEA3E313C82}">
-        <Dependency GUID="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}"/>
-        <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}"/>
-        <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"/>
       </Dependency>
       <Dependency GUID="{0E1D0670-8559-488C-A3F5-363F43EFA84F}">
-        <Dependency GUID="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}"/>
-        <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}"/>
+        <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"/>
+      </Dependency>
+      <Dependency GUID="{D813A993-5F7E-49A8-91FE-3CEA3E313C82}">
         <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"/>
       </Dependency>
     </Dependencies>
