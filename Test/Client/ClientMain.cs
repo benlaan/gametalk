@@ -328,7 +328,7 @@ namespace GameViewerClient
 			this.tabGame.Controls.Add(this.panel1);
 			this.tabGame.Location = new System.Drawing.Point(4, 22);
 			this.tabGame.Name = "tabGame";
-			this.tabGame.Size = new System.Drawing.Size(496, 372);
+			this.tabGame.Size = new System.Drawing.Size(496, 356);
 			this.tabGame.TabIndex = 1;
 			this.tabGame.Text = "Game";
 			this.tabGame.Visible = false;
@@ -344,7 +344,7 @@ namespace GameViewerClient
 			this.grdDisplay.LineColor = System.Drawing.SystemColors.ScrollBar;
 			this.grdDisplay.Location = new System.Drawing.Point(240, 40);
 			this.grdDisplay.Name = "grdDisplay";
-			this.grdDisplay.Size = new System.Drawing.Size(256, 332);
+			this.grdDisplay.Size = new System.Drawing.Size(256, 316);
 			this.grdDisplay.TabIndex = 28;
 			this.grdDisplay.Text = "PropertyGrid";
 			this.grdDisplay.ToolbarVisible = false;
@@ -362,7 +362,7 @@ namespace GameViewerClient
 			this.tvObjectTree.Name = "tvObjectTree";
 			this.tvObjectTree.SelectedImageIndex = -1;
 			this.tvObjectTree.ShowPlusMinus = false;
-			this.tvObjectTree.Size = new System.Drawing.Size(240, 332);
+			this.tvObjectTree.Size = new System.Drawing.Size(240, 316);
 			this.tvObjectTree.TabIndex = 27;
 			this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
 			// 
@@ -419,11 +419,13 @@ namespace GameViewerClient
 			this.Controls.Add(this.splitter1);
 			this.Controls.Add(this.pcStage);
 			this.Controls.Add(this.edDebug);
+			this.KeyPreview = true;
 			this.Location = new System.Drawing.Point(150, 0);
 			this.MinimumSize = new System.Drawing.Size(512, 592);
 			this.Name = "frmClient";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Client";
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmClient_KeyDown);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.WinForm_Closing);
 			this.Load += new System.EventHandler(this.frmClient_Load);
 			this.pcStage.ResumeLayout(false);
@@ -668,6 +670,12 @@ namespace GameViewerClient
 		{
 //			_game.PlayerReady(_playerReady);
 			_playerReady = !_playerReady;
+		}
+		
+		private void frmClient_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.F5)
+				Redraw();
 		}
 	
 	}
