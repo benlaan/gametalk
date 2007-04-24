@@ -12,12 +12,15 @@
     
     
     
+    
+    
     <Projects>
+      <Projects Name="Laan.Library.dll">Include\Laan.Library.bdsproj</Projects>
       <Projects Name="Laan.GameLibrary.dll">Laan.GameLibrary.bdsproj</Projects>
       <Projects Name="Riskier.dll">CodeGen\Riskier.bdsproj</Projects>
       <Projects Name="RiskClient.exe">Test\Client\RiskClient.bdsproj</Projects>
       <Projects Name="RiskServer.exe">Test\Server\RiskServer.bdsproj</Projects>
-      <Projects Name="Targets">Laan.GameLibrary.dll Riskier.dll RiskClient.exe RiskServer.exe</Projects>
+      <Projects Name="Targets">Laan.Library.dll Laan.GameLibrary.dll Riskier.dll RiskClient.exe RiskServer.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}">
