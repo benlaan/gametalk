@@ -2,12 +2,10 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-
-namespace Laan.Business.Risk.Border
+namespace Laan.Risk.Border
 {
     class Fields
     {
@@ -16,31 +14,20 @@ namespace Laan.Business.Risk.Border
         internal const int Arms    = 3;
     }
     
-    public interface IBorder : IBaseEntity
-    {
-        Int32   Economy { get; }
-        Int32   Oil { get; }
-        Int32   Arms { get; }
-    }
- 
-    public interface IBorderList : IBaseEntity
-    {
-        IBorder this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class BorderList : ServerEntityList, IBorderList
+
+        public class BorderList : ServerEntityList
         {
-            public new IBorder this[int index]
+            public new Server.Border this[int index]
             {
                 get {
-                    return (IBorder)base[index];
+                    return (Server.Border)base[index];
                 }
             }
         }
 
-        public abstract class BaseBorder : BaseEntityServer, IBorder
+        public abstract class BaseBorder : BaseEntityServer
         {
             // --------------- Private -------------------------------------------------
 
@@ -104,17 +91,18 @@ namespace Laan.Business.Risk.Border
 
     namespace Client
     {
-        public class BorderList: ClientEntityList, IBorderList
+    
+        public class BorderList: ClientEntityList
         {
-            public new IBorder this[int index]
+            public new Client.Border this[int index]
             {
                 get {
-                    return (IBorder)base[index];
+                    return (Client.Border)base[index];
                 }
             }
         }
 
-        public abstract class BaseBorder : BaseEntityClient, IBorder
+        public abstract class BaseBorder : BaseEntityClient
         {
 
             // ------------ Private ---------------------------------------------------------

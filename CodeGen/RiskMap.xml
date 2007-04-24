@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <EntityMap Version="1.0" xmlns="http://www.laanco.com/entitylist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.laanco.com/entitylist
 D:\Programming\Projects\C#\GameTalk2\CodeGen\RiskMap.xsd">
-	<Entity Name="Game" Namespace="Laan.Business.Risk.Game">
-		<Requirement Namespace="Laan.Business.Risk.Player"/>
-		<Requirement Namespace="Laan.Business.Risk.Region"/>
+	<Entity Name="Game" Namespace="Laan.Risk.Game">
+		<Requirement Namespace="Laan.Risk.Player"/>
+		<Requirement Namespace="Laan.Risk.Region"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Players" Type="PlayerList" List="true"/>
 		<Property Name="Regions" Type="RegionList" List="true"/>
 	</Entity>
-	<Entity Name="Player" Namespace="Laan.Business.Risk.Player">
-		<Requirement Namespace="Laan.Business.Risk.Nation"/>
+	<Entity Name="Player" Namespace="Laan.Risk.Player">
+		<Requirement Namespace="Laan.Risk.Nation"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Colour" Type="System.Drawing.Color" ShortType="Color"/>
 		<Property Name="Ready" Type="Boolean"/>
         <Property Name="Nation" Type="Nation"/>
 	</Entity>
-	<Entity Name="Nation" Namespace="Laan.Business.Risk.Nation">
-		<Requirement Namespace="Laan.Business.Risk.Region"/>
-		<Requirement Namespace="Laan.Business.Risk.Unit"/>
+	<Entity Name="Nation" Namespace="Laan.Risk.Nation">
+		<Requirement Namespace="Laan.Risk.Region"/>
+		<Requirement Namespace="Laan.Risk.Unit"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
+		<Property Name="ShortName" Type="String" Inherited="true"/>
 		<Property Name="Leader" Type="String"/>
 		<Property Name="Prestige" Type="Int32"/>
 		<Property Name="Technology" Type="Int32"/>
 		<Property Name="OwnedRegions" Type="RegionList" List="true"/>
 		<Property Name="OwnedUnits" Type="UnitList" List="true"/>
 	</Entity>
-	<Entity Name="Region" Namespace="Laan.Business.Risk.Region">
-		<Requirement Namespace="Laan.Business.Risk.Unit"/>
+	<Entity Name="Region" Namespace="Laan.Risk.Region">
+		<Requirement Namespace="Laan.Risk.Unit"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Economy" Type="Int32"/>
 		<Property Name="Oil" Type="Int32"/>
@@ -34,25 +35,25 @@ D:\Programming\Projects\C#\GameTalk2\CodeGen\RiskMap.xsd">
 		<Property Name="Defenders" Type="UnitList" List="true"/>
 		<Property Name="Attackers" Type="UnitList" List="true"/>
 	</Entity>
-	<Entity Name="Border" Namespace="Laan.Business.Risk.Border">
+	<Entity Name="Border" Namespace="Laan.Risk.Border">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Economy" Type="Int32"/>
 		<Property Name="Oil" Type="Int32"/>
 		<Property Name="Arms" Type="Int32"/>
 	</Entity>
-	<Entity Name="Unit" Abstract="true" Namespace="Laan.Business.Risk.Unit">
+	<Entity Name="Unit" Abstract="true" Namespace="Laan.Risk.Unit">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Size" Type="Int32"/>
 		<Property Name="Experience" Type="Int32"/>
 		<Property Name="Location" Type="Int32"/>
 	</Entity>
-	<Entity Name="Infantry" BaseClass="Unit" Namespace="Laan.Business.Risk.Unit.Infantry">
+	<Entity Name="Infantry" BaseClass="Unit" Namespace="Laan.Risk.Unit.Infantry">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Size" Type="Int32" Inherited="true"/>
 		<Property Name="Experience" Type="Int32" Inherited="true"/>
 		<Property Name="Location" Type="Int32" Inherited="true"/>
 	</Entity>
-	<Entity Name="Armour" BaseClass="Unit" Namespace="Laan.Business.Risk.Unit.Armour">
+	<Entity Name="Armour" BaseClass="Unit" Namespace="Laan.Risk.Unit.Armour">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Size" Type="Int32" Inherited="true"/>
 		<Property Name="Experience" Type="Int32" Inherited="true"/>

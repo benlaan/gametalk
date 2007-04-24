@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
 
+using Laan.Library.Logging;
 using Laan.GameLibrary.Data;
 
 namespace Laan.GameLibrary.Entity
@@ -11,109 +11,111 @@ namespace Laan.GameLibrary.Entity
     }
 
     // Responsible for receiving messages from Laan.GameLibrary.GameServer
-    // and updating properties
-    public class Client: Communication
+	// and updating properties
+	public class Client: Communication
     {
+		public Client()
+		{
+			_recency = new Hashtable();
+		}
 
-        private System.Collections.Hashtable _recency = null;
+		private System.Collections.Hashtable _recency = null;
 
-        public Client()
-        {
-            _recency = new Hashtable();
-        }
+		public TimeSpan LastUpdated(byte field)
+		{
+			return System.DateTime.Now - (System.DateTime)_recency[field];
+		}
 
-        internal void Modify(BinaryStreamReader reader)
-        {
-            Debug.WriteLine("Client.Modify()");
-            byte field = reader.ReadByte();
-            if (OnModify != null)
-                OnModify(field, reader);
-        }
+		public void UpdateRecency(byte field)
+		{
+			_recency[field] = System.DateTime.Now;
+		}
 
-        public event OnServerMessageEventHandler OnModify;
+		internal void Modify(BinaryStreamReader reader)
+		{
+			Log.WriteLine("Client.Modify()");
+			byte field = reader.ReadByte();
+			if (OnModify != null)
+				OnModify(field, reader);
+		}
 
-        public TimeSpan LastUpdated(byte field)
-        {
-            return System.DateTime.Now - (System.DateTime)_recency[field];
-        }
-
-        public void UpdateRecency(byte field)
-        {
-            _recency[field] = System.DateTime.Now;
-        }
+		public event OnServerMessageEventHandler OnModify;
     }
 
     // base class for all server-side objects, used by the server
-    // for processing purposes.
-    public class Server: Communication
+	// for processing purposes.
+	public class Server: Communication
     {
-        static int uniqueID = 10000;
-
-        private BaseEntity _entity;
-
-        public event OnProcessCommandEventHandler OnProcessCommand;
-
-        public Server(BaseEntity entity)
-        {
+		public Server(BaseEntity entity)
+		{
 			_entity = entity;
 			Size = _entity.StreamSize;
 
-            entity.ID = uniqueID++;
-            Debug.WriteLine(String.Format("Server({0}): {1}", entity.Name, entity.ID));
+			entity.ID = uniqueID++;
+			Log.WriteLine("Server({0}): {1}", entity.Name, entity.ID);
 
-            Insert();
+			Insert();
 		}
 
-        ~Server()
+		~Server()
 		{
-			Debug.WriteLine("~Server()");
-            Delete();
+			Log.WriteLine("~Server()");
+			Delete();
 		}
+
+		private BaseEntity _entity;
 		private int _size;
+		static int uniqueID = 10000;
 
-        internal void Insert()
-        {
-			Debug.WriteLine("Server.Insert()");
+		public void Modify(int ID, byte field, object value)
+		{
+			Log.WriteLine("Server.Modify({0},{1},{2})", ID, field, value);
+
 			BinaryStreamWriter writer = new BinaryStreamWriter(Size);
-            // call the virtual method Serialise
-            Serialise(writer);
-            // send as message
-            GameServer.Instance.AddUpdateMessage(writer.DataStream);
-        }
 
-        internal void Delete()
-        {
-            Debug.WriteLine("Server.Delete()");
+			writer.WriteByte(MessageCode.Update);
+			writer.WriteInt32(ID);
+			writer.WriteByte(field);
+
+			if (value is Int32)
+				writer.WriteInt32((int)value);
+
+			if (value is String)
+				writer.WriteString((string)value);
+
+			if (value is System.DateTime)
+				writer.WriteDateTime((System.DateTime)value);
+
+			byte[] data = writer.DataStream;
+			GameServer.Instance.AddUpdateMessage(data);
+		}
+
+		public void ProcessCommand(BinaryStreamReader reader)
+		{
+			if (OnProcessCommand != null)
+				OnProcessCommand(reader);
+		}
+
+		internal void Delete()
+		{
+			Log.WriteLine("Server.Delete()");
 			BinaryStreamWriter writer = new BinaryStreamWriter(Size);
 			writer.WriteByte(MessageCode.Delete);
 			writer.WriteInt32(_entity.ID);
 			GameServer.Instance.AddUpdateMessage(writer.DataStream);
 		}
 
-		public void Modify(int ID, byte field, object value)
+		internal void Insert()
 		{
-			Debug.WriteLine(String.Format("Server.Modify({0},{1},{2})", ID, field, value));
-
+			Log.WriteLine("Server.Insert()");
 			BinaryStreamWriter writer = new BinaryStreamWriter(Size);
+			// call the virtual method Serialise
+			Serialise(writer);
+			// send as message
+			GameServer.Instance.AddUpdateMessage(writer.DataStream);
+		}
 
-            writer.WriteByte(MessageCode.Update);
-            writer.WriteInt32(ID);
-            writer.WriteByte(field);
-
-            if (value is Int32)
-                writer.WriteInt32((int)value);
-
-            if (value is String)
-                writer.WriteString((string)value);
-
-            if (value is System.DateTime)
-                writer.WriteDateTime((System.DateTime)value);
-
-            byte[] data = writer.DataStream;
-            GameServer.Instance.AddUpdateMessage(data);
-        }
-
-        private void Serialise(BinaryStreamWriter writer)
+		private void Serialise(BinaryStreamWriter writer)
 		{
 			writer.WriteByte(MessageCode.Create);
 			 _entity.Serialise(writer);
@@ -121,17 +123,13 @@ namespace Laan.GameLibrary.Entity
 			 int length = writer.DataStream.Length;
 		}
 
-        public void ProcessCommand(BinaryStreamReader reader)
-        {
-            if (OnProcessCommand != null)
-                OnProcessCommand(reader);
-        }
-
 		public int Size
 		{
 			get { return _size; }
 			set { _size = value; }
 		}
+
+		public event OnProcessCommandEventHandler OnProcessCommand;
 	}
     
 }

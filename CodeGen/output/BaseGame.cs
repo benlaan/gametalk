@@ -2,14 +2,10 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-using Laan.Business.Risk.Player;
-using Laan.Business.Risk.Region;
-
-namespace Laan.Business.Risk.Game
+namespace Laan.Risk.Game
 {
     class Fields
     {
@@ -17,38 +13,30 @@ namespace Laan.Business.Risk.Game
         internal const int Regions = 2;
     }
     
-    public interface IGame : IBaseEntity
-    {
-        IPlayerList Players { get; }
-        IRegionList Regions { get; }
-    }
- 
-    public interface IGameList : IBaseEntity
-    {
-        IGame this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class GameList : ServerEntityList, IGameList
+        using Players = Laan.Risk.Player.Server;
+        using Regions = Laan.Risk.Region.Server;
+
+        public class GameList : ServerEntityList
         {
-            public new IGame this[int index]
+            public new Server.Game this[int index]
             {
                 get {
-                    return (IGame)base[index];
+                    return (Server.Game)base[index];
                 }
             }
         }
 
-        public abstract class BaseGame : BaseEntityServer, IGame
+        public abstract class BaseGame : BaseEntityServer
         {
             // --------------- Private -------------------------------------------------
 
             internal Int32 _playersID;
             internal Int32 _regionsID;
             
-            internal IPlayerList _players;
-            internal IRegionList _regions;
+            internal Players.PlayerList _players;
+            internal Regions.RegionList _regions;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
@@ -69,7 +57,7 @@ namespace Laan.Business.Risk.Game
                 return game.CommServer;
             }
             
-            public IPlayerList Players
+            public Players.PlayerList Players
             {
                 get { return _players; }
                 set {
@@ -79,7 +67,7 @@ namespace Laan.Business.Risk.Game
                 }
             }
 
-            public IRegionList Regions
+            public Regions.RegionList Regions
             {
                 get { return _regions; }
                 set {
@@ -94,23 +82,26 @@ namespace Laan.Business.Risk.Game
 
     namespace Client
     {
-        public class GameList: ClientEntityList, IGameList
+        using Players = Laan.Risk.Player.Client;
+        using Regions = Laan.Risk.Region.Client;
+    
+        public class GameList: ClientEntityList
         {
-            public new IGame this[int index]
+            public new Client.Game this[int index]
             {
                 get {
-                    return (IGame)base[index];
+                    return (Client.Game)base[index];
                 }
             }
         }
 
-        public abstract class BaseGame : BaseEntityClient, IGame
+        public abstract class BaseGame : BaseEntityClient
         {
 
             // ------------ Private ---------------------------------------------------------
 
-            internal IPlayerList _players = null;
-            internal IRegionList _regions = null;
+            internal Players.PlayerList _players = null;
+            internal Regions.RegionList _regions = null;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -121,6 +112,8 @@ namespace Laan.Business.Risk.Game
 
             public BaseGame() : base()
             {
+                _players = new Players.PlayerList();
+                _regions = new Regions.RegionList();
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -138,12 +131,12 @@ namespace Laan.Business.Risk.Game
                 }
             }
 
-            public IPlayerList Players
+            public Players.PlayerList Players
             {
                 get { return _players; }
             }
 
-            public IRegionList Regions
+            public Regions.RegionList Regions
             {
                 get { return _regions; }
             }

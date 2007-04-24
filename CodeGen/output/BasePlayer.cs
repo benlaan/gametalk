@@ -2,13 +2,10 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-using Laan.Business.Risk.Nation;
-
-namespace Laan.Business.Risk.Player
+namespace Laan.Risk.Player
 {
     class Fields
     {
@@ -17,31 +14,21 @@ namespace Laan.Business.Risk.Player
         internal const int Nation = 3;
     }
     
-    public interface IPlayer : IBaseEntity
-    {
-        System.Drawing.Color  Colour { get; }
-        Boolean               Ready { get; }
-        INation               Nation { get; }
-    }
- 
-    public interface IPlayerList : IBaseEntity
-    {
-        IPlayer this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class PlayerList : ServerEntityList, IPlayerList
+        using Nations = Laan.Risk.Nation.Server;
+
+        public class PlayerList : ServerEntityList
         {
-            public new IPlayer this[int index]
+            public new Server.Player this[int index]
             {
                 get {
-                    return (IPlayer)base[index];
+                    return (Server.Player)base[index];
                 }
             }
         }
 
-        public abstract class BasePlayer : BaseEntityServer, IPlayer
+        public abstract class BasePlayer : BaseEntityServer
         {
             // --------------- Private -------------------------------------------------
 
@@ -49,7 +36,7 @@ namespace Laan.Business.Risk.Player
             
             internal System.Drawing.Color _colour;
             internal Boolean              _ready;
-            internal INation              _nation;
+            internal Nations.Nation       _nation;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
@@ -91,7 +78,7 @@ namespace Laan.Business.Risk.Player
                 }
             }
 
-            public INation Nation
+            public Nations.Nation Nation
             {
                 get { return _nation; }
                 set {
@@ -106,24 +93,26 @@ namespace Laan.Business.Risk.Player
 
     namespace Client
     {
-        public class PlayerList: ClientEntityList, IPlayerList
+        using Nations = Laan.Risk.Nation.Client;
+    
+        public class PlayerList: ClientEntityList
         {
-            public new IPlayer this[int index]
+            public new Client.Player this[int index]
             {
                 get {
-                    return (IPlayer)base[index];
+                    return (Client.Player)base[index];
                 }
             }
         }
 
-        public abstract class BasePlayer : BaseEntityClient, IPlayer
+        public abstract class BasePlayer : BaseEntityClient
         {
 
             // ------------ Private ---------------------------------------------------------
 
             internal System.Drawing.Color _colour;
             internal Boolean _ready;
-            internal INation _nation = null;
+            internal Nations.Nation _nation = null;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -136,6 +125,7 @@ namespace Laan.Business.Risk.Player
 
             public BasePlayer() : base()
             {
+                _nation = new Nations.Nation();
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -172,7 +162,7 @@ namespace Laan.Business.Risk.Player
                 get { return _ready; }
             }
 
-            public INation Nation
+            public Nations.Nation Nation
             {
                 get { return _nation; }
             }

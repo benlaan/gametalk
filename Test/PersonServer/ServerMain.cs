@@ -1,17 +1,18 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
 using System.Diagnostics;
+
 using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
-using PersonClasses = Laan.Test.Business.Person.Server;
+
+using Laan.Library.Logging;
 using Laan.Library.ObjectTree;
 
-namespace PersonViewer
+using GameClasses = Laan.Risk.Game.Server;
+
+namespace Laan.Risk.GameServer.Client
 {
 	public class FormDebugger : DefaultTraceListener
 	{
@@ -38,53 +39,39 @@ namespace PersonViewer
 
 		#region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.pnlHeader = new System.Windows.Forms.Panel();
 			this.lbClientCount = new System.Windows.Forms.Label();
 			this.edClientCount = new System.Windows.Forms.TextBox();
-			this.btnInitialise = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.edWeight = new System.Windows.Forms.TextBox();
-			this.lbAge = new System.Windows.Forms.Label();
-			this.lbName = new System.Windows.Forms.Label();
-			this.edAge = new System.Windows.Forms.TextBox();
-			this.edName = new System.Windows.Forms.TextBox();
 			this.btnDelete = new System.Windows.Forms.Button();
 			this.btnAdd = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.edDebug = new System.Windows.Forms.TextBox();
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.grdDisplay = new System.Windows.Forms.PropertyGrid();
 			this.tvObjectTree = new System.Windows.Forms.TreeView();
-			this.panel1.SuspendLayout();
+			this.pnlHeader.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// panel1
+			// pnlHeader
 			// 
-			this.panel1.Controls.Add(this.lbClientCount);
-			this.panel1.Controls.Add(this.edClientCount);
-			this.panel1.Controls.Add(this.btnInitialise);
-			this.panel1.Controls.Add(this.label1);
-			this.panel1.Controls.Add(this.edWeight);
-			this.panel1.Controls.Add(this.lbAge);
-			this.panel1.Controls.Add(this.lbName);
-			this.panel1.Controls.Add(this.edAge);
-			this.panel1.Controls.Add(this.edName);
-			this.panel1.Controls.Add(this.btnDelete);
-			this.panel1.Controls.Add(this.btnAdd);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(576, 64);
-			this.panel1.TabIndex = 0;
-			//
+			this.pnlHeader.Controls.Add(this.lbClientCount);
+			this.pnlHeader.Controls.Add(this.edClientCount);
+			this.pnlHeader.Controls.Add(this.btnDelete);
+			this.pnlHeader.Controls.Add(this.btnAdd);
+			this.pnlHeader.Controls.Add(this.button1);
+			this.pnlHeader.Controls.Add(this.label1);
+			this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+			this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+			this.pnlHeader.Name = "pnlHeader";
+			this.pnlHeader.Size = new System.Drawing.Size(584, 40);
+			this.pnlHeader.TabIndex = 0;
+			// 
 			// lbClientCount
 			// 
-			this.lbClientCount.Location = new System.Drawing.Point(216, 10);
+			this.lbClientCount.Location = new System.Drawing.Point(8, 11);
 			this.lbClientCount.Name = "lbClientCount";
 			this.lbClientCount.Size = new System.Drawing.Size(40, 16);
 			this.lbClientCount.TabIndex = 21;
@@ -94,78 +81,18 @@ namespace PersonViewer
 			// 
 			// edClientCount
 			// 
-			this.edClientCount.Location = new System.Drawing.Point(264, 8);
+			this.edClientCount.Location = new System.Drawing.Point(56, 9);
 			this.edClientCount.Name = "edClientCount";
 			this.edClientCount.ReadOnly = true;
 			this.edClientCount.Size = new System.Drawing.Size(64, 20);
 			this.edClientCount.TabIndex = 6;
 			this.edClientCount.Text = "0";
 			// 
-			// btnInitialise
-			// 
-			this.btnInitialise.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnInitialise.Location = new System.Drawing.Point(496, 32);
-			this.btnInitialise.Name = "btnInitialise";
-			this.btnInitialise.TabIndex = 2;
-			this.btnInitialise.Text = "Initialise";
-			this.btnInitialise.Click += new System.EventHandler(this.btnInitialise_Click);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(104, 34);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(39, 16);
-			this.label1.TabIndex = 18;
-			this.label1.Text = "Weight";
-			// 
-			// edWeight
-			// 
-			this.edWeight.Location = new System.Drawing.Point(152, 32);
-			this.edWeight.Name = "edWeight";
-			this.edWeight.Size = new System.Drawing.Size(56, 20);
-			this.edWeight.TabIndex = 5;
-			this.edWeight.Text = "87";
-			// 
-			// lbAge
-			// 
-			this.lbAge.AutoSize = true;
-			this.lbAge.Location = new System.Drawing.Point(16, 34);
-			this.lbAge.Name = "lbAge";
-			this.lbAge.Size = new System.Drawing.Size(24, 16);
-			this.lbAge.TabIndex = 13;
-			this.lbAge.Text = "Age";
-			// 
-			// lbName
-			// 
-			this.lbName.AutoSize = true;
-			this.lbName.Location = new System.Drawing.Point(8, 10);
-			this.lbName.Name = "lbName";
-			this.lbName.Size = new System.Drawing.Size(34, 16);
-			this.lbName.TabIndex = 12;
-			this.lbName.Text = "Name";
-			// 
-			// edAge
-			// 
-			this.edAge.Location = new System.Drawing.Point(48, 32);
-			this.edAge.Name = "edAge";
-			this.edAge.Size = new System.Drawing.Size(48, 20);
-			this.edAge.TabIndex = 4;
-			this.edAge.Text = "30";
-			// 
-			// edName
-			// 
-			this.edName.Location = new System.Drawing.Point(48, 8);
-			this.edName.Name = "edName";
-			this.edName.Size = new System.Drawing.Size(160, 20);
-			this.edName.TabIndex = 3;
-			this.edName.Text = "Ben Laan";
-			// 
 			// btnDelete
 			// 
 			this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnDelete.Enabled = false;
-			this.btnDelete.Location = new System.Drawing.Point(496, 8);
+			this.btnDelete.Location = new System.Drawing.Point(504, 8);
 			this.btnDelete.Name = "btnDelete";
 			this.btnDelete.TabIndex = 1;
 			this.btnDelete.Text = "Delete";
@@ -175,11 +102,30 @@ namespace PersonViewer
 			// 
 			this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAdd.Enabled = false;
-			this.btnAdd.Location = new System.Drawing.Point(416, 8);
+			this.btnAdd.Location = new System.Drawing.Point(424, 8);
 			this.btnAdd.Name = "btnAdd";
 			this.btnAdd.TabIndex = 0;
 			this.btnAdd.Text = "Add";
 			this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+			// 
+			// button1
+			// 
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Location = new System.Drawing.Point(608, 40);
+			this.button1.Name = "button1";
+			this.button1.TabIndex = 2;
+			this.button1.Text = "Initialise";
+			this.button1.Visible = false;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(8, 11);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(40, 16);
+			this.label1.TabIndex = 21;
+			this.label1.Tag = "";
+			this.label1.Text = "Clients";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// edDebug
 			// 
@@ -187,19 +133,19 @@ namespace PersonViewer
 			this.edDebug.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.edDebug.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.edDebug.ForeColor = System.Drawing.Color.FromArgb(((byte)(0)), ((byte)(192)), ((byte)(0)));
-			this.edDebug.Location = new System.Drawing.Point(0, 394);
+			this.edDebug.Location = new System.Drawing.Point(0, 246);
 			this.edDebug.Multiline = true;
 			this.edDebug.Name = "edDebug";
-			this.edDebug.Size = new System.Drawing.Size(576, 384);
+			this.edDebug.Size = new System.Drawing.Size(584, 416);
 			this.edDebug.TabIndex = 17;
 			this.edDebug.Text = "";
 			// 
 			// splitter1
 			// 
 			this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.splitter1.Location = new System.Drawing.Point(0, 391);
+			this.splitter1.Location = new System.Drawing.Point(0, 243);
 			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(576, 3);
+			this.splitter1.Size = new System.Drawing.Size(584, 3);
 			this.splitter1.TabIndex = 20;
 			this.splitter1.TabStop = false;
 			// 
@@ -210,9 +156,9 @@ namespace PersonViewer
 			this.grdDisplay.HelpVisible = false;
 			this.grdDisplay.LargeButtons = false;
 			this.grdDisplay.LineColor = System.Drawing.SystemColors.ScrollBar;
-			this.grdDisplay.Location = new System.Drawing.Point(272, 64);
+			this.grdDisplay.Location = new System.Drawing.Point(272, 40);
 			this.grdDisplay.Name = "grdDisplay";
-			this.grdDisplay.Size = new System.Drawing.Size(304, 327);
+			this.grdDisplay.Size = new System.Drawing.Size(312, 203);
 			this.grdDisplay.TabIndex = 22;
 			this.grdDisplay.Text = "PropertyGrid";
 			this.grdDisplay.ToolbarVisible = false;
@@ -223,29 +169,29 @@ namespace PersonViewer
 			// 
 			this.tvObjectTree.Dock = System.Windows.Forms.DockStyle.Left;
 			this.tvObjectTree.ImageIndex = -1;
-			this.tvObjectTree.Location = new System.Drawing.Point(0, 64);
+			this.tvObjectTree.Location = new System.Drawing.Point(0, 40);
 			this.tvObjectTree.Name = "tvObjectTree";
 			this.tvObjectTree.SelectedImageIndex = -1;
-			this.tvObjectTree.Size = new System.Drawing.Size(272, 327);
+			this.tvObjectTree.Size = new System.Drawing.Size(272, 203);
 			this.tvObjectTree.TabIndex = 21;
 			this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
 			// 
 			// frmServer
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(576, 778);
+			this.ClientSize = new System.Drawing.Size(584, 662);
 			this.Controls.Add(this.grdDisplay);
 			this.Controls.Add(this.tvObjectTree);
 			this.Controls.Add(this.splitter1);
 			this.Controls.Add(this.edDebug);
-			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.pnlHeader);
 			this.Location = new System.Drawing.Point(650, 0);
 			this.Name = "frmServer";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Server";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.frmServer_Closing);
 			this.Load += new System.EventHandler(this.frmServer_Load);
-			this.panel1.ResumeLayout(false);
+			this.pnlHeader.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 		#endregion
@@ -257,27 +203,22 @@ namespace PersonViewer
 			Debug.Listeners.Add(_debugger);
 		}
 
-		private PersonClasses.PersonList _persons;
-		private GameServer _server;
+		private GameClasses.Game _game;
+		private Laan.GameLibrary.GameServer _server;
 		private System.Windows.Forms.Button btnAdd;
 		private System.Windows.Forms.Button btnDelete;
-		private System.Windows.Forms.Button btnInitialise;
 		private System.ComponentModel.Container components = null;
-		private System.Windows.Forms.TextBox edAge;
 		private System.Windows.Forms.TextBox edClientCount;
 		private System.Windows.Forms.TextBox edDebug;
-		private System.Windows.Forms.TextBox edName;
-		private System.Windows.Forms.TextBox edWeight;
 		private System.Windows.Forms.PropertyGrid grdDisplay;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label lbAge;
 		private System.Windows.Forms.Label lbClientCount;
-		private System.Windows.Forms.Label lbName;
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel pnlHeader;
 		private System.Windows.Forms.Splitter splitter1;
 		private System.Windows.Forms.TreeView tvObjectTree;
-		private ObjectTreeViewer viewer;
+		private ObjectTreeViewer _viewer;
 		FormDebugger _debugger;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Label label1;
 
 		public void Add(string message)
 		{
@@ -306,9 +247,15 @@ namespace PersonViewer
 
 		private void EnableButtons()
 		{
-			btnAdd.Enabled = (_persons != null);
-			btnDelete.Enabled = (_persons != null && !_persons.IsEmpty);
-			btnInitialise.Enabled = (_persons == null);
+			btnAdd.Enabled = (_game != null);
+			btnDelete.Enabled = (_game != null && !_game.Players.IsEmpty);
+		}
+
+		private void Initialise()
+		{
+			_game = new GameClasses.Game();
+			_viewer.Object = _game;
+			Redraw();
 		}
 
 		private void OnMessageReceivedEvent(object sender, byte[] data)
@@ -316,13 +263,21 @@ namespace PersonViewer
 			using (BinaryStreamReader reader = new BinaryStreamReader(data))
 			{
 				int id = reader.ReadInt32();
-				((Server)_persons.Find(id)).ProcessCommand(reader);
+				BaseEntity entity = ServerEntityList.Find(id);
+
+				if (entity == null)
+					throw new Exception(String.Format("entity {0} not found", id));
+
+				((Server)entity).ProcessCommand(reader);
 			}
-			UpdateOnMainThread();
+			Redraw();
 		}
 
 		private void OnNewClientConnectionEvent(object sender, ClientList clients)
 		{
+			if (clients.Count == 1)
+				Initialise();
+
 			edClientCount.Text = clients.Count.ToString();
 		}
 
@@ -349,15 +304,15 @@ namespace PersonViewer
 
 		// this method is called within a thread, hence it must call OnUpdate via
 		// the Invoke() method to allow the UI to be updated safely
-		private void UpdateOnMainThread()
+		private void Redraw()
 		{
-			this.Invoke(new EventHandler(OnUpdate), new object[] {this, new EventArgs()});
+			this.Invoke(new EventHandler(OnRedraw), new object[] {this, new EventArgs()});
 		}
 
-		private void OnUpdate(object sender, EventArgs e)
+		private void OnRedraw(object sender, EventArgs e)
 		{
-			if(viewer != null && viewer.Object != null)
-				viewer.Update();
+			if(_viewer != null && _viewer.Object != null)
+				_viewer.Update();
 
 			EnableButtons();
 
@@ -368,32 +323,26 @@ namespace PersonViewer
 		{
 			System.DateTime duration = System.DateTime.Now;
 
-			PersonClasses.Person p = new PersonClasses.Person(
-				edName.Text,
-				Int32.Parse(edAge.Text),
-				Int32.Parse(edWeight.Text)
-			);
-			_persons.Add(p);
+			Laan.Risk.Player.Server.Player player = new Laan.Risk.Player.Server.Player();
+			_game.Players.Add(player);
 
 			TimeSpan t = System.DateTime.Now - duration;
-			Debug.WriteLine("Time Taken: " + t);
+			Log.WriteLine("Time Taken: " + t);
 
-			UpdateOnMainThread();
+			Redraw();
 		}
 
 		private void btnDelete_Click(object sender, System.EventArgs e)
 		{
 			if(grdDisplay.SelectedObject is BaseEntity)
-				_persons.Remove((BaseEntity)grdDisplay.SelectedObject);
+				_game.Players.Remove((BaseEntity)grdDisplay.SelectedObject);
 
-			UpdateOnMainThread();
+			Redraw();
 		}
 
 		private void btnInitialise_Click(object sender, System.EventArgs e)
 		{
-			_persons = new PersonClasses.PersonList();
-			viewer.Object = _persons;
-			UpdateOnMainThread();
+			Initialise();
 		}
 
 		private void frmServer_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -404,18 +353,18 @@ namespace PersonViewer
 
 		private void frmServer_Load(object sender, System.EventArgs e)
 		{
-			_server = GameServer.Instance;
+			_server = Laan.GameLibrary.GameServer.Instance;
 			_server.OnProcessMessageEvent += new OnProcessMessageEventHandler(OnMessageReceivedEvent);
 			_server.OnNewClientConnectionEvent += new OnNewClientConnectionEventHandler(OnNewClientConnectionEvent);
 
 			_server.Active = true;
 
-			viewer = new ObjectTreeViewer(tvObjectTree, null);
+			_viewer = new ObjectTreeViewer(tvObjectTree, null);
 		}
 
 		private void tvObjectTree_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
 		{
-			NodeDefinition def = viewer.SelectedObject;
+			NodeDefinition def = _viewer.SelectedObject;
 
 			grdDisplay.SelectedObject = def.Instance;
 			if (def.Property != "")
@@ -427,5 +376,5 @@ namespace PersonViewer
 		{
 			Application.Run(new frmServer());
 		}
-    }
+	}
 }

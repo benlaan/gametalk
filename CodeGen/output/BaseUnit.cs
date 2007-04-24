@@ -2,12 +2,10 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-
-namespace Laan.Business.Risk.Unit
+namespace Laan.Risk.Unit
 {
     class Fields
     {
@@ -16,31 +14,20 @@ namespace Laan.Business.Risk.Unit
         internal const int Location   = 3;
     }
     
-    public interface IUnit : IBaseEntity
-    {
-        Int32   Size { get; }
-        Int32   Experience { get; }
-        Int32   Location { get; }
-    }
- 
-    public interface IUnitList : IBaseEntity
-    {
-        IUnit this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class UnitList : ServerEntityList, IUnitList
+
+        public class UnitList : ServerEntityList
         {
-            public new IUnit this[int index]
+            public new Server.Unit this[int index]
             {
                 get {
-                    return (IUnit)base[index];
+                    return (Server.Unit)base[index];
                 }
             }
         }
 
-        public abstract class BaseUnit : BaseEntityServer, IUnit
+        public abstract class BaseUnit : BaseEntityServer
         {
             // --------------- Private -------------------------------------------------
 
@@ -104,17 +91,18 @@ namespace Laan.Business.Risk.Unit
 
     namespace Client
     {
-        public class UnitList: ClientEntityList, IUnitList
+    
+        public class UnitList: ClientEntityList
         {
-            public new IUnit this[int index]
+            public new Client.Unit this[int index]
             {
                 get {
-                    return (IUnit)base[index];
+                    return (Client.Unit)base[index];
                 }
             }
         }
 
-        public abstract class BaseUnit : BaseEntityClient, IUnit
+        public abstract class BaseUnit : BaseEntityClient
         {
 
             // ------------ Private ---------------------------------------------------------
