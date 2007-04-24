@@ -98,10 +98,15 @@ namespace Laan.GameLibrary.Entity
 
 		internal void Delete()
 		{
+			// register the entity with the data store
+			ServerDataStore.Instance.Remove(this._entity);
+
 			Log.WriteLine("Server.Delete()");
 			BinaryStreamWriter writer = new BinaryStreamWriter(Size);
 			writer.WriteByte(MessageCode.Delete);
 			writer.WriteInt32(_entity.ID);
+
+			// send as message
 			GameServer.Instance.AddUpdateMessage(writer.DataStream);
 		}
 
@@ -111,8 +116,12 @@ namespace Laan.GameLibrary.Entity
 			BinaryStreamWriter writer = new BinaryStreamWriter(Size);
 			// call the virtual method Serialise
 			Serialise(writer);
+
 			// send as message
 			GameServer.Instance.AddUpdateMessage(writer.DataStream);
+
+			// register the entity with the data store
+			ServerDataStore.Instance.Add(this._entity);
 		}
 
 		private void Serialise(BinaryStreamWriter writer)

@@ -263,7 +263,7 @@ namespace Laan.Risk.GameServer.Client
 			using (BinaryStreamReader reader = new BinaryStreamReader(data))
 			{
 				int id = reader.ReadInt32();
-				BaseEntity entity = ServerEntityList.Find(id);
+				BaseEntity entity = ServerDataStore.Instance.Find(id);
 
 				if (entity == null)
 					throw new Exception(String.Format("entity {0} not found", id));

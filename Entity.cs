@@ -354,6 +354,17 @@ namespace Laan.GameLibrary.Entity
 
     }
 
+	public class ServerDataStore: EntityList, IEnumerable
+	{
+		static ServerDataStore _entities = new ServerDataStore();
+
+		public static ServerDataStore Instance
+		{
+			get { return _entities; }
+		}
+
+	}
+
     public abstract class BaseEntityServer: BaseEntity
     {
         // --------------- Private -------------------------------------------------
@@ -364,7 +375,7 @@ namespace Laan.GameLibrary.Entity
 
         protected override Communication GetComms()
         {
-            return _server;
+			return _server;
         }
 
         protected abstract void ProcessCommand(BinaryStreamReader reader);
@@ -416,4 +427,5 @@ namespace Laan.GameLibrary.Entity
         }
 
     }
+
 }
