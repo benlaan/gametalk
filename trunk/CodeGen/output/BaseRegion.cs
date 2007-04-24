@@ -2,13 +2,10 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-using Laan.Business.Risk.Unit;
-
-namespace Laan.Business.Risk.Region
+namespace Laan.Risk.Region
 {
     class Fields
     {
@@ -19,33 +16,21 @@ namespace Laan.Business.Risk.Region
         internal const int Attackers = 5;
     }
     
-    public interface IRegion : IBaseEntity
-    {
-        Int32     Economy { get; }
-        Int32     Oil { get; }
-        Int32     Arms { get; }
-        IUnitList Defenders { get; }
-        IUnitList Attackers { get; }
-    }
- 
-    public interface IRegionList : IBaseEntity
-    {
-        IRegion this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class RegionList : ServerEntityList, IRegionList
+        using Units = Laan.Risk.Unit.Server;
+
+        public class RegionList : ServerEntityList
         {
-            public new IRegion this[int index]
+            public new Server.Region this[int index]
             {
                 get {
-                    return (IRegion)base[index];
+                    return (Server.Region)base[index];
                 }
             }
         }
 
-        public abstract class BaseRegion : BaseEntityServer, IRegion
+        public abstract class BaseRegion : BaseEntityServer
         {
             // --------------- Private -------------------------------------------------
 
@@ -55,8 +40,8 @@ namespace Laan.Business.Risk.Region
             internal Int32    _economy;
             internal Int32    _oil;
             internal Int32    _arms;
-            internal IUnitList _defenders;
-            internal IUnitList _attackers;
+            internal Units.UnitList _defenders;
+            internal Units.UnitList _attackers;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
@@ -110,7 +95,7 @@ namespace Laan.Business.Risk.Region
                 }
             }
 
-            public IUnitList Defenders
+            public Units.UnitList Defenders
             {
                 get { return _defenders; }
                 set {
@@ -120,7 +105,7 @@ namespace Laan.Business.Risk.Region
                 }
             }
 
-            public IUnitList Attackers
+            public Units.UnitList Attackers
             {
                 get { return _attackers; }
                 set {
@@ -135,17 +120,19 @@ namespace Laan.Business.Risk.Region
 
     namespace Client
     {
-        public class RegionList: ClientEntityList, IRegionList
+        using Units = Laan.Risk.Unit.Client;
+    
+        public class RegionList: ClientEntityList
         {
-            public new IRegion this[int index]
+            public new Client.Region this[int index]
             {
                 get {
-                    return (IRegion)base[index];
+                    return (Client.Region)base[index];
                 }
             }
         }
 
-        public abstract class BaseRegion : BaseEntityClient, IRegion
+        public abstract class BaseRegion : BaseEntityClient
         {
 
             // ------------ Private ---------------------------------------------------------
@@ -153,8 +140,8 @@ namespace Laan.Business.Risk.Region
             internal Int32     _economy;
             internal Int32     _oil;
             internal Int32     _arms;
-            internal IUnitList _defenders = null;
-            internal IUnitList _attackers = null;
+            internal Units.UnitList _defenders = null;
+            internal Units.UnitList _attackers = null;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -168,6 +155,8 @@ namespace Laan.Business.Risk.Region
 
             public BaseRegion() : base()
             {
+                _defenders = new Units.UnitList();
+                _attackers = new Units.UnitList();
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -209,12 +198,12 @@ namespace Laan.Business.Risk.Region
                 get { return _arms; }
             }
 
-            public IUnitList Defenders
+            public Units.UnitList Defenders
             {
                 get { return _defenders; }
             }
 
-            public IUnitList Attackers
+            public Units.UnitList Attackers
             {
                 get { return _attackers; }
             }

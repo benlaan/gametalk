@@ -1,9 +1,10 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using Indy.Sockets;
 using System.Text;
 using System.Runtime.Serialization;
+
+using Laan.Library.Logging;
 
 namespace Laan.GameLibrary
 {
@@ -38,6 +39,7 @@ namespace Laan.GameLibrary
 			_tcpClient = new TCPClient();
 			_tcpClient.Port = Config.OutboundPort;
 			_tcpClient.Host = Config.OutboundHost;
+			_tcpClient.OnDisconnected += new TIdNetNotifyEvent(OnClientDisconnected);
 		}
 
 		protected Indy.Sockets.TCPServer _tcpServer;
@@ -68,25 +70,31 @@ namespace Laan.GameLibrary
 
 		protected virtual byte[] InternalOnServerExecute(Context context)
 		{
-			Debug.WriteLine("GameSocket: Receiving Message");
+			Log.WriteLine("GameSocket: Receiving Message");
 
 			byte[] data = ReadFromSocket(context.Connection.Socket);
 
-			Debug.WriteLine("GameSocket: Message Received: " +  Message.ToString(data));
+			Log.WriteLine("GameSocket: Message Received: " +  Message.ToString(data));
 
 			return data;
 		}
 
-		// -------------- Public Events ----------------------------------
+		// -------------- protected Events ----------------------------------
+
 		protected void OnServerConnect(Context context)
 		{
 
 		}
 
-		// -------------- Public Events ----------------------------------
-		public void OnServerDisconnect(Context context)
+		protected void OnClientDisconnected(object sender)
 		{
-			_tcpClient.Disconnect(false);
+			;//_tcpClient.Disconnect(false);
+		}
+
+
+		protected void OnServerDisconnect(Context context)
+		{
+//			_tcpClient.Disconnect(false);
 		}
 	}
 }

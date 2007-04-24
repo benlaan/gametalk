@@ -2,14 +2,10 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-using Laan.Business.Risk.Region;
-using Laan.Business.Risk.Unit;
-
-namespace Laan.Business.Risk.Nation
+namespace Laan.Risk.Nation
 {
     class Fields
     {
@@ -20,33 +16,22 @@ namespace Laan.Business.Risk.Nation
         internal const int OwnedUnits   = 5;
     }
     
-    public interface INation : IBaseEntity
-    {
-        String      Leader { get; }
-        Int32       Prestige { get; }
-        Int32       Technology { get; }
-        IRegionList OwnedRegions { get; }
-        IUnitList   OwnedUnits { get; }
-    }
- 
-    public interface INationList : IBaseEntity
-    {
-        INation this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class NationList : ServerEntityList, INationList
+        using Regions = Laan.Risk.Region.Server;
+        using Units = Laan.Risk.Unit.Server;
+
+        public class NationList : ServerEntityList
         {
-            public new INation this[int index]
+            public new Server.Nation this[int index]
             {
                 get {
-                    return (INation)base[index];
+                    return (Server.Nation)base[index];
                 }
             }
         }
 
-        public abstract class BaseNation : BaseEntityServer, INation
+        public abstract class BaseNation : BaseEntityServer
         {
             // --------------- Private -------------------------------------------------
 
@@ -56,8 +41,8 @@ namespace Laan.Business.Risk.Nation
             internal String     _leader;
             internal Int32      _prestige;
             internal Int32      _technology;
-            internal IRegionList _ownedRegions;
-            internal IUnitList  _ownedUnits;
+            internal Regions.RegionList _ownedRegions;
+            internal Units.UnitList _ownedUnits;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
@@ -111,7 +96,7 @@ namespace Laan.Business.Risk.Nation
                 }
             }
 
-            public IRegionList OwnedRegions
+            public Regions.RegionList OwnedRegions
             {
                 get { return _ownedRegions; }
                 set {
@@ -121,7 +106,7 @@ namespace Laan.Business.Risk.Nation
                 }
             }
 
-            public IUnitList OwnedUnits
+            public Units.UnitList OwnedUnits
             {
                 get { return _ownedUnits; }
                 set {
@@ -136,17 +121,20 @@ namespace Laan.Business.Risk.Nation
 
     namespace Client
     {
-        public class NationList: ClientEntityList, INationList
+        using Regions = Laan.Risk.Region.Client;
+        using Units = Laan.Risk.Unit.Client;
+    
+        public class NationList: ClientEntityList
         {
-            public new INation this[int index]
+            public new Client.Nation this[int index]
             {
                 get {
-                    return (INation)base[index];
+                    return (Client.Nation)base[index];
                 }
             }
         }
 
-        public abstract class BaseNation : BaseEntityClient, INation
+        public abstract class BaseNation : BaseEntityClient
         {
 
             // ------------ Private ---------------------------------------------------------
@@ -154,21 +142,23 @@ namespace Laan.Business.Risk.Nation
             internal String       _leader;
             internal Int32        _prestige;
             internal Int32        _technology;
-            internal IRegionList  _ownedRegions = null;
-            internal IUnitList    _ownedUnits = null;
+            internal Regions.RegionList _ownedRegions = null;
+            internal Units.UnitList _ownedUnits = null;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
                 base.Deserialise(reader);
-                _leader     = reader.ReadString();
-                _prestige   = reader.ReadInt32();
-                _technology = reader.ReadInt32();
+                _leader       = reader.ReadString();
+                _prestige     = reader.ReadInt32();
+                _technology   = reader.ReadInt32();
             }
 
             // ------------ Public ----------------------------------------------------------
 
             public BaseNation() : base()
             {
+                _ownedRegions = new Regions.RegionList();
+                _ownedUnits = new Units.UnitList();
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -210,12 +200,12 @@ namespace Laan.Business.Risk.Nation
                 get { return _technology; }
             }
 
-            public IRegionList OwnedRegions
+            public Regions.RegionList OwnedRegions
             {
                 get { return _ownedRegions; }
             }
 
-            public IUnitList OwnedUnits
+            public Units.UnitList OwnedUnits
             {
                 get { return _ownedUnits; }
             }

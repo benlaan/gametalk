@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Threading;
 using Indy.Sockets;
 
+using Laan.Library.Logging;
 using Laan.GameLibrary.Data;
 
 namespace Laan.GameLibrary
@@ -47,7 +47,7 @@ namespace Laan.GameLibrary
 
 		protected override byte[] InternalOnServerExecute(Context context)
 		{
-			Debug.WriteLine("GameServer: Receiving Client Message");
+			Log.WriteLine("GameServer: Receiving Client Message");
 
 			byte[] message = base.InternalOnServerExecute(context);
 
@@ -60,7 +60,7 @@ namespace Laan.GameLibrary
 					string hostName = reader.ReadString();
 					int port = reader.ReadInt32();
 
-					Debug.WriteLine(String.Format("Client {0} has connected from {1}:{2}", clientName, hostName, port));
+					Log.WriteLine("Client {0} has connected from {1}:{2}", clientName, hostName, port);
 
 					AddClient(clientName, hostName, port);
 				}
@@ -127,7 +127,7 @@ namespace Laan.GameLibrary
 
 			bool isValid = false;
 
-			Debug.WriteLine(
+			Log.WriteLine(
 				String.Format("UDP Received '{0}' from {1} on port {2}",
 					receivedText,
 					binding.PeerIP,
@@ -144,7 +144,7 @@ namespace Laan.GameLibrary
 			if(isValid)
 			{
 				string sSend = String.Format("{0}:{1}", Environment.MachineName, Config.InboundPort);
-				Debug.WriteLine("Sending UDP response: " + sSend);
+				Log.WriteLine("Sending UDP response: " + sSend);
 				_udpServer.Send(binding.PeerIP, binding.PeerPort, sSend);
 			}
 		}
@@ -171,7 +171,7 @@ namespace Laan.GameLibrary
 					// get the message
 					lock(this._messages) {
 						m = (byte[])_messages.Dequeue();
-						Debug.WriteLine("Dequeing Message: " + Message.ToString(m));
+						Log.WriteLine("Dequeing Message: " + Message.ToString(m));
 					}
 
 					// allow custom game processing of message to occur
@@ -194,7 +194,7 @@ namespace Laan.GameLibrary
 				{
 					if(c.PendingMessages.Count > 0)
 					{
-						Debug.WriteLine(String.Format("Sending Pending Message to {0}:{1}", c.Host, c.Port));
+						Log.WriteLine("Sending Pending Message to {0}:{1}", c.Host, c.Port);
 
 						_tcpClient.Connect(c.Host, c.Port);
 						try
@@ -203,7 +203,7 @@ namespace Laan.GameLibrary
 							{
 								byte[] m = (byte[])c.PendingMessages[i];
 								WriteToSocket(_tcpClient.Socket, m);
-//						   		Debug.WriteLine(String.Format("Message: {0}", Message.ToString(m)));
+//						   		Log.WriteLine("Message: {0}", Message.ToString(m)));
 							}
 							c.PendingMessages.Clear();
 						}
@@ -227,11 +227,11 @@ namespace Laan.GameLibrary
 
 				if(value) {
 					_processor.Start();
-					Debug.WriteLine(String.Format("Listening (TCP) on Port {0}", Port));
+					Log.WriteLine("Listening (TCP) on Port {0}", Port);
 				}
 				else {
 					_processor.Abort();
-					Debug.WriteLine(String.Format("Stopped Listening (TCP) on Port {0}", Port));
+					Log.WriteLine("Stopped Listening (TCP) on Port {0}", Port);
 				}
 			}
 		}

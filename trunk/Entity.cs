@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Diagnostics;
 using System.Reflection;
+using System.Diagnostics;
+
 using Laan.GameLibrary.Data;
+using Laan.Library.Logging;
 
 namespace Laan.GameLibrary.Entity
 {
@@ -17,19 +19,28 @@ namespace Laan.GameLibrary.Entity
         internal const int Remove = 1;
     }
 
+	public class MessageCode
+	{
+		public const byte Create = 0;
+		public const byte Update = 1;
+		public const byte Delete = 2;
+	}
+
     public interface IBaseEntity
     {
 
         Int32  ID   { get ; set ; }
-        string Name { get ; set ; }
+		string Name { get ; set ; }
+
+		BaseEntity Entity();
 
         void Serialise(BinaryStreamWriter writer);
         void Deserialise(BinaryStreamReader reader);
-    }
+	}
 
-    // generic class to contain all transferable objects
+	// generic class to contain all transferable objects
     public abstract class BaseEntity : IBaseEntity
-    {
+	{
 
         // ------------ Private ----------------------------------------------------------
 
@@ -43,7 +54,7 @@ namespace Laan.GameLibrary.Entity
             _name = value;
         }
 
-       protected abstract Communication GetComms();
+		protected abstract Communication GetComms();
 
         // ------------ Public ------------------------------------------------------------
         public int ID
@@ -59,15 +70,20 @@ namespace Laan.GameLibrary.Entity
         }
 		private int _streamSize;
 
-        public static implicit operator GameLibrary.Entity.Client(BaseEntity entity)
+		public BaseEntity Entity()
+		{
+        	return this;
+		}
+
+		public static implicit operator GameLibrary.Entity.Client(BaseEntity entity)
         {
             // allows the class to be cast to an Entity.Client class
             return (Client)entity.GetComms();
         }
 
         public static implicit operator GameLibrary.Entity.Server(BaseEntity entity)
-        {
-            // allows the class to be cast to an Entity.Server class
+		{
+			// allows the class to be cast to an Entity.Server class
             return (Server)entity.GetComms();
         }
 
@@ -96,11 +112,10 @@ namespace Laan.GameLibrary.Entity
 			get { return _streamSize; }
 			set { _streamSize = value; }
 		}
-
 	}
 
 	public abstract class EntityList : BaseEntity, IEnumerable
-    {
+	{
 
         private ArrayList _list;
 
@@ -139,9 +154,9 @@ namespace Laan.GameLibrary.Entity
                 }
             }
             return null;
-        }
+		}
 
-        protected override Communication GetComms()
+		protected override Communication GetComms()
         {
             return null;
         }
@@ -161,20 +176,75 @@ namespace Laan.GameLibrary.Entity
         }
      }
 
-    public class MessageCode
-    {
-        public const byte Create = 0;
-        public const byte Update = 1;
-        public const byte Delete = 2;
-    }
-
     public delegate void OnProcessCommandEventHandler(BinaryStreamReader reader);
 
 	public delegate void OnNewEntityEventHandler(BaseEntity instance);
 	public delegate void OnRootEntityEventHandler(BaseEntity rootEntity);
 	public delegate void OnModifyEntityEventHandler(BaseEntity entity);
 
-    public class ClientDataStore : EntityList
+	public class ServerEntityList : EntityList
+	{
+		Server _server;
+
+		public ServerEntityList()
+		{
+			_server = new GameLibrary.Entity.Server(this);
+		}
+
+		protected override Communication GetComms()
+		{
+			return _server;
+		}
+
+		public override void Add(BaseEntity entity)
+		{
+			base.Add(entity);
+			_server.Modify(this.ID, Commands.Add, entity.ID);
+		}
+
+		public override void Remove(BaseEntity entity)
+		{
+			base.Remove(entity);
+			_server.Modify(this.ID, Commands.Remove, entity.ID);
+		}
+	}
+
+	public class ClientEntityList : EntityList
+	{
+		Client _client;
+
+		public ClientEntityList()
+		{
+			_client = new GameLibrary.Entity.Client();
+			_client.OnModify += new OnServerMessageEventHandler(OnModifyEvent);
+		}
+
+		protected override Communication GetComms()
+		{
+			return _client;
+		}
+
+		private void OnModifyEvent(byte field, BinaryStreamReader reader)
+		{
+			int id = reader.ReadInt32();
+			BaseEntity e = ClientDataStore.Instance.Find(id);
+
+			Debug.Assert(e != null, String.Format("ClientDataStore.Find({0}): not found!", id));
+			switch (field)
+			{
+				case Commands.Add:
+					this.Add(e);
+					break;
+				case Commands.Remove:
+					this.Remove(e);
+					break;
+				default:
+					throw new Exception("ClientEntityList: Command must be Add or Remove");
+			}
+		}
+	}
+
+	public class ClientDataStore : EntityList
     {
 
         static ClientDataStore _entities = new ClientDataStore();
@@ -187,7 +257,7 @@ namespace Laan.GameLibrary.Entity
         public static ClientDataStore Instance
         {
             get { return _entities; }
-        }
+		}
 
 		public event OnRootEntityEventHandler   OnRootEntityEvent;
 		public event OnNewEntityEventHandler    OnNewEntityEvent;
@@ -219,14 +289,14 @@ namespace Laan.GameLibrary.Entity
 			}
 			catch (System.Exception e)
 			{
-				Debug.WriteLine("Error: " + e.ToString());
+				Log.WriteLine("Error: " + e.ToString());
 				throw;
 			}
 		}
 
         internal void ProcessInsert(BinaryStreamReader reader)
         {
-			Debug.WriteLine("ClientDataStore.ProcessInsert");
+			Log.WriteLine("ClientDataStore.ProcessInsert");
 
             // create an instance of the given type, and attach
 			// it to the entities list
@@ -249,12 +319,12 @@ namespace Laan.GameLibrary.Entity
 			if (e != null)
 				e.Deserialise(reader);
 
-			Debug.WriteLine(String.Format("Created BaseEntity {0}:{1}", e.ID, e.Name));
+			Log.WriteLine("Created BaseEntity {0}:{1}", e.ID, e.Name);
 		}
 
         internal void ProcessDelete(BinaryStreamReader reader)
 		{
-			Debug.WriteLine("ClientDataStore.ProcessDelete");
+			Log.WriteLine("ClientDataStore.ProcessDelete");
 
 			int ID = reader.ReadInt32();
             BaseEntity e = _entities.Find(ID);
@@ -265,7 +335,7 @@ namespace Laan.GameLibrary.Entity
 
         internal void ProcessModify(BinaryStreamReader reader)
         {
-			Debug.WriteLine("ClientDataStore.ProcessModify");
+			Log.WriteLine("ClientDataStore.ProcessModify");
 
             int ID = reader.ReadInt32();
 
@@ -283,68 +353,6 @@ namespace Laan.GameLibrary.Entity
 		}
 
     }
-
-    public class ClientEntityList : EntityList
-    {
-        Client _client;
-
-        public ClientEntityList()
-        {
-            _client = new GameLibrary.Entity.Client();
-            _client.OnModify += new OnServerMessageEventHandler(OnModifyEvent);
-        }
-
-        protected override Communication GetComms()
-        {
-            return _client;
-        }
-
-        private void OnModifyEvent(byte field, BinaryStreamReader reader)
-        {
-            int id = reader.ReadInt32();
-            BaseEntity e = ClientDataStore.Instance.Find(id);
-
-            Debug.Assert(e != null, String.Format("ClientDataStore.Find({0}): not found!", id));
-            switch (field)
-            {
-                case Commands.Add:
-                    this.Add(e);
-                    break;
-                case Commands.Remove:
-                    this.Remove(e);
-                    break;
-                default:
-                    throw new Exception("ClientEntityList: Command must be Add or Remove");
-            }
-        }
-    }
-
-    public class ServerEntityList : EntityList
-    {
-        Server _server;
-
-        public ServerEntityList()
-        {
-            _server = new GameLibrary.Entity.Server(this);
-        }
-
-        protected override Communication GetComms()
-        {
-            return _server;
-        }
-
-        public override void Add(BaseEntity entity)
-        {
-            base.Add(entity);
-            _server.Modify(this.ID, Commands.Add, entity.ID);
-        }
-
-        public override void Remove(BaseEntity entity)
-        {
-            base.Remove(entity);
-            _server.Modify(this.ID, Commands.Remove, entity.ID);
-		}
-	}
 
     public abstract class BaseEntityServer: BaseEntity
     {
@@ -381,21 +389,20 @@ namespace Laan.GameLibrary.Entity
 
     public abstract class BaseEntityClient: BaseEntity
     {
+
+		public BaseEntityClient()
+		{
+			_client = new GameLibrary.Entity.Client();
+		}
+
         // --------------- Private -------------------------------------------------
 
-        private GameLibrary.Entity.Client _client = null;
-
-        // --------------- Protected -----------------------------------------------
-
-        protected void Initialise()
-        {
-            _client = new GameLibrary.Entity.Client();
-        }
+		private GameLibrary.Entity.Client _client = null;
 
         protected override Communication GetComms()
         {
-            return _client;
-        }
+			return _client;
+		}
 
         // --------------- Public --------------------------------------------------
 

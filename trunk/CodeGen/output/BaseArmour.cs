@@ -2,39 +2,29 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-
-namespace Laan.Business.Risk.Unit.Armour
+namespace Laan.Risk.Unit.Armour
 {
     class Fields
     {
     }
     
-    public interface IArmour : IBaseEntity
-    {
-    }
- 
-    public interface IArmourList : IBaseEntity
-    {
-        IArmour this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class ArmourList : ServerEntityList, IArmourList
+
+        public class ArmourList : ServerEntityList
         {
-            public new IArmour this[int index]
+            public new Server.Armour this[int index]
             {
                 get {
-                    return (IArmour)base[index];
+                    return (Server.Armour)base[index];
                 }
             }
         }
 
-        public abstract class BaseArmour : Unit.Server.Unit, IArmour
+        public abstract class BaseArmour : Unit.Server.Unit
         {
             // --------------- Private -------------------------------------------------
 
@@ -62,17 +52,18 @@ namespace Laan.Business.Risk.Unit.Armour
 
     namespace Client
     {
-        public class ArmourList: ClientEntityList, IArmourList
+    
+        public class ArmourList: ClientEntityList
         {
-            public new IArmour this[int index]
+            public new Client.Armour this[int index]
             {
                 get {
-                    return (IArmour)base[index];
+                    return (Client.Armour)base[index];
                 }
             }
         }
 
-        public abstract class BaseArmour : Unit.Client.Unit, IArmour
+        public abstract class BaseArmour : Unit.Client.Unit
         {
 
             // ------------ Private ---------------------------------------------------------

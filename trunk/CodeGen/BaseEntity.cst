@@ -4,22 +4,13 @@
 <%@ Property Name="EntityName" Type="System.String" Optional="True" Category="Context" Description="If this template is being called directly, then specify the element name to target." %>
 <%@ Assembly Name="CodeSmith.BaseTemplates" %>
 <%@ Import Namespace="CodeSmith.BaseTemplates" %>
+<%@ Import Namespace="System.Text.RegularExpressions" %>
 using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
-
-<%
-    int width = MaxWidthType();
-    
-    foreach (Requirement req in EntityElement.Requirements)
-    {
-        Response.WriteLine(String.Format("using {0};", req.Namespace));
-    }
-%>
 
 namespace <%= EntityElement.Namespace %>
 {
@@ -27,7 +18,7 @@ namespace <%= EntityElement.Namespace %>
     {
         <%
             Response.IndentLevel = 2;
-            width = MaxWidthName();
+            int width = MaxWidthName();
             int index = 1;
             foreach (Property property in EntityElement.Properties)
                 if(!property.Inherited)
@@ -44,51 +35,28 @@ namespace <%= EntityElement.Namespace %>
         %>
     }
     
-    public interface I<%= EntityElement.Name %> : IBaseEntity
-    {
-        <%
-            Response.IndentLevel = 2;
-            width = MaxWidthType() + 1;  // + 1 for "I"
-            
-            string sName;
-            
-            foreach (Property property in EntityElement.Properties)
-                if(!property.Inherited)
-                {
-                    if(IsPrimitiveType(property.Type))
-                        sName = property.Type;
-                    else
-                        sName = "I" + property.Type;
-                        
-                    Response.WriteLine(
-                        String.Format("{0} {1} {{ get; }}",
-                            FormattedWidth(sName, width),
-                            property.Name
-                        )
-                    );
-                }
-            Response.IndentLevel = 0;
-        %>
-    }
- 
-    public interface I<%= EntityElement.Name%>List : IBaseEntity
-    {
-        I<%= EntityElement.Name%> this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class <%= EntityElement.Name %>List : ServerEntityList, I<%= EntityElement.Name%>List
+    <%
+        width = MaxWidthType();
+        
+        foreach (Requirement req in EntityElement.Requirements)
         {
-            public new <%= "I" + EntityElement.Name %> this[int index]
+            Response.WriteLine(String.Format("        using {0}s = {1}.Server;", GetTermEntity(req.Namespace), req.Namespace));
+        }
+    %>
+
+        public class <%= EntityElement.Name %>List : ServerEntityList
+        {
+            public new <%= DeriveClassName(EntityElement, "Server") %> this[int index]
             {
                 get {
-                    return (<%= "I" + EntityElement.Name %>)base[index];
+                    return (<%= DeriveClassName(EntityElement, "Server") %>)base[index];
                 }
             }
         }
 
-        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Server") %>, I<%= EntityElement.Name %>
+        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Server") %>
         {
             // --------------- Private -------------------------------------------------
 
@@ -114,7 +82,7 @@ namespace <%= EntityElement.Namespace %>
                 {
                     Response.WriteLine(
                         String.Format("internal {0} _{1};",
-                            FormattedWidth(GetInterfaceType(property.Type), width),
+                            FormattedWidth(GetDeclaredType(property), width),
                             StringUtility.ToCamelCase(property.Name)
                         )
                     );
@@ -172,7 +140,7 @@ namespace <%= EntityElement.Namespace %>
                 if(!property.Inherited)
                 {
 %>
-            public <%=GetInterfaceType(property.Type)%> <%= property.Name %>
+            public <%=GetDeclaredType(property)%> <%= property.Name %>
             {
                 get { return _<%= StringUtility.ToCamelCase(property.Name)%>; }
                 set {
@@ -188,17 +156,26 @@ namespace <%= EntityElement.Namespace %>
 
     namespace Client
     {
-        public class <%= EntityElement.Name %>List: ClientEntityList, I<%= EntityElement.Name%>List
+    <%
+        width = MaxWidthType();
+        
+        foreach (Requirement req in EntityElement.Requirements)
         {
-            public new <%= "I" + EntityElement.Name %> this[int index]
+            Response.WriteLine(String.Format("        using {0}s = {1}.Client;", GetTermEntity(req.Namespace), req.Namespace));
+        }
+    %>
+    
+        public class <%= EntityElement.Name %>List: ClientEntityList
+        {
+            public new <%= DeriveClassName(EntityElement, "Client") %> this[int index]
             {
                 get {
-                    return (<%= "I" + EntityElement.Name %>)base[index];
+                    return (<%= DeriveClassName(EntityElement, "Client") %>)base[index];
                 }
             }
         }
 
-        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Client") %>, I<%= EntityElement.Name %>
+        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Client") %>
         {
 
             // ------------ Private ---------------------------------------------------------
@@ -212,7 +189,7 @@ namespace <%= EntityElement.Namespace %>
                 {
                     Response.WriteLine(
                         String.Format("internal {0} _{1}{2};",
-                            FormattedWidth(GetInterfaceType(property.Type), width),
+                            FormattedWidth(GetDeclaredType(property), width),
                             StringUtility.ToCamelCase(property.Name),
                             IsPrimitiveType(property.Type) ? "" : " = null"
                         )
@@ -249,6 +226,21 @@ namespace <%= EntityElement.Namespace %>
 
             public Base<%= EntityElement.Name %><%= GetConstructor(false) %>
             {
+                <%
+                    Response.IndentLevel = 4;
+                    foreach (Property property in EntityElement.Properties)
+                    {
+                        string type = property.ShortType != null ? property.ShortType : property.Type;
+                        if(!property.Inherited)
+                            if(!IsPrimitiveType(property.Type))
+                                Response.WriteLine(
+                                    String.Format("_{0} = new {1}s.{2}();", 
+                                        StringUtility.ToCamelCase(property.Name), property.Type.Replace("List", ""), property.Type));
+
+                    }
+                    
+                    Response.IndentLevel = 0;
+                %>
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -294,7 +286,7 @@ namespace <%= EntityElement.Namespace %>
                 if(!property.Inherited)
                 {
         %>        
-            public <%=GetInterfaceType(property.Type)%> <%=property.Name %>
+            public <%=GetDeclaredType(property)%> <%=property.Name %>
             {
                 get { return _<%= StringUtility.ToCamelCase(property.Name)%>; }
             }
@@ -372,6 +364,11 @@ namespace <%= EntityElement.Namespace %>
             result = "BaseEntity" + origin;
         return result;
     }
+    
+    string DeriveClassName(Entity entity, string section)
+    {
+        return String.Format("{0}.{1}", section, entity.Name);
+    }
 
     string IsNew()
     {
@@ -384,6 +381,12 @@ namespace <%= EntityElement.Namespace %>
             return "I" + propType;
         else
             return propType; 
+    }
+    
+    string GetTermEntity(string nameSpace)
+    {
+        string[] parts = Regex.Split(nameSpace, @"\.");
+        return parts[parts.Length - 1];
     }
     
     string GetModifyValue(Property prop)
@@ -402,6 +405,18 @@ namespace <%= EntityElement.Namespace %>
             return "";
     }
     
+    string GetDeclaredType(Property prop)
+    {
+        if(IsPrimitiveType(prop.Type))
+            return prop.Type;
+        else
+        if(!prop.List)
+            return String.Format("{0}s.{0}", prop.Type);
+        else
+        {
+            return String.Format("{0}s.{1}", prop.Type.Substring(0, prop.Type.Length - 4), prop.Type); 
+        }
+    }
     
     bool IsPrimitiveType(string typeName)
     {

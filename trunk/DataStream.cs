@@ -1,6 +1,8 @@
 using System.IO;
 using System.Drawing;
 
+using Laan.Library.Logging;
+
 namespace Laan.GameLibrary.Data
 {
     public class BinaryStreamReader : System.IDisposable
@@ -29,30 +31,40 @@ namespace Laan.GameLibrary.Data
 
         public byte ReadByte()
         {
-            return _reader.ReadByte();
-        }
+			byte data = _reader.ReadByte();
+			Log.WriteLine("ReadByte: " + data.ToString());
+			return data;
+		}
 
-        public int ReadInt32()
-        {
-            return _reader.ReadInt32();
-        }
+		public int ReadInt32()
+		{
+			int data = _reader.ReadInt32();
+			Log.WriteLine("ReadInt32: " + data.ToString());
+			return data;
+		}
 
-        public string ReadString()
-        {
-            return _reader.ReadString();
-        }
+		public string ReadString()
+		{
+			string data = _reader.ReadString();
+			Log.WriteLine("ReadString: " + data.ToString());
+			return data;
+		}
 
-        public bool ReadBoolean()
-        {
-            return _reader.ReadBoolean();
-        }
+		public bool ReadBoolean()
+		{
+			bool data = _reader.ReadBoolean();
+			Log.WriteLine("ReadBoolean: " + data.ToString());
+			return data;
+		}
 
-        public Color ReadColor()
-        {
-            return Color.FromArgb(_reader.ReadInt32());
-        }
+		public Color ReadColor()
+		{
+			Color data = Color.FromArgb(_reader.ReadInt32());
+			Log.WriteLine("ReadColor: " + data.ToString());
+			return data;
+		}
 
-        public byte[] DataStream
+		public byte[] DataStream
         {
             get {
                 return _stream.GetBuffer();
@@ -77,35 +89,41 @@ namespace Laan.GameLibrary.Data
 
         public void WriteByte(byte value)
         {
-            _writer.Write((byte)value);
-        }
+			_writer.Write((byte)value);
+			Log.WriteLine("WriteByte: " + value);
+		}
 
-        public void WriteInt32(int value)
-        {
-            _writer.Write((int)value);
-        }
+		public void WriteInt32(int value)
+		{
+			_writer.Write((int)value);
+			Log.WriteLine("WriteInt32: " + value);
+		}
 
-        public void WriteString(string value)
-        {
-            _writer.Write((string)value);
-        }
+		public void WriteString(string value)
+		{
+			_writer.Write((string)value);
+			Log.WriteLine("WriteString: " + value);
+		}
 
-        public void WriteDateTime(System.DateTime value)
-        {
-            _writer.Write(value.ToString());
-        }
+		public void WriteDateTime(System.DateTime value)
+		{
+			_writer.Write(value.ToString());
+			Log.WriteLine("WriteDateTime: " + value);
+		}
 
-        public void WriteBoolean(bool value)
-        {
-            _writer.Write((bool)value);
-        }
+		public void WriteBoolean(bool value)
+		{
+			_writer.Write((bool)value);
+			Log.WriteLine("WriteBoolean: " + value);
+		}
 
-        public void WriteColor(Color value)
-        {
-            _writer.Write(value.ToArgb());
-        }
+		public void WriteColor(Color value)
+		{
+			_writer.Write(value.ToArgb());
+			Log.WriteLine("WriteColor: " + value);
+		}
 
-        public byte[] DataStream
+		public byte[] DataStream
         {
             get {
                 return _stream.GetBuffer();

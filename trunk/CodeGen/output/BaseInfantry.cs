@@ -2,39 +2,29 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-
-namespace Laan.Business.Risk.Unit.Infantry
+namespace Laan.Risk.Unit.Infantry
 {
     class Fields
     {
     }
     
-    public interface IInfantry : IBaseEntity
-    {
-    }
- 
-    public interface IInfantryList : IBaseEntity
-    {
-        IInfantry this [int index] { get; }
-    }
-
     namespace Server
     {
-        public class InfantryList : ServerEntityList, IInfantryList
+
+        public class InfantryList : ServerEntityList
         {
-            public new IInfantry this[int index]
+            public new Server.Infantry this[int index]
             {
                 get {
-                    return (IInfantry)base[index];
+                    return (Server.Infantry)base[index];
                 }
             }
         }
 
-        public abstract class BaseInfantry : Unit.Server.Unit, IInfantry
+        public abstract class BaseInfantry : Unit.Server.Unit
         {
             // --------------- Private -------------------------------------------------
 
@@ -62,17 +52,18 @@ namespace Laan.Business.Risk.Unit.Infantry
 
     namespace Client
     {
-        public class InfantryList: ClientEntityList, IInfantryList
+    
+        public class InfantryList: ClientEntityList
         {
-            public new IInfantry this[int index]
+            public new Client.Infantry this[int index]
             {
                 get {
-                    return (IInfantry)base[index];
+                    return (Client.Infantry)base[index];
                 }
             }
         }
 
-        public abstract class BaseInfantry : Unit.Client.Unit, IInfantry
+        public abstract class BaseInfantry : Unit.Client.Unit
         {
 
             // ------------ Private ---------------------------------------------------------

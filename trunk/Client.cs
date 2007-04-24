@@ -1,10 +1,12 @@
 using System;
 using System.IO;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
+
 using Indy.Sockets;
 
+using Laan.Library.Logging;
 using Laan.GameLibrary.Data;
 
 namespace Laan.GameLibrary
@@ -50,33 +52,33 @@ namespace Laan.GameLibrary
             _timer.Tick += new EventHandler(OnBroadcastRendevous);
         }
 
-        public void Connect(string Host, int Port)
-        {
-            this._tcpClient.Host = Host;
-            this._tcpClient.Port = Port;
+		public void Connect(string Host, int Port, string userName)
+		{
+			this._tcpClient.Host = Host;
+			this._tcpClient.Port = Port;
 
-            this.Connect();
+			this.Connect(userName);
         }
 
         // Used to establish the client to server tcp connection, used when
         // sending information to the server
-        public void Connect()
+		public void Connect(string userName)
 		{
 			// establish connection to GameServer
-			Debug.WriteLine(String.Format("Client Socket: attempting to connect to.. {0}:{1}", _tcpClient.Host, _tcpClient.Port));
+			Log.WriteLine("Client Socket: attempting to connect to.. {0}:{1}", _tcpClient.Host, _tcpClient.Port);
 
 			_tcpClient.Connect();
-			SendConnectionProtocol();
+			Log.WriteLine("Client Socket: Connected to {0}:{1}", _tcpClient.Host, _tcpClient.Port);
+			SendConnectionProtocol(userName);
+			Log.WriteLine("ProtocolSent: {0}", userName);
 
 			// establish listener to get updates from Server
-			Debug.WriteLine(String.Format("Server Socket: commencing listening .. {0}", _tcpServer.DefaultPort));
+			Log.WriteLine("Server Socket: commencing listening .. {0}", _tcpServer.DefaultPort);
 			_tcpServer.Active = true;
+			Log.WriteLine("Server Socket: Listening on {0}", _tcpServer.DefaultPort);
 
 			_active = true;
-
-			Debug.WriteLine(String.Format("Client Socket: Connected to {0}:{1}", _tcpClient.Host, _tcpClient.Port));
-			Debug.WriteLine(String.Format("Server Socket: Listening on {0}", _tcpServer.DefaultPort));
-        }
+		}
 
         public bool Active
 		{
@@ -95,9 +97,9 @@ namespace Laan.GameLibrary
 		// The mechansim by which the client initiates a communication to the server
         public void SendMessage(byte[] message)
         {
-            Debug.WriteLine(String.Format("Client: Sending Message: {0}: {1})", this, Message.ToString(message)));
+            Log.WriteLine("Client: Sending Message: {0}: {1})", this, Message.ToString(message));
 			WriteToSocket(_tcpClient.Socket, message);
-			Debug.WriteLine("Client: Message Sent");
+			Log.WriteLine("Client: Message Sent");
 		}
 
         // start broadcasting for a GameServer that responds
@@ -106,7 +108,7 @@ namespace Laan.GameLibrary
         {
              _rendezvousText = rendezvousText;
             _timer.Start();
-        }
+		}
 
         // stop broadcasting
         public void StopRendezvous()
@@ -116,20 +118,20 @@ namespace Laan.GameLibrary
 
 		// After a connection is established, inform Server
         // of client details, to allow server to establish Update mechanism
-        private void SendConnectionProtocol()
+        private void SendConnectionProtocol(string userName)
 		{
 			using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
 			{
 				// Connection protocol consists of user name,
 				// machine name and inbound message port (ie. for tcpServer)
 				writer.WriteInt32(Command.Login);
-				writer.WriteString(Config.UserName);
+				writer.WriteString(userName);
 				writer.WriteString(Environment.MachineName);
 				writer.WriteInt32(Config.InboundPort);
 
 				SendMessage(writer.DataStream);
 
-				Debug.WriteLine("MessageSent(Login)");
+				Log.WriteLine("MessageSent(Login)");
 			}
 		}
 
@@ -148,11 +150,11 @@ namespace Laan.GameLibrary
                 // test for valid input - should be "Host:Port"
                 IsBroadcastFound(sData);
 
-                Debug.WriteLine("Broadcasting..");
+                Log.WriteLine("Broadcasting..");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Log.WriteLine(ex.Message);
 				StopRendezvous();
 				throw;
             }
