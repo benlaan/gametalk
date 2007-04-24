@@ -21,7 +21,7 @@ namespace Laan.GameLibrary.Data
 
             _stream.Write(data, 0, data.Length);
             _stream.Position = 0;
-        }
+		}
 
         public void Dispose()
         {
