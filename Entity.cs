@@ -66,7 +66,7 @@ namespace Laan.GameLibrary.Entity
 		public BaseEntity()
         {
             _name = "";
-			_streamSize = 32;
+			_streamSize = 4;
         }
 		private int _streamSize;
 
