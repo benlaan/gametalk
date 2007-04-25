@@ -110,7 +110,7 @@ namespace <%= EntityElement.Namespace %>
 
             // --------------- Public -----------------------------------------------
 
-            public Base<%= EntityElement.Name %><%= GetConstructor(false) %>
+            public Base<%= EntityElement.Name %><%= GetConstructor() %>
             {
                 <%
                     Response.IndentLevel = 4;
@@ -224,8 +224,9 @@ namespace <%= EntityElement.Namespace %>
 
             // ------------ Public ----------------------------------------------------------
 
-            public Base<%= EntityElement.Name %><%= GetConstructor(false) %>
+            public Base<%= EntityElement.Name %><%= GetConstructor() %>
             {
+                /*
                 <%
                     Response.IndentLevel = 4;
                     foreach (Property property in EntityElement.Properties)
@@ -241,10 +242,11 @@ namespace <%= EntityElement.Namespace %>
                     
                     Response.IndentLevel = 0;
                 %>
+                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            public <%=IsNew()%>void OnModify(byte field, BinaryStreamReader reader)
+            protected override <%=IsNew()%>void OnModify(byte field, BinaryStreamReader reader)
             {
 
                 // move this to the call site of the delegate that calls this (OnUpdate) event
@@ -256,10 +258,10 @@ namespace <%= EntityElement.Namespace %>
                 <%
                     Response.IndentLevel = 5;
                     foreach (Property property in EntityElement.Properties)
-                        if(!property.Inherited && !property.List)
+                        if(!property.Inherited) // && !property.List)
                         {
                             Response.WriteLine(String.Format("case Fields.{0}:", property.Name));
-
+    
                             if(IsPrimitiveType(property.Type))
                             {
                                 Response.WriteLine(String.Format("    _{0} = reader.Read{1}();",
@@ -268,13 +270,19 @@ namespace <%= EntityElement.Namespace %>
                             }
                             else
                             {
-                                Response.WriteLine(String.Format("    _{0}.Deserialise(reader);",
-                                    StringUtility.ToCamelCase(property.Name)));
+    //                            Response.WriteLine(String.Format("    _{0}.Deserialise(reader);",
+    //                                StringUtility.ToCamelCase(property.Name)));
+                                Response.WriteLine(
+                                    String.Format(
+                                        "    _{0} = ({1})(ClientDataStore.Instance.Find(reader.ReadInt32()));",
+                                        StringUtility.ToCamelCase(property.Name), GetDeclaredType(property)
+                                    )
+                                );
                             }
             
                             Response.WriteLine("    break;");
                         }
-                    Response.IndentLevel = 0;
+                        Response.IndentLevel = 0;
                 %>
                     default:
                         throw new Exception("Illegal field value");
@@ -329,7 +337,7 @@ namespace <%= EntityElement.Namespace %>
         return String.Format(format, text);
     }
 
-    string GetConstructor(bool getAll)
+    string GetConstructor()
     {
         string constructor = "";
         string baseConstructor = "";
@@ -372,7 +380,7 @@ namespace <%= EntityElement.Namespace %>
 
     string IsNew()
     {
-        return EntityElement.BaseClass != "" ? "new " : "";
+        return ""; //EntityElement.BaseClass != "" ? "new " : "";
     }
     
     string GetInterfaceType(string propType)
@@ -413,9 +421,7 @@ namespace <%= EntityElement.Namespace %>
         if(!prop.List)
             return String.Format("{0}s.{0}", prop.Type);
         else
-        {
             return String.Format("{0}s.{1}", prop.Type.Substring(0, prop.Type.Length - 4), prop.Type); 
-        }
     }
     
     bool IsPrimitiveType(string typeName)

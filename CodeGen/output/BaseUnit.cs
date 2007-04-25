@@ -123,10 +123,12 @@ namespace Laan.Risk.Unit
 
             public BaseUnit() : base()
             {
+                /*
+                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            public void OnModify(byte field, BinaryStreamReader reader)
+            protected override void OnModify(byte field, BinaryStreamReader reader)
             {
 
                 // move this to the call site of the delegate that calls this (OnUpdate) event

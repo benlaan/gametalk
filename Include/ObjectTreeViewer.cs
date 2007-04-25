@@ -102,17 +102,20 @@ namespace Laan.Library.ObjectTree
 				// store the current property's value
 				object value = info.GetValue(item, new object[] {});
 
-				// strings are treated as objects, but here they should be
-				// treated like value types (ie. as a simple leaf node)
-				Type t = value.GetType();
-				if (t.IsValueType || t.Name == "String")
-				{
-					string text = String.Format("{0}: {1}", info.Name, value);
-					TreeNode newNode = parent.Nodes.Add(text);
-					newNode.Tag = new NodeDefinition(NodeType.Property, item, info.Name);
-				}
-				else
-					Add(value, parent);
+                if (value != null)
+                {
+                    // strings are treated as objects, but here they should be
+                    // treated like value types (ie. as a simple leaf node)
+                    Type t = value.GetType();
+                    if (t.IsValueType || t.Name == "String")
+                    {
+                        string text = String.Format("{0}: {1}", info.Name, value);
+                        TreeNode newNode = parent.Nodes.Add(text);
+                        newNode.Tag = new NodeDefinition(NodeType.Property, item, info.Name);
+                    }
+                    else
+                        Add(value, parent);
+                }
 			}
 		}
 

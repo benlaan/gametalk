@@ -296,11 +296,12 @@ namespace Laan.GameLibrary.Entity
 
         internal void ProcessInsert(BinaryStreamReader reader)
         {
-			Log.WriteLine("ClientDataStore.ProcessInsert");
-
             // create an instance of the given type, and attach
 			// it to the entities list
 			string typeName = reader.ReadString().Replace(".Server.", ".Client.");
+
+			Log.WriteLine("ClientDataStore.ProcessInsert: {0}", typeName);
+
 
 			BaseEntity e = (Activator.CreateInstanceFrom(AssemblyName + ".DLL", typeName).Unwrap()) as BaseEntity;
 			if (e == null)
@@ -404,11 +405,17 @@ namespace Laan.GameLibrary.Entity
 		public BaseEntityClient()
 		{
 			_client = new GameLibrary.Entity.Client();
+            _client.OnModify += new OnServerMessageEventHandler(OnModify);
 		}
 
         // --------------- Private -------------------------------------------------
 
 		private GameLibrary.Entity.Client _client = null;
+
+        protected virtual void OnModify(Byte field, BinaryStreamReader reader)
+        {
+            ;
+        }
 
         protected override Communication GetComms()
         {

@@ -125,11 +125,13 @@ namespace Laan.Risk.Player
 
             public BasePlayer() : base()
             {
+                /*
                 _nation = new Nations.Nation();
+                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            public void OnModify(byte field, BinaryStreamReader reader)
+            protected override void OnModify(byte field, BinaryStreamReader reader)
             {
 
                 // move this to the call site of the delegate that calls this (OnUpdate) event
@@ -145,7 +147,7 @@ namespace Laan.Risk.Player
                         _ready = reader.ReadBoolean();
                         break;
                     case Fields.Nation:
-                        _nation.Deserialise(reader);
+                        _nation = (Nations.Nation)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
                     default:
                         throw new Exception("Illegal field value");

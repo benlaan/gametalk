@@ -38,7 +38,7 @@ namespace Laan.Risk.Nation
             internal Int32 _ownedRegionsID;
             internal Int32 _ownedUnitsID;
             
-            internal String     _leader = "";
+            internal String     _leader;
             internal Int32      _prestige;
             internal Int32      _technology;
             internal Regions.RegionList _ownedRegions;
@@ -157,12 +157,14 @@ namespace Laan.Risk.Nation
 
             public BaseNation() : base()
             {
+                /*
                 _ownedRegions = new Regions.RegionList();
                 _ownedUnits = new Units.UnitList();
+                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            public void OnModify(byte field, BinaryStreamReader reader)
+            protected override void OnModify(byte field, BinaryStreamReader reader)
             {
 
                 // move this to the call site of the delegate that calls this (OnUpdate) event
@@ -179,6 +181,12 @@ namespace Laan.Risk.Nation
                         break;
                     case Fields.Technology:
                         _technology = reader.ReadInt32();
+                        break;
+                    case Fields.OwnedRegions:
+                        _ownedRegions = (Regions.RegionList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
+                        break;
+                    case Fields.OwnedUnits:
+                        _ownedUnits = (Units.UnitList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
                     default:
                         throw new Exception("Illegal field value");
