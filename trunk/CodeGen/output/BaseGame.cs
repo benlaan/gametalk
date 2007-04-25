@@ -112,12 +112,14 @@ namespace Laan.Risk.Game
 
             public BaseGame() : base()
             {
+                /*
                 _players = new Players.PlayerList();
                 _regions = new Regions.RegionList();
+                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            public void OnModify(byte field, BinaryStreamReader reader)
+            protected override void OnModify(byte field, BinaryStreamReader reader)
             {
 
                 // move this to the call site of the delegate that calls this (OnUpdate) event
@@ -126,6 +128,12 @@ namespace Laan.Risk.Game
                 // update the appropriate field
                 switch (field)
                 {
+                    case Fields.Players:
+                        _players = (Players.PlayerList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
+                        break;
+                    case Fields.Regions:
+                        _regions = (Regions.RegionList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
+                        break;
                     default:
                         throw new Exception("Illegal field value");
                 }
