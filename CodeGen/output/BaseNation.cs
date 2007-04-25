@@ -38,7 +38,7 @@ namespace Laan.Risk.Nation
             internal Int32 _ownedRegionsID;
             internal Int32 _ownedUnitsID;
             
-            internal String     _leader;
+            internal String     _leader = "";
             internal Int32      _prestige;
             internal Int32      _technology;
             internal Regions.RegionList _ownedRegions;

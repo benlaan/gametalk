@@ -3,6 +3,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
+using Laan.Library.Logging;
 
 namespace Laan.Library.ObjectTree
 {
@@ -83,6 +84,8 @@ namespace Laan.Library.ObjectTree
 
 			foreach(object item in list)
 				Add(item, rootNode);
+
+			AddProperties(list, rootNode);
 		}
 
 		private void Add(object item, TreeNode parent)
@@ -97,7 +100,13 @@ namespace Laan.Library.ObjectTree
 		{
 			foreach(PropertyInfo info in item.GetType().GetProperties())
 			{
-//				Debug.WriteLine(String.Format("{0}: {1}", item.GetType(), info.ToString()));
+//				Log.WriteLine("{0}: {1}", item.GetType(), info.ToString());
+
+                if(info.Name == "Item")
+                    continue;
+
+                if(info.IsNotPublic)
+                    continue;
 
 				// store the current property's value
 				object value = info.GetValue(item, new object[] {});
@@ -134,7 +143,7 @@ namespace Laan.Library.ObjectTree
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine("Error: " + ex.ToString());
+					Log.WriteLine("Error: " + ex.ToString());
 					throw;
 				}
 			}
