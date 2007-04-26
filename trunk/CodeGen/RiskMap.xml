@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EntityMap Version="1.0" xmlns="http://www.laanco.com/entitylist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.laanco.com/entitylist
-D:\Programming\Projects\C#\GameTalk2\CodeGen\RiskMap.xsd">
+<EntityMap Version="1.0" xmlns="http://www.laanco.com/entitylist"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="D:\Programming\Projects\C#\Game.Library\CodeGen\RiskMap.xsd">
 	<Entity Name="Game" Namespace="Laan.Risk.Game">
 		<Requirement Namespace="Laan.Risk.Player"/>
 		<Requirement Namespace="Laan.Risk.Region"/>
@@ -11,15 +12,15 @@ D:\Programming\Projects\C#\GameTalk2\CodeGen\RiskMap.xsd">
 	<Entity Name="Player" Namespace="Laan.Risk.Player">
 		<Requirement Namespace="Laan.Risk.Nation"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
-		<Property Name="Colour" Type="System.Drawing.Color" ShortType="Color"/>
+		<Property Name="Colour" Type="Int32" ShortType="Int32"/>
 		<Property Name="Ready" Type="Boolean"/>
-        <Property Name="Nation" Type="Nation"/>
+		<Property Name="Nation" Type="Nation"/>
 	</Entity>
 	<Entity Name="Nation" Namespace="Laan.Risk.Nation">
 		<Requirement Namespace="Laan.Risk.Region"/>
 		<Requirement Namespace="Laan.Risk.Unit"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
-		<Property Name="ShortName" Type="String" Inherited="true"/>
+		<Property Name="ShortName" Type="String"/>
 		<Property Name="Leader" Type="String"/>
 		<Property Name="Prestige" Type="Int32"/>
 		<Property Name="Technology" Type="Int32"/>

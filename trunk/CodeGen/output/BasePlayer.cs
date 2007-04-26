@@ -9,9 +9,9 @@ namespace Laan.Risk.Player
 {
     class Fields
     {
-        internal const int Colour = 1;
-        internal const int Ready  = 2;
-        internal const int Nation = 3;
+        internal const int Colour = 2;
+        internal const int Ready  = 3;
+        internal const int Nation = 4;
     }
     
     namespace Server
@@ -32,16 +32,16 @@ namespace Laan.Risk.Player
         {
             // --------------- Private -------------------------------------------------
 
-            internal Int32 _nationID;
+            internal Int32          _nationID;
             
-            internal System.Drawing.Color _colour;
-            internal Boolean              _ready;
-            internal Nations.Nation       _nation;
+            internal Int32          _colour;
+            internal Boolean        _ready;
+            internal Nations.Nation _nation;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
-                writer.WriteColor(this.Colour);
+                writer.WriteInt32(this.Colour);
                 writer.WriteBoolean(this.Ready);
             }
 
@@ -49,7 +49,7 @@ namespace Laan.Risk.Player
 
             public BasePlayer() : base()
             {
-                _nation = new Nation.Server.Nation();
+                Nation = new Nation.Server.Nation();
             }
 
             public static implicit operator GameLibrary.Entity.Server(BasePlayer player)
@@ -58,7 +58,7 @@ namespace Laan.Risk.Player
                 return player.CommServer;
             }
             
-            public System.Drawing.Color Colour
+            public Int32 Colour
             {
                 get { return _colour; }
                 set {
@@ -110,14 +110,14 @@ namespace Laan.Risk.Player
 
             // ------------ Private ---------------------------------------------------------
 
-            internal System.Drawing.Color _colour;
+            internal Int32  _colour;
             internal Boolean _ready;
             internal Nations.Nation _nation = null;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
                 base.Deserialise(reader);
-                _colour = reader.ReadColor();
+                _colour = reader.ReadInt32();
                 _ready  = reader.ReadBoolean();
             }
 
@@ -131,9 +131,11 @@ namespace Laan.Risk.Player
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            protected override void OnModify(byte field, BinaryStreamReader reader)
+            protected override void DoModify(byte field, BinaryStreamReader reader)
             {
 
+                base.DoModify(field, reader);
+                
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
@@ -141,7 +143,7 @@ namespace Laan.Risk.Player
                 switch (field)
                 {
                     case Fields.Colour:
-                        _colour = reader.ReadColor();
+                        _colour = reader.ReadInt32();
                         break;
                     case Fields.Ready:
                         _ready = reader.ReadBoolean();
@@ -149,12 +151,12 @@ namespace Laan.Risk.Player
                     case Fields.Nation:
                         _nation = (Nations.Nation)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-                    default:
-                        throw new Exception("Illegal field value");
+//                    default:
+//                        throw new Exception("Illegal field value");
                 }
             }
 
-            public System.Drawing.Color Colour
+            public Int32 Colour
             {
                 get { return _colour; }
             }

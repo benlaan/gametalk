@@ -9,11 +9,12 @@ namespace Laan.Risk.Nation
 {
     class Fields
     {
-        internal const int Leader       = 1;
-        internal const int Prestige     = 2;
-        internal const int Technology   = 3;
-        internal const int OwnedRegions = 4;
-        internal const int OwnedUnits   = 5;
+        internal const int ShortName    = 2;
+        internal const int Leader       = 3;
+        internal const int Prestige     = 4;
+        internal const int Technology   = 5;
+        internal const int OwnedRegions = 6;
+        internal const int OwnedUnits   = 7;
     }
     
     namespace Server
@@ -35,18 +36,20 @@ namespace Laan.Risk.Nation
         {
             // --------------- Private -------------------------------------------------
 
-            internal Int32 _ownedRegionsID;
-            internal Int32 _ownedUnitsID;
+            internal Int32              _ownedRegionsID;
+            internal Int32              _ownedUnitsID;
             
-            internal String     _leader = "";
-            internal Int32      _prestige;
-            internal Int32      _technology;
+            internal String             _shortName = "";
+            internal String             _leader = "";
+            internal Int32              _prestige;
+            internal Int32              _technology;
             internal Regions.RegionList _ownedRegions;
-            internal Units.UnitList _ownedUnits;
+            internal Units.UnitList     _ownedUnits;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
+                writer.WriteString(this.ShortName);
                 writer.WriteString(this.Leader);
                 writer.WriteInt32(this.Prestige);
                 writer.WriteInt32(this.Technology);
@@ -56,8 +59,8 @@ namespace Laan.Risk.Nation
 
             public BaseNation() : base()
             {
-                _ownedRegions = new Region.Server.RegionList();
-                _ownedUnits = new Unit.Server.UnitList();
+                OwnedRegions = new Region.Server.RegionList();
+                OwnedUnits = new Unit.Server.UnitList();
             }
 
             public static implicit operator GameLibrary.Entity.Server(BaseNation nation)
@@ -66,6 +69,16 @@ namespace Laan.Risk.Nation
                 return nation.CommServer;
             }
             
+            public String ShortName
+            {
+                get { return _shortName; }
+                set {
+                    _shortName = value;
+                    
+                    CommServer.Modify(this.ID, Fields.ShortName, value);
+                }
+            }
+
             public String Leader
             {
                 get { return _leader; }
@@ -139,6 +152,7 @@ namespace Laan.Risk.Nation
 
             // ------------ Private ---------------------------------------------------------
 
+            internal String       _shortName;
             internal String       _leader;
             internal Int32        _prestige;
             internal Int32        _technology;
@@ -148,6 +162,7 @@ namespace Laan.Risk.Nation
             public override void Deserialise(BinaryStreamReader reader)
             {
                 base.Deserialise(reader);
+                _shortName    = reader.ReadString();
                 _leader       = reader.ReadString();
                 _prestige     = reader.ReadInt32();
                 _technology   = reader.ReadInt32();
@@ -164,15 +179,20 @@ namespace Laan.Risk.Nation
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            protected override void OnModify(byte field, BinaryStreamReader reader)
+            protected override void DoModify(byte field, BinaryStreamReader reader)
             {
 
+                base.DoModify(field, reader);
+                
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
                 // update the appropriate field
                 switch (field)
                 {
+                    case Fields.ShortName:
+                        _shortName = reader.ReadString();
+                        break;
                     case Fields.Leader:
                         _leader = reader.ReadString();
                         break;
@@ -188,9 +208,14 @@ namespace Laan.Risk.Nation
                     case Fields.OwnedUnits:
                         _ownedUnits = (Units.UnitList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-                    default:
-                        throw new Exception("Illegal field value");
+//                    default:
+//                        throw new Exception("Illegal field value");
                 }
+            }
+
+            public String ShortName
+            {
+                get { return _shortName; }
             }
 
             public String Leader

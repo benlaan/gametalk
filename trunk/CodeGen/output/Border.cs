@@ -6,7 +6,7 @@ using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
 
-namespace Laan.Business.Risk.Border
+namespace Laan.Risk.Border
 {
 
     namespace Server
