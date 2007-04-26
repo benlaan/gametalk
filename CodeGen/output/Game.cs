@@ -54,7 +54,7 @@ namespace Laan.Risk.Game
 
 				p.Nation.Name = reader.ReadString();
 				string shortName = reader.ReadString();
-//				p.Colour = System.Drawing.Color.FromArgb(reader.ReadInt32());
+				p.Colour = reader.ReadInt32();
 				Players.Add(p);
 
 				Log.WriteLine("MessageReceived(PlayerJoin)");
@@ -92,7 +92,7 @@ namespace Laan.Risk.Game
 					writer.WriteInt32(Command.PlayerJoin);
 					writer.WriteString(name);
 					writer.WriteString(shortName);
-//					writer.WriteInt32(colour);
+					writer.WriteInt32(colour);
 
 					GameClient.Instance.SendMessage(writer.DataStream);
 

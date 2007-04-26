@@ -9,9 +9,9 @@ namespace Laan.Risk.Border
 {
     class Fields
     {
-        internal const int Economy = 1;
-        internal const int Oil     = 2;
-        internal const int Arms    = 3;
+        internal const int Economy = 2;
+        internal const int Oil     = 3;
+        internal const int Arms    = 4;
     }
     
     namespace Server
@@ -128,9 +128,11 @@ namespace Laan.Risk.Border
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            protected override void OnModify(byte field, BinaryStreamReader reader)
+            protected override void DoModify(byte field, BinaryStreamReader reader)
             {
 
+                base.DoModify(field, reader);
+                
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
@@ -146,8 +148,8 @@ namespace Laan.Risk.Border
                     case Fields.Arms:
                         _arms = reader.ReadInt32();
                         break;
-                    default:
-                        throw new Exception("Illegal field value");
+//                    default:
+//                        throw new Exception("Illegal field value");
                 }
             }
 

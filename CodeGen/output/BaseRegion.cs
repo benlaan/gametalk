@@ -9,11 +9,11 @@ namespace Laan.Risk.Region
 {
     class Fields
     {
-        internal const int Economy   = 1;
-        internal const int Oil       = 2;
-        internal const int Arms      = 3;
-        internal const int Defenders = 4;
-        internal const int Attackers = 5;
+        internal const int Economy   = 2;
+        internal const int Oil       = 3;
+        internal const int Arms      = 4;
+        internal const int Defenders = 5;
+        internal const int Attackers = 6;
     }
     
     namespace Server
@@ -34,12 +34,12 @@ namespace Laan.Risk.Region
         {
             // --------------- Private -------------------------------------------------
 
-            internal Int32 _defendersID;
-            internal Int32 _attackersID;
+            internal Int32          _defendersID;
+            internal Int32          _attackersID;
             
-            internal Int32    _economy;
-            internal Int32    _oil;
-            internal Int32    _arms;
+            internal Int32          _economy;
+            internal Int32          _oil;
+            internal Int32          _arms;
             internal Units.UnitList _defenders;
             internal Units.UnitList _attackers;
 
@@ -55,8 +55,8 @@ namespace Laan.Risk.Region
 
             public BaseRegion() : base()
             {
-                _defenders = new Unit.Server.UnitList();
-                _attackers = new Unit.Server.UnitList();
+                Defenders = new Unit.Server.UnitList();
+                Attackers = new Unit.Server.UnitList();
             }
 
             public static implicit operator GameLibrary.Entity.Server(BaseRegion region)
@@ -162,9 +162,11 @@ namespace Laan.Risk.Region
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            protected override void OnModify(byte field, BinaryStreamReader reader)
+            protected override void DoModify(byte field, BinaryStreamReader reader)
             {
 
+                base.DoModify(field, reader);
+                
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
@@ -186,8 +188,8 @@ namespace Laan.Risk.Region
                     case Fields.Attackers:
                         _attackers = (Units.UnitList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-                    default:
-                        throw new Exception("Illegal field value");
+//                    default:
+//                        throw new Exception("Illegal field value");
                 }
             }
 

@@ -9,9 +9,9 @@ namespace Laan.Risk.Unit
 {
     class Fields
     {
-        internal const int Size       = 1;
-        internal const int Experience = 2;
-        internal const int Location   = 3;
+        internal const int Size       = 2;
+        internal const int Experience = 3;
+        internal const int Location   = 4;
     }
     
     namespace Server
@@ -128,9 +128,11 @@ namespace Laan.Risk.Unit
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            protected override void OnModify(byte field, BinaryStreamReader reader)
+            protected override void DoModify(byte field, BinaryStreamReader reader)
             {
 
+                base.DoModify(field, reader);
+                
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
@@ -146,8 +148,8 @@ namespace Laan.Risk.Unit
                     case Fields.Location:
                         _location = reader.ReadInt32();
                         break;
-                    default:
-                        throw new Exception("Illegal field value");
+//                    default:
+//                        throw new Exception("Illegal field value");
                 }
             }
 

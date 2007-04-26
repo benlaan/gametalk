@@ -101,10 +101,6 @@
     
     
     
-    
-    
-    
-    
     <FileList>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Data" AssemblyName="System.Data" Version="1.0.5000.0"/>
@@ -127,8 +123,10 @@
       <File FileName="output\Region.cs" ContainerId="CSharpCompiler" ModuleName="Region"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Drawing" AssemblyName="System.Drawing" Version="1.0.5000.0"/>
       <File FileName="Riskier.todo" ContainerId="ToDo" ModuleName="Riskier"/>
-      <File FileName="..\bin\debug\Laan.GameLibrary.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="GameTalk" AssemblyName="GameTalk" Project="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}" Version="1.0.2671.20769"/>
-      <File FileName="..\include\bin\debug\Laan.Library.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Laan.Library" AssemblyName="Laan.Library" Project="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}" Version="1.0.2671.21180"/>
+      <File FileName="..\bin\debug\Laan.GameLibrary.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="GameTalk" AssemblyName="GameTalk" Project="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}" Version="1.0.2671.42283"/>
+      <File FileName="..\include\bin\debug\Laan.Library.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Laan.Library" AssemblyName="Laan.Library" Project="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}" Version="1.0.2671.42283"/>
+      <File FileName="output\Border.cs" ContainerId="CSharpCompiler" ModuleName="Border"/>
+      <File FileName="output\BaseBorder.cs" ContainerId="CSharpCompiler" ModuleName="BaseBorder"/>
     </FileList>
   </CSharp.Personality>
 </BorlandProject>

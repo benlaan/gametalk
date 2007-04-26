@@ -13,6 +13,11 @@ namespace Laan.GameLibrary.Entity
     public delegate void OnServerMessageEventHandler(Byte field, BinaryStreamReader reader);
     public delegate void OnSerialiseEventHandler(BinaryStreamWriter writer);
 
+    public class Fields
+    {
+        internal const int Name = 0;
+    }
+
     public class Commands
     {
         internal const int Add    = 0;
@@ -149,12 +154,12 @@ namespace Laan.GameLibrary.Entity
             return null;
         }
 
-        public IList DataSource
-        {
-            get {
-                return _list;
-            }
-        }
+//        public IList DataSource
+//        {
+//            get {
+//                return _list;
+//            }
+//        }
 
         public BaseEntity this[int index]
         {
@@ -204,15 +209,20 @@ namespace Laan.GameLibrary.Entity
 		public ClientEntityList()
 		{
 			_client = new GameLibrary.Entity.Client();
-			_client.OnModify += new OnServerMessageEventHandler(OnModifyEvent);
+			_client.OnModify += new OnServerMessageEventHandler(OnModify);
 		}
+
+        private void OnModify(Byte field, BinaryStreamReader reader)
+        {
+            DoModify(field, reader);
+        }
 
 		public override Communication Communication()
 		{
 			return _client;
 		}
 
-		private void OnModifyEvent(byte field, BinaryStreamReader reader)
+        protected virtual void DoModify(Byte field, BinaryStreamReader reader)
 		{
 			int id = reader.ReadInt32();
 			BaseEntity e = ClientDataStore.Instance.Find(id);
@@ -363,6 +373,12 @@ namespace Laan.GameLibrary.Entity
 
         // --------------- Protected -----------------------------------------------
 
+        protected override void SetName(string value)
+        {
+            base.SetName(value);
+            CommServer.Modify(this.ID, Fields.Name, value);
+        }
+
         public override Communication Communication()
         {
 			return _server;
@@ -378,7 +394,8 @@ namespace Laan.GameLibrary.Entity
             _server.OnProcessCommand += new OnProcessCommandEventHandler(ProcessCommand);
         }
 
-        public GameLibrary.Entity.Server CommServer {
+        public GameLibrary.Entity.Server CommServer
+        {
             get {
                 return _server;
             }
@@ -401,9 +418,19 @@ namespace Laan.GameLibrary.Entity
 
 		private GameLibrary.Entity.Client _client = null;
 
-        protected virtual void OnModify(Byte field, BinaryStreamReader reader)
+        private void OnModify(Byte field, BinaryStreamReader reader)
         {
-            ;
+            DoModify(field, reader);
+        }
+
+        protected virtual void DoModify(Byte field, BinaryStreamReader reader)
+        {
+                switch (field)
+                {
+                    case Fields.Name:
+                        Name = reader.ReadString();
+                        break;
+                }
         }
 
         public override Communication Communication()
@@ -413,7 +440,8 @@ namespace Laan.GameLibrary.Entity
 
         // --------------- Public --------------------------------------------------
 
-        public GameLibrary.Entity.Client CommClient {
+        public GameLibrary.Entity.Client CommClient
+        {
             get {
                 return _client;
             }

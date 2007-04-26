@@ -3,6 +3,7 @@ using System.Collections;
 
 using Laan.Library.Logging;
 using Laan.GameLibrary.Data;
+using System.Drawing;
 
 namespace Laan.GameLibrary.Entity
 {
@@ -126,10 +127,10 @@ namespace Laan.GameLibrary.Entity
 
 		private void Serialise(BinaryStreamWriter writer)
 		{
-			writer.WriteByte(MessageCode.Create);
-			 _entity.Serialise(writer);
+            writer.WriteByte(MessageCode.Create);
+			_entity.Serialise(writer);
 
-			 int length = writer.DataStream.Length;
+			int length = writer.DataStream.Length;
 		}
 
 		public int Size

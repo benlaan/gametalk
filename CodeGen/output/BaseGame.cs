@@ -9,8 +9,8 @@ namespace Laan.Risk.Game
 {
     class Fields
     {
-        internal const int Players = 1;
-        internal const int Regions = 2;
+        internal const int Players = 2;
+        internal const int Regions = 3;
     }
     
     namespace Server
@@ -32,8 +32,8 @@ namespace Laan.Risk.Game
         {
             // --------------- Private -------------------------------------------------
 
-            internal Int32 _playersID;
-            internal Int32 _regionsID;
+            internal Int32              _playersID;
+            internal Int32              _regionsID;
             
             internal Players.PlayerList _players;
             internal Regions.RegionList _regions;
@@ -47,8 +47,8 @@ namespace Laan.Risk.Game
 
             public BaseGame() : base()
             {
-                _players = new Player.Server.PlayerList();
-                _regions = new Region.Server.RegionList();
+                Players = new Player.Server.PlayerList();
+                Regions = new Region.Server.RegionList();
             }
 
             public static implicit operator GameLibrary.Entity.Server(BaseGame game)
@@ -119,9 +119,11 @@ namespace Laan.Risk.Game
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
-            protected override void OnModify(byte field, BinaryStreamReader reader)
+            protected override void DoModify(byte field, BinaryStreamReader reader)
             {
 
+                base.DoModify(field, reader);
+                
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
@@ -134,8 +136,8 @@ namespace Laan.Risk.Game
                     case Fields.Regions:
                         _regions = (Regions.RegionList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-                    default:
-                        throw new Exception("Illegal field value");
+//                    default:
+//                        throw new Exception("Illegal field value");
                 }
             }
 
