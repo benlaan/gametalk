@@ -105,8 +105,8 @@ namespace Laan.Library.ObjectTree
                 if(info.Name == "Item")
                     continue;
 
-                if(info.PropertyType.IsNotPublic)
-                    continue;
+//				if(info.PropertyType.IsPr)
+//					continue;
 
 				// store the current property's value
 				object value = info.GetValue(item, new object[] {});

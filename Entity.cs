@@ -26,20 +26,8 @@ namespace Laan.GameLibrary.Entity
 		public const byte Delete = 2;
 	}
 
-    public interface IBaseEntity
-    {
-
-        Int32  ID   { get ; set ; }
-		string Name { get ; set ; }
-
-		BaseEntity Entity();
-
-        void Serialise(BinaryStreamWriter writer);
-        void Deserialise(BinaryStreamReader reader);
-	}
-
 	// generic class to contain all transferable objects
-    public abstract class BaseEntity : IBaseEntity
+	public abstract class BaseEntity
 	{
 
         // ------------ Private ----------------------------------------------------------
@@ -54,7 +42,7 @@ namespace Laan.GameLibrary.Entity
             _name = value;
         }
 
-		protected abstract Communication GetComms();
+		public abstract Communication Communication();
 
         // ------------ Public ------------------------------------------------------------
         public int ID
@@ -75,17 +63,17 @@ namespace Laan.GameLibrary.Entity
         	return this;
 		}
 
-		public static implicit operator GameLibrary.Entity.Client(BaseEntity entity)
-        {
-            // allows the class to be cast to an Entity.Client class
-            return (Client)entity.GetComms();
-        }
-
-        public static implicit operator GameLibrary.Entity.Server(BaseEntity entity)
-		{
-			// allows the class to be cast to an Entity.Server class
-            return (Server)entity.GetComms();
-        }
+//		public static implicit operator GameLibrary.Entity.Client(BaseEntity entity)
+//        {
+//            // allows the class to be cast to an Entity.Client class
+//            return (Client)entity.GetComms();
+//        }
+//
+//        public static implicit operator GameLibrary.Entity.Server(BaseEntity entity)
+//		{
+//			// allows the class to be cast to an Entity.Server class
+//            return (Server)entity.GetComms();
+//        }
 
         public string Name
         {
@@ -156,7 +144,7 @@ namespace Laan.GameLibrary.Entity
             return null;
 		}
 
-		protected override Communication GetComms()
+		public override Communication Communication()
         {
             return null;
         }
@@ -191,7 +179,7 @@ namespace Laan.GameLibrary.Entity
 			_server = new GameLibrary.Entity.Server(this);
 		}
 
-		protected override Communication GetComms()
+		public override Communication Communication()
 		{
 			return _server;
 		}
@@ -219,7 +207,7 @@ namespace Laan.GameLibrary.Entity
 			_client.OnModify += new OnServerMessageEventHandler(OnModifyEvent);
 		}
 
-		protected override Communication GetComms()
+		public override Communication Communication()
 		{
 			return _client;
 		}
@@ -341,7 +329,8 @@ namespace Laan.GameLibrary.Entity
             int ID = reader.ReadInt32();
 
             BaseEntity e = _entities.Find(ID);
-            ((Client)e).Modify(reader);
+//            ((Client)e).Modify(reader);
+			(e.Communication() as Client).Modify(reader);
 
             if(OnModifyEntityEvent != null)
                 OnModifyEntityEvent(e);
@@ -374,7 +363,7 @@ namespace Laan.GameLibrary.Entity
 
         // --------------- Protected -----------------------------------------------
 
-        protected override Communication GetComms()
+        public override Communication Communication()
         {
 			return _server;
         }
@@ -417,7 +406,7 @@ namespace Laan.GameLibrary.Entity
             ;
         }
 
-        protected override Communication GetComms()
+        public override Communication Communication()
         {
 			return _client;
 		}
