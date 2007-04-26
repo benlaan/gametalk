@@ -560,18 +560,22 @@ namespace GameViewerClient
 			if(viewer != null && viewer.Object != null)
             {
 				viewer.Update();
-                lvPlayers.Clear();
-                foreach(Laan.Risk.Player.Client.Player player in _game.Players)
+                if(_game != null && _game.Players != null)
                 {
-                    lvPlayers.Items.Add(new ListViewItem(
-                        player.Colour.ToString(),
-                        _game.Name.ToString(),
-                        player.Nation.Name.ToString(),
-                        player.Nation.ShortName.ToString(),
-                        "N"
-                    ));
+                    lvPlayers.Clear();
+                    foreach(Laan.Risk.Player.Client.Player player in _game.Players)
+                    {
+                        lvPlayers.Items.Add(new ListViewItem(new string[] {
+                                player.Colour.ToString(),
+                                _game.Name.ToString(),
+                                player.Nation.Name.ToString(),
+                                player.Nation.ShortName.ToString(),
+                                "N"
+    }
+                        ));
+                    }
+                    lvPlayers.Invalidate();
                 }
-
             }
 
 			this.Invalidate();
