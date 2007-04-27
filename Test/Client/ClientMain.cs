@@ -53,7 +53,7 @@ namespace Laan.Risk.GUI.Client
 	public class GameList: ArrayList
 	{
 
-		private void Add(Game game)
+		public void Add(Game game)
 		{
 			foreach(Game g in this)
 				if (g.Name == game.Name)
@@ -238,13 +238,11 @@ namespace Laan.Risk.GUI.Client
 						this.colName,
 						this.colHost,
 						this.colPort});
-			this.lvAvailableGames.Enabled = false;
 			this.lvAvailableGames.FullRowSelect = true;
 			this.lvAvailableGames.Location = new System.Drawing.Point(8, 48);
 			this.lvAvailableGames.Name = "lvAvailableGames";
 			this.lvAvailableGames.Size = new System.Drawing.Size(480, 224);
 			this.lvAvailableGames.TabIndex = 30;
-			this.lvAvailableGames.View = System.Windows.Forms.View.Details;
 			// 
 			// colName
 			// 
@@ -259,9 +257,9 @@ namespace Laan.Risk.GUI.Client
 			// colPort
 			// 
 			this.colPort.Text = "Port";
-			//
+			// 
 			// btnFind
-			//
+			// 
 			this.btnFind.AccessibleDescription = "";
 			this.btnFind.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnFind.BackgroundImage")));
 			this.btnFind.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -300,7 +298,6 @@ namespace Laan.Risk.GUI.Client
 						this.colNation,
 						this.colShortName,
 						this.colReady});
-			this.lvPlayers.Enabled = false;
 			this.lvPlayers.FullRowSelect = true;
 			this.lvPlayers.Location = new System.Drawing.Point(8, 187);
 			this.lvPlayers.Name = "lvPlayers";
@@ -702,15 +699,18 @@ namespace Laan.Risk.GUI.Client
 				if(_game != null && _game.Players != null)
 				{
 					lvPlayers.Clear();
+
 					foreach(Laan.Risk.Player.Client.Player player in _game.Players)
 					{
-						lvPlayers.Items.Add(new ListViewItem(new string[] {
-								player.Colour.ToString(),
+						lvPlayers.Items.Add(new ListViewItem(
+							new string[]
+							{
+								Color.FromArgb(player.Colour).ToKnownColor().ToString(),
 								_game.Name.ToString(),
 								player.Nation.Name.ToString(),
 								player.Nation.ShortName.ToString(),
 								"N"
-	}
+							}
 						));
 					}
 					lvPlayers.Invalidate();
@@ -774,15 +774,19 @@ namespace Laan.Risk.GUI.Client
 		{
 			try
 			{
-//				Game _game = SelectedGame;
-//				_client.Connect(_game.Host, _game.Port, edName.Text);
+				Game _game = SelectedGame;
+				if (_game != null)
+				{
+					_client.Connect(_game.Host, _game.Port, edName.Text);
 
-				btnJoin.Enabled = true;
-				gbNationDetails.Enabled = true;
+					btnJoin.Enabled = true;
+					gbNationDetails.Enabled = true;
+				}
 			}
 			catch (Exception ex)
 			{
 				Log.WriteLine(ex.ToString());
+				throw;
 			}
 		}
 
@@ -806,7 +810,6 @@ namespace Laan.Risk.GUI.Client
 				if (lvAvailableGames.SelectedIndices.Count == 1)
 					return _availableGame[lvAvailableGames.SelectedIndices[0]];
 				else
-
 					return null;
 			}
 		}
