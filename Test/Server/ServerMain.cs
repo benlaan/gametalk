@@ -12,7 +12,7 @@ using Laan.Library.ObjectTree;
 
 using GameClasses = Laan.Risk.Game.Server;
 
-namespace Laan.Risk.GameServer.Client
+namespace Laan.Risk.GUI.Server
 {
 	public class FormDebugger : DefaultTraceListener
 	{
@@ -239,6 +239,17 @@ namespace Laan.Risk.GameServer.Client
 			btnDelete.Enabled = (_game != null && !_game.Players.IsEmpty);
 		}
 
+		private void Finalise()
+		{
+			_game = null;
+			_viewer.Object = null;
+
+			_server.Active = false;
+			_server.Active = true;
+
+			Redraw();
+		}
+
 		private void Initialise()
 		{
 			_game = new GameClasses.Game();
@@ -256,7 +267,7 @@ namespace Laan.Risk.GameServer.Client
 				if (entity == null)
 					throw new Exception(String.Format("entity {0} not found", id));
 
-				(entity.Communication() as Server).ProcessCommand(reader);
+				(entity.Communication() as Laan.GameLibrary.Entity.Server).ProcessCommand(reader);
 			}
 			Redraw();
 		}
@@ -265,6 +276,14 @@ namespace Laan.Risk.GameServer.Client
 		{
 			if (clients.Count == 1)
 				Initialise();
+
+			edClientCount.Text = clients.Count.ToString();
+		}
+
+		private void OnClientDisconnectionEvent(object sender, ClientList clients)
+		{
+			if (clients.Count == 0)
+				Finalise();
 
 			edClientCount.Text = clients.Count.ToString();
 		}
@@ -336,18 +355,24 @@ namespace Laan.Risk.GameServer.Client
 		private void frmServer_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			_server.Active = false;
+			_server.EndRendezvous();
 			Debug.Listeners.Remove(_debugger);
 		}
 
 		private void frmServer_Load(object sender, System.EventArgs e)
 		{
 			_server = Laan.GameLibrary.GameServer.Instance;
+			_server.Name = "Riskier";
+			_server.OnRendezvousReceivedEvent += new OnRendezvousReceivedEventHandler(OnRendezvousReceivedEvent);
 			_server.OnProcessMessageEvent += new OnProcessMessageEventHandler(OnMessageReceivedEvent);
 			_server.OnNewClientConnectionEvent += new OnNewClientConnectionEventHandler(OnNewClientConnectionEvent);
+			_server.OnClientDisconnectionEvent += new OnClientDisconnectionEventHandler(OnClientDisconnectionEvent);
 
 			_server.Active = true;
 
 			_viewer = new ObjectTreeViewer(tvObjectTree, null);
+
+			_server.BeginRendezvous();
 		}
 
 		private void tvObjectTree_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
@@ -363,6 +388,12 @@ namespace Laan.Risk.GameServer.Client
 		static void Main()
 		{
 			Application.Run(new frmServer());
+		}
+
+		public void OnRendezvousReceivedEvent(object sender, string receivedText, ref bool isValid)
+		{
+			Log.WriteLine("Rendezvous: " + receivedText);
+			isValid = (receivedText == Laan.Risk.Constants.RendezvousText);
 		}
 	}
 }

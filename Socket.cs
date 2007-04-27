@@ -10,11 +10,12 @@ namespace Laan.GameLibrary
 {
 
 	public delegate void OnRendezvousReceivedEventHandler(object sender, string data, ref bool isValid);
-	public delegate void OnBroadcastFoundEventHandler(object sender, string Host, int Port);
+	public delegate void OnBroadcastFoundEventHandler(object sender, string Name, string Host, int Port);
 
 	public delegate void OnProcessMessageEventHandler(object sender, byte[] message);
 	public delegate void OnAllowClientUpdateEventHandler(object sender, byte[] message, ref bool isValid);
 	public delegate void OnNewClientConnectionEventHandler(object sender, ClientList clients);
+	public delegate void OnClientDisconnectionEventHandler(object sender, ClientList clients);
 
     class Command
 	{
@@ -39,7 +40,6 @@ namespace Laan.GameLibrary
 			_tcpClient = new TCPClient();
 			_tcpClient.Port = Config.OutboundPort;
 			_tcpClient.Host = Config.OutboundHost;
-			_tcpClient.OnDisconnected += new TIdNetNotifyEvent(OnClientDisconnected);
 		}
 
 		protected Indy.Sockets.TCPServer _tcpServer;
@@ -85,12 +85,6 @@ namespace Laan.GameLibrary
 		{
 
 		}
-
-		protected void OnClientDisconnected(object sender)
-		{
-			;//_tcpClient.Disconnect(false);
-		}
-
 
 		protected void OnServerDisconnect(Context context)
 		{

@@ -8,7 +8,11 @@
 			<Option Name="GUID">{4D7DCFF7-D68A-47C3-BDBF-6BED984DAB28}</Option>
 		</Option>
 	</PersonalityInfo>
-	<Default.Personality>  <Projects>
+	<Default.Personality>  
+    
+    
+    
+    <Projects>
       <Projects Name="Laan.Library.dll">Include\Laan.Library.bdsproj</Projects>
       <Projects Name="Laan.GameLibrary.dll">Laan.GameLibrary.bdsproj</Projects>
       <Projects Name="Riskier.dll">CodeGen\Riskier.bdsproj</Projects>
@@ -24,10 +28,13 @@
         <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}"/>
       </Dependency>
       <Dependency GUID="{D813A993-5F7E-49A8-91FE-3CEA3E313C82}">
+        <Dependency GUID="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}"/>
+        <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}"/>
         <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"/>
       </Dependency>
       <Dependency GUID="{0E1D0670-8559-488C-A3F5-363F43EFA84F}">
         <Dependency GUID="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}"/>
+        <Dependency GUID="{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}"/>
         <Dependency GUID="{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"/>
       </Dependency>
     </Dependencies>

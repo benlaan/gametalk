@@ -44,13 +44,13 @@ namespace Laan.GameLibrary
         public void Initialise()
         {
             _udpClient = new UDPClient();
-            _udpClient.Host = "";
-            _udpClient.Port = Config.RendezvousPort;
+			_udpClient.Host = "";
+			_udpClient.Port = Config.RendezvousPort;
 
             _timer = new Timer();
             _timer.Interval = Config.RendezvousFrequency;
             _timer.Tick += new EventHandler(OnBroadcastRendevous);
-        }
+		}
 
 		public void Connect(string Host, int Port, string userName)
 		{
@@ -106,7 +106,8 @@ namespace Laan.GameLibrary
         // to a particular text
         public void StartRendezvous(string rendezvousText)
         {
-             _rendezvousText = rendezvousText;
+			 _rendezvousText = rendezvousText;
+			 OnBroadcastRendevous(this, new EventArgs());
             _timer.Start();
 		}
 
@@ -140,19 +141,21 @@ namespace Laan.GameLibrary
         private void OnBroadcastRendevous(object sender, EventArgs e)
         {
             try
-            {
-                // send the Rendezvous text
-                _udpClient.Send(_rendezvousText);
+			{
+				Log.WriteLine("Sending Broadcast to {0}", _udpClient.Port);
+
+				// send the Rendezvous text
+				_udpClient.Broadcast(_rendezvousText, _udpClient.Port);
 
                 // receive the response
                 string sData = _udpClient.ReceiveString(1);
 
-                // test for valid input - should be "Host:Port"
+                // test for valid input - should be "Name:Host:Port"
                 IsBroadcastFound(sData);
 
                 Log.WriteLine("Broadcasting..");
-            }
-            catch (Exception ex)
+			}
+			catch (Exception ex)
             {
                 Log.WriteLine(ex.Message);
 				StopRendezvous();
@@ -166,8 +169,8 @@ namespace Laan.GameLibrary
             if((sData != "") && (OnBroadcastFoundEvent != null))
             {
                 string[] data = Regex.Split(sData, ":");
-                Debug.Assert(data.Length == 2, "Incorrect Broadcast Format - should be Host:Port");
-                OnBroadcastFoundEvent(this, data[0], Int32.Parse(data[1]));
+				Debug.Assert(data.Length == 3, "Incorrect Broadcast Format - should be Name:Host:Port");
+				OnBroadcastFoundEvent(this, data[0], data[1], Int32.Parse(data[2]));
             }
         }
 
