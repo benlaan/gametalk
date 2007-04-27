@@ -12,13 +12,14 @@ namespace Laan.GameLibrary
     {
 		private GameServer() : base()
 		{
-
+			_tcpServer.OnDisconnect += new TIdServerThreadEvent(OnClientDisconnected);
 		}
 
 		/// Private Properties
 
 		private ClientList              _clients;
 		private Queue                   _messages;
+		private string _name;
 		private System.Threading.Thread _processor;
 		private UDPServer               _udpServer;
 
@@ -143,7 +144,13 @@ namespace Laan.GameLibrary
 			// if its valid, send the response thus: "Host:Port"
 			if(isValid)
 			{
-				string sSend = String.Format("{0}:{1}", Environment.MachineName, Config.InboundPort);
+				string sSend =
+					String.Format("{0}:{1}:{2}",
+						GameServer.Instance.Name,
+						Environment.MachineName,
+						Config.InboundPort
+					);
+
 				Log.WriteLine("Sending UDP response: " + sSend);
 				_udpServer.Send(binding.PeerIP, binding.PeerPort, sSend);
 			}
@@ -169,7 +176,8 @@ namespace Laan.GameLibrary
 				while (_messages.Count > 0)
 				{
 					// get the message
-					lock(this._messages) {
+					lock(this._messages)
+					{
 						m = (byte[])_messages.Dequeue();
 						Log.WriteLine("Dequeing Message: " + Message.ToString(m));
 					}
@@ -266,9 +274,23 @@ namespace Laan.GameLibrary
 			}
 		}
                                                                          
+ 		protected void OnClientDisconnected(Context context)
+		{
+			int port = context.Binding().PeerPort;
+			if (OnClientDisconnectionEvent != null)
+				OnClientDisconnectionEvent(this, this._clients);
+		}
+
+		public string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
 		/// Public Events
 		public event OnAllowClientUpdateEventHandler   OnAllowClientUpdateEvent;
 		public event OnNewClientConnectionEventHandler OnNewClientConnectionEvent;
+		public event OnClientDisconnectionEventHandler OnClientDisconnectionEvent;
 		public event OnProcessMessageEventHandler      OnProcessMessageEvent;
 		public event OnRendezvousReceivedEventHandler  OnRendezvousReceivedEvent;
 	}
