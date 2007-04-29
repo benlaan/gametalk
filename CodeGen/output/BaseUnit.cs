@@ -107,9 +107,9 @@ namespace Laan.Risk.Unit
 
             // ------------ Private ---------------------------------------------------------
 
-            internal Int32      _size;
-            internal Int32      _experience;
-            internal Int32      _location;
+            internal Int32  _size;
+            internal Int32  _experience;
+            internal Int32  _location;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -123,8 +123,6 @@ namespace Laan.Risk.Unit
 
             public BaseUnit() : base()
             {
-                /*
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -148,8 +146,6 @@ namespace Laan.Risk.Unit
                     case Fields.Location:
                         _location = reader.ReadInt32();
                         break;
-//                    default:
-//                        throw new Exception("Illegal field value");
                 }
             }
 

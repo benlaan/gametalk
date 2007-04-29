@@ -100,8 +100,8 @@ namespace Laan.Risk.Game
 
             // ------------ Private ---------------------------------------------------------
 
-            internal Players.PlayerList _players = null;
-            internal Regions.RegionList _regions = null;
+            internal Players.PlayerList _players;
+            internal Regions.RegionList _regions;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -112,10 +112,6 @@ namespace Laan.Risk.Game
 
             public BaseGame() : base()
             {
-                /*
-                _players = new Players.PlayerList();
-                _regions = new Regions.RegionList();
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -136,8 +132,6 @@ namespace Laan.Risk.Game
                     case Fields.Regions:
                         _regions = (Regions.RegionList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-//                    default:
-//                        throw new Exception("Illegal field value");
                 }
             }
 

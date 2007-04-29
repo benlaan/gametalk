@@ -53,7 +53,8 @@ namespace Laan.Risk.Game
 				Laan.Risk.Player.Server.Player p = new Laan.Risk.Player.Server.Player();
 
 				p.Nation.Name = reader.ReadString();
-				string shortName = reader.ReadString();
+				p.Nation.ShortName = reader.ReadString();
+                p.Nation.Leader = reader.ReadString();
 				p.Colour = reader.ReadInt32();
 				Players.Add(p);
 
@@ -84,7 +85,7 @@ namespace Laan.Risk.Game
 
 			}
 
-			public void AddPlayer(string name, string shortName, int colour)
+			public void AddPlayer(string name, string shortName, string leader, int colour)
 			{
 				using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
 				{
@@ -92,6 +93,7 @@ namespace Laan.Risk.Game
 					writer.WriteInt32(Command.PlayerJoin);
 					writer.WriteString(name);
 					writer.WriteString(shortName);
+					writer.WriteString(leader);
 					writer.WriteInt32(colour);
 
 					GameClient.Instance.SendMessage(writer.DataStream);

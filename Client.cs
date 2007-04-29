@@ -16,6 +16,8 @@ namespace Laan.GameLibrary
     {
         /// Public Constructor
 
+        const int cRENDEVOUS_COUNT = 10;
+
         static GameClient _instance = null;
 
         private GameClient() : base()
@@ -40,6 +42,7 @@ namespace Laan.GameLibrary
 		private UDPClient _udpClient;
         private string _rendezvousText = "Rendezvous";
         private bool _active = false;
+        private int _rendezvousCount = cRENDEVOUS_COUNT;
 
         public void Initialise()
         {
@@ -107,6 +110,8 @@ namespace Laan.GameLibrary
         public void StartRendezvous(string rendezvousText)
         {
 			 _rendezvousText = rendezvousText;
+             _rendezvousCount = cRENDEVOUS_COUNT;
+
 			 OnBroadcastRendevous(this, new EventArgs());
             _timer.Start();
 		}
@@ -154,6 +159,11 @@ namespace Laan.GameLibrary
                 IsBroadcastFound(sData);
 
                 Log.WriteLine("Broadcasting..");
+
+                _rendezvousCount--;
+
+                if (_rendezvousCount == 0)
+                    StopRendezvous();
 			}
 			catch (Exception ex)
             {
@@ -190,6 +200,11 @@ namespace Laan.GameLibrary
             */
 
             return message;
+        }
+
+        public bool Finding
+        {
+            get { return _timer.Enabled; }
         }
 
 		public event OnProcessMessageEventHandler OnProcessMessageEvent;

@@ -152,12 +152,12 @@ namespace Laan.Risk.Nation
 
             // ------------ Private ---------------------------------------------------------
 
-            internal String       _shortName;
-            internal String       _leader;
-            internal Int32        _prestige;
-            internal Int32        _technology;
-            internal Regions.RegionList _ownedRegions = null;
-            internal Units.UnitList _ownedUnits = null;
+            internal String             _shortName = "";
+            internal String             _leader = "";
+            internal Int32              _prestige;
+            internal Int32              _technology;
+            internal Regions.RegionList _ownedRegions;
+            internal Units.UnitList     _ownedUnits;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -172,10 +172,6 @@ namespace Laan.Risk.Nation
 
             public BaseNation() : base()
             {
-                /*
-                _ownedRegions = new Regions.RegionList();
-                _ownedUnits = new Units.UnitList();
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -208,8 +204,6 @@ namespace Laan.Risk.Nation
                     case Fields.OwnedUnits:
                         _ownedUnits = (Units.UnitList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-//                    default:
-//                        throw new Exception("Illegal field value");
                 }
             }
 
