@@ -8,6 +8,32 @@ using Laan.GameLibrary.Data;
 
 namespace Laan.GameLibrary
 {
+
+    public class ClientMessage
+    {
+        private byte[] _data;
+        private IOHandlerSocket _socket;
+
+        public ClientMessage(byte[] data, IOHandlerSocket socket)
+        {
+            _data = data;
+            _socket = socket;
+        }
+
+        public byte[] Data
+        {
+            get { return _data; }
+            set { _data = value; }
+        }
+
+        public IOHandlerSocket Socket
+        {
+            get { return _socket; }
+            set { _socket = value; }
+        }
+
+    }
+
 	public class GameServer : GameSocket
     {
 		private GameServer() : base()
@@ -50,9 +76,10 @@ namespace Laan.GameLibrary
 		{
 			Log.WriteLine("GameServer: Receiving Client Message");
 
-			byte[] message = base.InternalOnServerExecute(context);
+			byte[] data = base.InternalOnServerExecute(context);
+            ClientMessage message = new ClientMessage(data, context.Connection.Socket);
 
-			using (BinaryStreamReader reader = new BinaryStreamReader(message))
+			using (BinaryStreamReader reader = new BinaryStreamReader(data))
 			{
 				int id = reader.ReadInt32();
 				if (id == Command.Login)
@@ -72,7 +99,7 @@ namespace Laan.GameLibrary
 					_messages.Enqueue(message);
 				}
 			}
-			return message;
+			return message.Data;
 		}
 
 		/// Private Methods
@@ -141,7 +168,7 @@ namespace Laan.GameLibrary
 			if(OnRendezvousReceivedEvent != null)
 				OnRendezvousReceivedEvent(this, receivedText, ref isValid);
 
-			// if its valid, send the response thus: "Host:Port"
+			// if its valid, send the response thus: "Name:Host:Port"
 			if(isValid)
 			{
 				string sSend =
@@ -156,7 +183,7 @@ namespace Laan.GameLibrary
 			}
 		}
 
-		private void ProcessMessage(byte[] message)
+		private void ProcessMessage(ClientMessage message)
 		{
 			if(OnProcessMessageEvent != null)
 				OnProcessMessageEvent(this, message);
@@ -166,7 +193,7 @@ namespace Laan.GameLibrary
 
 		private void ProcessQueue()
 		{
-			byte[] m;
+			ClientMessage m;
 
 			// repeat until Server is inactive
 			while(this.Active)
@@ -178,8 +205,8 @@ namespace Laan.GameLibrary
 					// get the message
 					lock(this._messages)
 					{
-						m = (byte[])_messages.Dequeue();
-						Log.WriteLine("Dequeing Message: " + Message.ToString(m));
+						m = (ClientMessage)_messages.Dequeue();
+//						Log.WriteLine("Dequeing Message: " + Message.ToString(m));
 					}
 
 					// allow custom game processing of message to occur
@@ -294,4 +321,5 @@ namespace Laan.GameLibrary
 		public event OnProcessMessageEventHandler      OnProcessMessageEvent;
 		public event OnRendezvousReceivedEventHandler  OnRendezvousReceivedEvent;
 	}
+
 }

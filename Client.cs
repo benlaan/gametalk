@@ -198,7 +198,9 @@ namespace Laan.GameLibrary
             byte[] message = base.InternalOnServerExecute(context);
 
 			if (OnProcessMessageEvent != null)
-				OnProcessMessageEvent(this, message);
+				OnProcessMessageEvent(this,
+                    new ClientMessage(message, context.Connection.Socket)
+                );
 			/*
                 need to respond to the message by either:
 
