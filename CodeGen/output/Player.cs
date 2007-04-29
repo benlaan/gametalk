@@ -5,9 +5,15 @@ using System.Diagnostics;
 using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
+using Laan.Library.Logging;
 
 namespace Laan.Risk.Player
 {
+
+    class Command
+	{
+		internal const int Ready = 0;
+	}
 
     namespace Server
     {
@@ -16,9 +22,9 @@ namespace Laan.Risk.Player
 
             // --------------- Protected --------------------------------------------
 
-            protected override void ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                
+                return null;                
             }
             
             // --------------- Public -----------------------------------------------
@@ -40,6 +46,24 @@ namespace Laan.Risk.Player
             {
 
             }
+
+            public new Boolean Ready
+            {
+                get { return base.Ready; }
+                set {
+                    using (BinaryStreamWriter writer = new BinaryStreamWriter(3))
+                    {
+                        writer.WriteInt32(this.ID);
+                        writer.WriteInt32(Command.Ready);
+                        writer.WriteBoolean(value);
+
+                        GameClient.Instance.SendMessage(writer.DataStream);
+
+                        Log.WriteLine("MessageSent(Player.Ready = {0})", value);
+                    }
+                }
+            }
+
 		}
     }
 }

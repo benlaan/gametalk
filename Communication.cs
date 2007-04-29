@@ -91,10 +91,12 @@ namespace Laan.GameLibrary.Entity
 			GameServer.Instance.AddUpdateMessage(data);
 		}
 
-		public void ProcessCommand(BinaryStreamReader reader)
+		public byte[] ProcessCommand(BinaryStreamReader reader)
 		{
 			if (OnProcessCommand != null)
-				OnProcessCommand(reader);
+				return OnProcessCommand(reader);
+            else
+                return null;
 		}
 
 		internal void Delete()

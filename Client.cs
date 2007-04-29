@@ -100,9 +100,18 @@ namespace Laan.GameLibrary
 		// The mechansim by which the client initiates a communication to the server
         public void SendMessage(byte[] message)
         {
+            this.SendMessage(message, false);
+        }
+
+        public byte[] SendMessage(byte[] message, bool expectResult)
+        {
             Log.WriteLine("Client: Sending Message: {0}: {1})", this, Message.ToString(message));
 			WriteToSocket(_tcpClient.Socket, message);
 			Log.WriteLine("Client: Message Sent");
+            if (expectResult)
+                return ReadFromSocket(_tcpClient.Socket);
+            else
+                return null;
 		}
 
         // start broadcasting for a GameServer that responds
@@ -135,7 +144,7 @@ namespace Laan.GameLibrary
 				writer.WriteString(Environment.MachineName);
 				writer.WriteInt32(Config.InboundPort);
 
-				SendMessage(writer.DataStream);
+				SendMessage(writer.DataStream, false);
 
 				Log.WriteLine("MessageSent(Login)");
 			}

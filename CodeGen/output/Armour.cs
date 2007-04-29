@@ -16,9 +16,9 @@ namespace Laan.Risk.Unit.Armour
 
             // --------------- Protected --------------------------------------------
 
-            protected override void ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                
+                return null;                
             }
             
             // --------------- Public -----------------------------------------------

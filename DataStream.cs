@@ -2,6 +2,8 @@ using System.IO;
 using System.Drawing;
 
 using Laan.Library.Logging;
+using System.Collections;
+using System.Diagnostics;
 
 namespace Laan.GameLibrary.Data
 {
@@ -136,4 +138,69 @@ namespace Laan.GameLibrary.Data
             _writer.Close();
         }
     }
+
+    public class BinaryHelper
+    {
+    
+        public static object[] Read(byte[] message, string[] types)
+        {
+            object[] result = new object[types.Length];
+
+            int index = 0;
+            using (BinaryStreamReader reader = new BinaryStreamReader(message))
+            {
+                foreach(string type in types)
+                {
+                    switch(type)
+                    {
+                        case "string":
+                            result[index] = reader.ReadString();
+                            break;
+                        case "int":
+                            result[index] = reader.ReadInt32();
+                            break;
+                        case "bool":
+                            result[index] = reader.ReadBoolean();
+                            break;
+//                        case "date":
+//                            result[index] = reader.Read();
+//                            break;
+                    }
+                    index++;
+                }
+                return result;
+            }
+        }
+
+        public static byte[] Write(string[] types, object[] values)
+        {
+            int index = 0;
+            Debug.Assert(types.Length == values.Length);
+
+            using (BinaryStreamWriter writer = new BinaryStreamWriter(3))
+            {
+                foreach(string type in types)
+                {
+                    switch(type)
+                    {
+                        case "string":
+                            writer.WriteString((string)values[index]);
+                            break;
+                        case "int":
+                            writer.WriteInt32((int)values[index]);
+                            break;
+                        case "bool":
+                            writer.WriteBoolean((bool)values[index]);
+                            break;
+                        case "date":
+                            writer.WriteDateTime((System.DateTime)values[index]);
+                            break;
+                    }
+                    index++;
+                }
+                return writer.DataStream;
+            }
+        }
+    }
+
 }

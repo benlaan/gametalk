@@ -169,7 +169,7 @@ namespace Laan.GameLibrary.Entity
         }
      }
 
-    public delegate void OnProcessCommandEventHandler(BinaryStreamReader reader);
+    public delegate byte[] OnProcessCommandEventHandler(BinaryStreamReader reader);
 
 	public delegate void OnNewEntityEventHandler(BaseEntity instance);
 	public delegate void OnRootEntityEventHandler(BaseEntity rootEntity);
@@ -261,7 +261,7 @@ namespace Laan.GameLibrary.Entity
 		public event OnNewEntityEventHandler    OnNewEntityEvent;
 		public event OnModifyEntityEventHandler OnModifyEntityEvent;
 
-        public void ProcessMessage(byte[] data)
+        public byte[] ProcessMessage(byte[] data)
 		{
 			try
 			{
@@ -271,16 +271,11 @@ namespace Laan.GameLibrary.Entity
 				switch (code)
 				{
 					case MessageCode.Create:
-						ProcessInsert(reader);
-						break;
+						return ProcessInsert(reader);
 					case MessageCode.Delete:
-						ProcessDelete(reader);
-						break;
-
+						return ProcessDelete(reader);
 					case MessageCode.Update:
-						ProcessModify(reader);
-						break;
-
+						return ProcessModify(reader);
 					default:
 						throw new Exception("Invalid MesssageCode");
 				}
@@ -292,7 +287,7 @@ namespace Laan.GameLibrary.Entity
 			}
 		}
 
-        internal void ProcessInsert(BinaryStreamReader reader)
+        internal byte[] ProcessInsert(BinaryStreamReader reader)
         {
             // create an instance of the given type, and attach
 			// it to the entities list
@@ -319,9 +314,16 @@ namespace Laan.GameLibrary.Entity
 				e.Deserialise(reader);
 
 			Log.WriteLine("Created BaseEntity {0}:{1}", e.ID, e.Name);
+
+            // return new ID to client
+            using (BinaryStreamWriter writer = new BinaryStreamWriter(1))
+            {
+                writer.WriteInt32(e.ID);
+                return writer.DataStream;
+            }
 		}
 
-        internal void ProcessDelete(BinaryStreamReader reader)
+        internal byte[] ProcessDelete(BinaryStreamReader reader)
 		{
 			Log.WriteLine("ClientDataStore.ProcessDelete");
 
@@ -330,9 +332,11 @@ namespace Laan.GameLibrary.Entity
 
             // remove the entity from the main list
             _entities.Remove(e);
+
+            return null;
         }
 
-        internal void ProcessModify(BinaryStreamReader reader)
+        internal byte[] ProcessModify(BinaryStreamReader reader)
         {
 			Log.WriteLine("ClientDataStore.ProcessModify");
 
@@ -344,6 +348,8 @@ namespace Laan.GameLibrary.Entity
 
             if(OnModifyEntityEvent != null)
                 OnModifyEntityEvent(e);
+
+            return null;
         }
 
 		public string AssemblyName
@@ -384,7 +390,7 @@ namespace Laan.GameLibrary.Entity
 			return _server;
         }
 
-        protected abstract void ProcessCommand(BinaryStreamReader reader);
+        protected abstract byte[] ProcessCommand(BinaryStreamReader reader);
         
         // --------------- Public --------------------------------------------------
 
