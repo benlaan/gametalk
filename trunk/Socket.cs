@@ -12,7 +12,7 @@ namespace Laan.GameLibrary
 	public delegate void OnRendezvousReceivedEventHandler(object sender, string data, ref bool isValid);
 	public delegate void OnBroadcastFoundEventHandler(object sender, string Name, string Host, int Port);
 
-	public delegate void OnProcessMessageEventHandler(object sender, byte[] message);
+	public delegate void OnProcessMessageEventHandler(object sender, ClientMessage message);
 	public delegate void OnAllowClientUpdateEventHandler(object sender, byte[] message, ref bool isValid);
 	public delegate void OnNewClientConnectionEventHandler(object sender, ClientList clients);
 	public delegate void OnClientDisconnectionEventHandler(object sender, ClientList clients);
@@ -54,7 +54,7 @@ namespace Laan.GameLibrary
 
 		// --------------- Protected Methods ------------------------------
 
-        protected void WriteToSocket(IOHandlerSocket socket, byte[] data)
+        public void WriteToSocket(IOHandlerSocket socket, byte[] data)
         {
             socket.WriteLn(data.Length.ToString());
             socket.WriteDirect(ref data);

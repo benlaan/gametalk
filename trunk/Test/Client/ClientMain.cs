@@ -721,9 +721,9 @@ namespace Laan.Risk.GUI.Client
 			Log.WriteLine(String.Format("OnModifyEntityEvent({0})", e.ID));
 		}
 
-		private void OnProcessMessageEvent(object sender, byte[] message)
+		private void OnProcessMessageEvent(object sender, ClientMessage message)
 		{
-			_dataStore.ProcessMessage(message);
+			_dataStore.ProcessMessage(message.Data);
 		}
 
 		private void btnConnectToServer_Click(object sender, System.EventArgs e)

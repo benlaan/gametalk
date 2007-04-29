@@ -257,9 +257,9 @@ namespace Laan.Risk.GUI.Server
 			Redraw();
 		}
 
-		private void OnMessageReceivedEvent(object sender, byte[] data)
+		private void OnMessageReceivedEvent(object sender, ClientMessage message)
 		{
-			using (BinaryStreamReader reader = new BinaryStreamReader(data))
+			using (BinaryStreamReader reader = new BinaryStreamReader(message.Data))
 			{
 				int id = reader.ReadInt32();
 				BaseEntity entity = ServerDataStore.Instance.Find(id);
@@ -267,7 +267,9 @@ namespace Laan.Risk.GUI.Server
 				if (entity == null)
 					throw new Exception(String.Format("entity {0} not found", id));
 
-				(entity.Communication() as Laan.GameLibrary.Entity.Server).ProcessCommand(reader);
+				byte[] result = (entity.Communication() as Laan.GameLibrary.Entity.Server).ProcessCommand(reader);
+                if (result != null)
+                    _server.WriteToSocket(message.Socket, result);
 			}
 			Redraw();
 		}
