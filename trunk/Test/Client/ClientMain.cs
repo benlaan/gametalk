@@ -642,6 +642,7 @@ namespace Laan.Risk.GUI.Client
 			_availableGame = new GameList();
 		}
 		private GameList _availableGame;
+        private int _playerID;
 		private bool _playerReady = false;
 
 		protected override void Dispose(bool disposing)
@@ -834,7 +835,7 @@ namespace Laan.Risk.GUI.Client
 		
 		private void btnJoin_Click(object sender, System.EventArgs e)
 		{
-			_game.AddPlayer(
+			_playerID = _game.AddPlayer(
 				edNationName.Text,
 				edNationShortName.Text,
                 edName.Text,
@@ -845,7 +846,8 @@ namespace Laan.Risk.GUI.Client
 		
 		private void btnReady_Click(object sender, System.EventArgs e)
 		{
-//			_game.PlayerReady(_playerReady);
+            Player.Client.Player player = (Player.Client.Player)ClientDataStore.Instance.Find(_playerID);
+			player.Ready = _playerReady;
 			_playerReady = !_playerReady;
             UpdatePlayerList();
 		}

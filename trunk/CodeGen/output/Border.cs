@@ -16,9 +16,9 @@ namespace Laan.Risk.Border
 
             // --------------- Protected --------------------------------------------
 
-            protected override void ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                
+                return null;                
             }
             
             // --------------- Public -----------------------------------------------

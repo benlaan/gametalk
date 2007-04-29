@@ -15,7 +15,7 @@ namespace Laan.Risk.Game
 //		internal const int PlayerLeave = 1;
 //		internal const int Start = 2;
 //		internal const int Quit = 3;
-//		internal const int PlayerReady = 1;
+		internal const int PlayerReady = 1;
 	}
 
 	namespace Server
@@ -25,19 +25,15 @@ namespace Laan.Risk.Game
 
             // --------------- Protected --------------------------------------------
 
-            protected override void ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader) 
             {
 				int command = reader.ReadInt32();
                 switch (command)
                 {
 				  case Command.PlayerJoin:
-					PlayerJoin(reader);
-					break;
-//				  case Command.PlayerReady:
-//					PlayerReady(reader);
-//					break;
+					return PlayerJoin(reader);
 				  default:
-					break;
+					return null;
 				}
 			}
             
@@ -48,7 +44,7 @@ namespace Laan.Risk.Game
 
             }
 
-			public void PlayerJoin(BinaryStreamReader reader)
+			public byte[] PlayerJoin(BinaryStreamReader reader)
 			{
 				Laan.Risk.Player.Server.Player p = new Laan.Risk.Player.Server.Player();
 
@@ -59,18 +55,14 @@ namespace Laan.Risk.Game
 				Players.Add(p);
 
 				Log.WriteLine("MessageReceived(PlayerJoin)");
-			}
 
-//			public void PlayerReady(BinaryStreamReader reader)
-//			{
-//				Laan.Business.Risk.Player.Server.Player p = new Laan.Business.Risk.Player.Server.Player();
-//				p.Nation.Name = reader.ReadBoolean();
-//				string shortName = reader.ReadString();
-//				p.Colour = System.Drawing.Color.FromArgb(reader.ReadInt32());
-//				Players.Add(p);
-//
-//				Log.WriteLine("MessageReceived(PlayerReady)");
-//			}
+                return BinaryHelper.Write(new string[] {"int"}, new object[]{p.ID});
+//                using (BinaryStreamWriter writer = new BinaryStreamWriter(3))
+//                {
+//                    writer.WriteInt32(p.ID);
+//                    return writer.DataStream;
+//                }
+			}
 		}
     }
 
@@ -85,37 +77,33 @@ namespace Laan.Risk.Game
 
 			}
 
-			public void AddPlayer(string name, string shortName, string leader, int colour)
+			public int AddPlayer(string name, string shortName, string leader, int colour)
 			{
-				using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
-				{
-					writer.WriteInt32(this.ID);
-					writer.WriteInt32(Command.PlayerJoin);
-					writer.WriteString(name);
-					writer.WriteString(shortName);
-					writer.WriteString(leader);
-					writer.WriteInt32(colour);
+                byte[] message = BinaryHelper.Write(
+                    new string[] {"int", "int", "string", "string", "string", "int"},
+                    new object[] {this.ID, Command.PlayerJoin, name, shortName, leader, colour}
+                );
+                byte[] response = GameClient.Instance.SendMessage(message, true);
 
-					GameClient.Instance.SendMessage(writer.DataStream);
-
-					Log.WriteLine("MessageSent(AddPlayer)");
-				}
-			}
-
-//			public void PlayerReady(bool ready)
-//			{
+                using (BinaryStreamReader reader = new BinaryStreamReader(response))
+                {
+                    return reader.ReadInt32();
+                }
+                
 //				using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
 //				{
 //					writer.WriteInt32(this.ID);
-//					writer.WriteInt32(Command.PlayerReady);
-//					writer.WriteInt32(c);
-//					writer.WriteBoolean(ready);
+//					writer.WriteInt32(Command.PlayerJoin);
+//					writer.WriteString(name);
+//					writer.WriteString(shortName);
+//					writer.WriteString(leader);
+//					writer.WriteInt32(colour);
 //
-//					GameClient.Instance.SendMessage(writer.DataStream);
+//					Log.WriteLine("MessageSent(AddPlayer)");
 //
-//					Debug.WriteLine("MessageSent(PlayerReady)");
 //				}
-//			}
+			}
+
 		}
 	}
 }
