@@ -25,7 +25,8 @@ namespace Laan.Risk.Nation
 
             public Nation() : base()
             {
-
+                Prestige = 100;
+                Technology = 100;
             }
         }
     }

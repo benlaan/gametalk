@@ -137,11 +137,11 @@ namespace Laan.Risk.Region
 
             // ------------ Private ---------------------------------------------------------
 
-            internal Int32     _economy;
-            internal Int32     _oil;
-            internal Int32     _arms;
-            internal Units.UnitList _defenders = null;
-            internal Units.UnitList _attackers = null;
+            internal Int32          _economy;
+            internal Int32          _oil;
+            internal Int32          _arms;
+            internal Units.UnitList _defenders;
+            internal Units.UnitList _attackers;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -155,10 +155,6 @@ namespace Laan.Risk.Region
 
             public BaseRegion() : base()
             {
-                /*
-                _defenders = new Units.UnitList();
-                _attackers = new Units.UnitList();
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -188,8 +184,6 @@ namespace Laan.Risk.Region
                     case Fields.Attackers:
                         _attackers = (Units.UnitList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-//                    default:
-//                        throw new Exception("Illegal field value");
                 }
             }
 

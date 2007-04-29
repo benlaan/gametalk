@@ -110,9 +110,9 @@ namespace Laan.Risk.Player
 
             // ------------ Private ---------------------------------------------------------
 
-            internal Int32  _colour;
-            internal Boolean _ready;
-            internal Nations.Nation _nation = null;
+            internal Int32          _colour;
+            internal Boolean        _ready;
+            internal Nations.Nation _nation;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -125,9 +125,6 @@ namespace Laan.Risk.Player
 
             public BasePlayer() : base()
             {
-                /*
-                _nation = new Nations.Nation();
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -151,8 +148,6 @@ namespace Laan.Risk.Player
                     case Fields.Nation:
                         _nation = (Nations.Nation)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
-//                    default:
-//                        throw new Exception("Illegal field value");
                 }
             }
 

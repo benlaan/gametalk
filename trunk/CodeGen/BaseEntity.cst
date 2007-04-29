@@ -189,7 +189,7 @@ namespace <%= EntityElement.Namespace %>
 
         <%
             Response.IndentLevel = 3;
-            width = MaxWidthName();
+            width = MaxWidthType();
             index = 1;
             foreach (Property property in EntityElement.Properties)
                 if(!property.Inherited)
@@ -198,7 +198,7 @@ namespace <%= EntityElement.Namespace %>
                         String.Format("internal {0} _{1}{2};",
                             FormattedWidth(GetDeclaredType(property), width),
                             StringUtility.ToCamelCase(property.Name),
-                            IsPrimitiveType(property.Type) ? "" : " = null"
+                            property.Type == "String" ? " = \"\"" : ""
                         )
                     );
                     index++;
@@ -233,23 +233,6 @@ namespace <%= EntityElement.Namespace %>
 
             public Base<%= EntityElement.Name %><%= GetConstructor() %>
             {
-                /*
-                <%
-                    Response.IndentLevel = 4;
-                    foreach (Property property in EntityElement.Properties)
-                    {
-                        string type = property.ShortType != null ? property.ShortType : property.Type;
-                        if(!property.Inherited)
-                            if(!IsPrimitiveType(property.Type))
-                                Response.WriteLine(
-                                    String.Format("_{0} = new {1}s.{2}();", 
-                                        StringUtility.ToCamelCase(property.Name), property.Type.Replace("List", ""), property.Type));
-
-                    }
-                    
-                    Response.IndentLevel = 0;
-                %>
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -261,13 +244,20 @@ namespace <%= EntityElement.Namespace %>
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
-                // update the appropriate field
-                switch (field)
-                {
                 <%
+                
+                    bool hasNonInheritedProps = NonInheritedProps();
+                
+                    Response.IndentLevel = 4;
+                    if (hasNonInheritedProps)
+                    {
+                        Response.WriteLine(@"// update the appropriate field");
+                        Response.WriteLine(@"switch (field)");
+                        Response.WriteLine(@"{");
+                    }
                     Response.IndentLevel = 5;
                     foreach (Property property in EntityElement.Properties)
-                        if(!property.Inherited) // && !property.List)
+                        if(!property.Inherited)
                         {
                             Response.WriteLine(String.Format("case Fields.{0}:", property.Name));
     
@@ -279,8 +269,6 @@ namespace <%= EntityElement.Namespace %>
                             }
                             else
                             {
-    //                            Response.WriteLine(String.Format("    _{0}.Deserialise(reader);",
-    //                                StringUtility.ToCamelCase(property.Name)));
                                 Response.WriteLine(
                                     String.Format(
                                         "    _{0} = ({1})(ClientDataStore.Instance.Find(reader.ReadInt32()));",
@@ -291,11 +279,16 @@ namespace <%= EntityElement.Namespace %>
             
                             Response.WriteLine("    break;");
                         }
-                        Response.IndentLevel = 0;
-                %>
+                        Response.IndentLevel = 4;
+                        
 //                    default:
 //                        throw new Exception("Illegal field value");
-                }
+                    if (hasNonInheritedProps)
+                    {
+                        Response.WriteLine(@"}");
+                    }
+                    Response.IndentLevel = 0;
+                %>
             }
 
         <%
@@ -431,6 +424,16 @@ namespace <%= EntityElement.Namespace %>
             return String.Format("{0}s.{0}", prop.Type);
         else
             return String.Format("{0}s.{1}", prop.Type.Substring(0, prop.Type.Length - 4), prop.Type); 
+    }
+    
+    bool NonInheritedProps()
+    {
+        int count = 0;
+        foreach (Property property in EntityElement.Properties)
+            if(!property.Inherited)
+                count++;
+                
+        return count > 0;
     }
     
     bool IsPrimitiveType(string typeName)

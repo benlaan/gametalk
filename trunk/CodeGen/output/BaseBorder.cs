@@ -107,9 +107,9 @@ namespace Laan.Risk.Border
 
             // ------------ Private ---------------------------------------------------------
 
-            internal Int32   _economy;
-            internal Int32   _oil;
-            internal Int32   _arms;
+            internal Int32  _economy;
+            internal Int32  _oil;
+            internal Int32  _arms;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
@@ -123,8 +123,6 @@ namespace Laan.Risk.Border
 
             public BaseBorder() : base()
             {
-                /*
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -148,8 +146,6 @@ namespace Laan.Risk.Border
                     case Fields.Arms:
                         _arms = reader.ReadInt32();
                         break;
-//                    default:
-//                        throw new Exception("Illegal field value");
                 }
             }
 

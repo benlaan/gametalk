@@ -78,8 +78,6 @@ namespace Laan.Risk.Unit.Infantry
 
             public BaseInfantry() : base()
             {
-                /*
-                */
             }
 
             // when a change is caught (by the client), ensure the correct field is updated
@@ -91,12 +89,6 @@ namespace Laan.Risk.Unit.Infantry
                 // move this to the call site of the delegate that calls this (OnUpdate) event
                 CommClient.UpdateRecency(field);
 
-                // update the appropriate field
-                switch (field)
-                {
-//                    default:
-//                        throw new Exception("Illegal field value");
-                }
             }
 
         }

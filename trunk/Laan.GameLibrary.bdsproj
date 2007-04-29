@@ -99,31 +99,8 @@
 					<Options Name="AspNetCassiniVirtualDirectory">\</Options>
 				</Options>
 			</OptionsSet>
-		</Options>  
-    
-    
-    <FileList>
-      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0"/>
-      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Data" AssemblyName="System.Data" Version="1.0.5000.0"/>
-      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.XML.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.XML" AssemblyName="System.XML" Version="1.0.5000.0"/>
-      <File FileName="AssemblyInfo.cs" ContainerId="CSharpCompiler" ModuleName="AssemblyInfo"/>
-      <File FileName="Entity.cs" ContainerId="CSharpCompiler" ModuleName="Entity"/>
-      <File FileName="Socket.cs" ContainerId="CSharpCompiler" ModuleName="Socket"/>
-      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Windows.Forms" AssemblyName="System.Windows.Forms" Version="1.0.5000.0"/>
-      <File FileName="c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Indy.Sockets" AssemblyName="Indy.Sockets" CopyLocal="True" Version="10.1.5.17875"/>
-      <File FileName="Server.cs" ContainerId="CSharpCompiler" ModuleName="Server"/>
-      <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Delphi.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Borland.Delphi" AssemblyName="Borland.Delphi" Version="10.0.4143.0"/>
-      <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.VclRtl.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Borland.VclRtl" AssemblyName="Borland.VclRtl" Version="9.0.1882.30496"/>
-      <File FileName="Configuration.cs" ContainerId="CSharpCompiler" ModuleName="Configuration"/>
-      <File FileName="Client.cs" ContainerId="CSharpCompiler" ModuleName="Client"/>
-      <File FileName="StoredClient.cs" ContainerId="CSharpCompiler" ModuleName="StoredClient"/>
-      <File FileName="DataStream.cs" ContainerId="CSharpCompiler" ModuleName="DataStream"/>
-      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Drawing" AssemblyName="System.Drawing" Version="1.0.5000.0"/>
-      <File FileName="Message.cs" ContainerId="CSharpCompiler" ModuleName="Message"/>
-      <File FileName="Communication.cs" ContainerId="CSharpCompiler" ModuleName="Communication"/>
-      <File FileName="include\bin\debug\Laan.Library.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Laan.Library" AssemblyName="Laan.Library" Project="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}" Version="1.0.2672.20909"/>
-    </FileList>
-  </CSharp.Personality>
+		</Options>
+		<FileList><File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0"/><File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Data" AssemblyName="System.Data" Version="1.0.5000.0"/><File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.XML.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.XML" AssemblyName="System.XML" Version="1.0.5000.0"/><File FileName="AssemblyInfo.cs" ContainerId="CSharpCompiler" ModuleName="AssemblyInfo"/><File FileName="Entity.cs" ContainerId="CSharpCompiler" ModuleName="Entity"/><File FileName="Socket.cs" ContainerId="CSharpCompiler" ModuleName="Socket"/><File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Windows.Forms" AssemblyName="System.Windows.Forms" Version="1.0.5000.0"/><File FileName="c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Indy.Sockets" AssemblyName="Indy.Sockets" CopyLocal="True" Version="10.1.5.17875"/><File FileName="Server.cs" ContainerId="CSharpCompiler" ModuleName="Server"/><File FileName="c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Delphi.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Borland.Delphi" AssemblyName="Borland.Delphi" Version="10.0.4143.0"/><File FileName="c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.VclRtl.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Borland.VclRtl" AssemblyName="Borland.VclRtl" Version="10.0.4143.0"/><File FileName="Configuration.cs" ContainerId="CSharpCompiler" ModuleName="Configuration"/><File FileName="Client.cs" ContainerId="CSharpCompiler" ModuleName="Client"/><File FileName="StoredClient.cs" ContainerId="CSharpCompiler" ModuleName="StoredClient"/><File FileName="DataStream.cs" ContainerId="CSharpCompiler" ModuleName="DataStream"/><File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="System.Drawing" AssemblyName="System.Drawing" Version="1.0.5000.0"/><File FileName="Message.cs" ContainerId="CSharpCompiler" ModuleName="Message"/><File FileName="Communication.cs" ContainerId="CSharpCompiler" ModuleName="Communication"/><File FileName="include\bin\debug\Laan.Library.dll" ContainerId="DotNetAssemblyCompiler" ModuleName="Laan.Library" AssemblyName="Laan.Library" Project="{D9915423-744A-4A9A-A97D-58BF2B29ABE1}" Version="1.0.2672.37089"/></FileList></CSharp.Personality>
 	<ModelSupport>False</ModelSupport>
 	<!-- EurekaLog First Line
 [Exception Log]
