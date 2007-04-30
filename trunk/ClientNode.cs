@@ -23,7 +23,6 @@ namespace Laan.GameLibrary
 			Name = name;
 			Host = host;
 			Port = port;
-			_active = false;
 		}
 
         public void AddMessage(byte[] message)
@@ -38,7 +37,7 @@ namespace Laan.GameLibrary
     }
 
     /// <summary>
-    /// ClientList is a container for Client objects
+    /// ClientNodeList is a container for Client objects
     /// </summary>
     public class ClientNodeList : ArrayList
     {
