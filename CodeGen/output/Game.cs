@@ -85,11 +85,9 @@ namespace Laan.Risk.Game
                 );
                 byte[] response = GameClient.Instance.SendMessage(message, true);
 
-                using (BinaryStreamReader reader = new BinaryStreamReader(response))
-                {
-                    return reader.ReadInt32();
-                }
-                
+				using (BinaryStreamReader reader = new BinaryStreamReader(response))
+					return reader.ReadInt32();
+
 //				using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
 //				{
 //					writer.WriteInt32(this.ID);

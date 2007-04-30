@@ -40,7 +40,6 @@ namespace Laan.GameLibrary
 
 		private ClientNodeList          _clients;
 		private Queue                   _messages;
-		private Queue                   _storedMessages;
 		private string 					_name;
 		private System.Threading.Thread _processor;
 		private UDPServer               _udpServer;
@@ -56,7 +55,6 @@ namespace Laan.GameLibrary
 		{
 			_clients = new ClientNodeList();
 			_messages = new Queue();
-			_storedMessages = new Queue();
 
 			_processor = new System.Threading.Thread(new ThreadStart(ProcessQueue));
 
@@ -257,8 +255,8 @@ namespace Laan.GameLibrary
 				if (id == Command.Login)
 				{
 					string clientName = reader.ReadString();
-					string hostName = reader.ReadString();
-					int port = reader.ReadInt32();
+					string hostName   = reader.ReadString();
+					int    port       = reader.ReadInt32();
 
 					Log.WriteLine("Client {0} has connected from {1}:{2}", clientName, hostName, port);
 

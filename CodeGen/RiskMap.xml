@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <EntityMap Version="1.0" xmlns="http://www.laanco.com/entitylist"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="D:\Programming\Projects\C#\Game.Library\CodeGen\RiskMap.xsd">
-	<Entity Name="Game" Namespace="Laan.Risk.Game">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="RiskMap.xsd">
+	
+	<Entity Name="Game" Abstract="true" Namespace="Laan.GameLibray.Game">
+		<Property Name="Name" Type="String" Inherited="true"/>
+		<Property Name="Players" Type="PlayerList" List="true"/>
+	</Entity>
+
+	<Entity Name="Player" Namespace="Laan.Risk.Player">
+		<Requirement Namespace="Laan.Risk.Nation"/>
+		<Property Name="Name" Type="String" Inherited="true"/>
+		<Property Name="Ready" Type="Boolean"/>
+	</Entity>
+
+	<Entity Name="RiskGame" BaseClass="Game" Namespace="Laan.Risk.Game">
 		<Requirement Namespace="Laan.Risk.Player"/>
 		<Requirement Namespace="Laan.Risk.Region"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
-		<Property Name="Players" Type="PlayerList" List="true"/>
 		<Property Name="Regions" Type="RegionList" List="true"/>
 	</Entity>
-	<Entity Name="Player" Namespace="Laan.Risk.Player">
+
+	<Entity Name="RiskPlayer" BaseClass="Player" Namespace="Laan.Risk.Player">
 		<Requirement Namespace="Laan.Risk.Nation"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Colour" Type="Int32" ShortType="Int32"/>
 		<Property Name="Ready" Type="Boolean"/>
 		<Property Name="Nation" Type="Nation"/>
 	</Entity>
+
 	<Entity Name="Nation" Namespace="Laan.Risk.Nation">
 		<Requirement Namespace="Laan.Risk.Region"/>
 		<Requirement Namespace="Laan.Risk.Unit"/>
@@ -27,37 +39,47 @@
 		<Property Name="OwnedRegions" Type="RegionList" List="true"/>
 		<Property Name="OwnedUnits" Type="UnitList" List="true"/>
 	</Entity>
+
 	<Entity Name="Region" Namespace="Laan.Risk.Region">
 		<Requirement Namespace="Laan.Risk.Unit"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Economy" Type="Int32"/>
+		<Property Name="EconomicWeight" Type="Int32"/>
 		<Property Name="Oil" Type="Int32"/>
 		<Property Name="Arms" Type="Int32"/>
 		<Property Name="Defenders" Type="UnitList" List="true"/>
 		<Property Name="Attackers" Type="UnitList" List="true"/>
+		<Property Name="Borders" Type="BorderList" List="true"/>
 	</Entity>
+
 	<Entity Name="Border" Namespace="Laan.Risk.Border">
 		<Property Name="Name" Type="String" Inherited="true"/>
+		<Property Name="FromRegion" Type="Region"/>
+		<Property Name="ToRegion" Type="Region"/>
 		<Property Name="Economy" Type="Int32"/>
 		<Property Name="Oil" Type="Int32"/>
 		<Property Name="Arms" Type="Int32"/>
 	</Entity>
+
 	<Entity Name="Unit" Abstract="true" Namespace="Laan.Risk.Unit">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Size" Type="Int32"/>
 		<Property Name="Experience" Type="Int32"/>
 		<Property Name="Location" Type="Int32"/>
 	</Entity>
+
 	<Entity Name="Infantry" BaseClass="Unit" Namespace="Laan.Risk.Unit.Infantry">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Size" Type="Int32" Inherited="true"/>
 		<Property Name="Experience" Type="Int32" Inherited="true"/>
 		<Property Name="Location" Type="Int32" Inherited="true"/>
 	</Entity>
+
 	<Entity Name="Armour" BaseClass="Unit" Namespace="Laan.Risk.Unit.Armour">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Size" Type="Int32" Inherited="true"/>
 		<Property Name="Experience" Type="Int32" Inherited="true"/>
 		<Property Name="Location" Type="Int32" Inherited="true"/>
 	</Entity>
+
 </EntityMap>
