@@ -14,8 +14,8 @@ namespace Laan.GameLibrary
 
 	public delegate void OnProcessMessageEventHandler(object sender, ClientMessage message);
 	public delegate void OnAllowClientUpdateEventHandler(object sender, byte[] message, ref bool isValid);
-	public delegate void OnNewClientConnectionEventHandler(object sender, ClientList clients);
-	public delegate void OnClientDisconnectionEventHandler(object sender, ClientList clients);
+	public delegate void OnNewClientConnectionEventHandler(object sender, ClientNodeList clients);
+	public delegate void OnClientDisconnectionEventHandler(object sender, ClientNodeList clients);
 
     class Command
 	{

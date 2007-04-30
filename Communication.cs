@@ -87,6 +87,9 @@ namespace Laan.GameLibrary.Entity
 			if (value is System.DateTime)
 				writer.WriteDateTime((System.DateTime)value);
 
+			if (value is Boolean)
+				writer.WriteBoolean((bool)value);
+
 			byte[] data = writer.DataStream;
 			GameServer.Instance.AddUpdateMessage(data);
 		}

@@ -18,12 +18,6 @@ namespace Laan.GameLibrary.Entity
         internal const int Name = 0;
     }
 
-    public class Commands
-    {
-        internal const int Add    = 0;
-        internal const int Remove = 1;
-    }
-
 	public class MessageCode
 	{
 		public const byte Create = 0;
@@ -59,7 +53,7 @@ namespace Laan.GameLibrary.Entity
 		public BaseEntity()
         {
             _name = "";
-			_streamSize = 4;
+			_streamSize = 1;
         }
 		private int _streamSize;
 
@@ -107,81 +101,64 @@ namespace Laan.GameLibrary.Entity
 		}
 	}
 
-	public abstract class EntityList : BaseEntity, IEnumerable
+	public abstract class BaseEntityClient: BaseEntity
 	{
 
-        private ArrayList _list;
-
-        public EntityList() : base()
-        {
-            _list = new ArrayList(10);
-		}
-
-		public IEnumerator GetEnumerator()
+		public BaseEntityClient()
 		{
-        	return _list.GetEnumerator();
+			_client = new GameLibrary.Entity.Client();
+			_client.OnModify += new OnServerMessageEventHandler(OnModify);
 		}
 
-        public virtual void Add(BaseEntity entity)
-        {
-            _list.Add(entity);
-        }
+		// --------------- Private -------------------------------------------------
 
-        public virtual void Remove(BaseEntity entity)
-        {
-            _list.Remove(entity);
-        }
+		private GameLibrary.Entity.Client _client = null;
 
-        public bool IsEmpty
-        {
-            get { return (_list.Count == 0); }
-        }
+		private void OnModify(Byte field, BinaryStreamReader reader)
+		{
+			DoModify(field, reader);
+		}
 
-        public BaseEntity Find(int identity)
-        {
-            foreach(BaseEntity e in _list)
-            {
-                if(e.ID == identity)
-                {
-                    return e;
-                }
-            }
-            return null;
+		protected virtual void DoModify(Byte field, BinaryStreamReader reader)
+		{
+				switch (field)
+				{
+					case Fields.Name:
+						Name = reader.ReadString();
+						break;
+				}
 		}
 
 		public override Communication Communication()
-        {
-            return null;
-        }
-
-//        public IList DataSource
-//        {
-//            get {
-//                return _list;
-//            }
-//        }
-
-        public BaseEntity this[int index]
-        {
-            get {
-                return (BaseEntity)_list[index];
-            }
-        }
-     }
-
-    public delegate byte[] OnProcessCommandEventHandler(BinaryStreamReader reader);
-
-	public delegate void OnNewEntityEventHandler(BaseEntity instance);
-	public delegate void OnRootEntityEventHandler(BaseEntity rootEntity);
-	public delegate void OnModifyEntityEventHandler(BaseEntity entity);
-
-	public class ServerEntityList : EntityList
-	{
-		Server _server;
-
-		public ServerEntityList()
 		{
-			_server = new GameLibrary.Entity.Server(this);
+			return _client;
+		}
+
+		// --------------- Public --------------------------------------------------
+
+		public GameLibrary.Entity.Client CommClient
+		{
+			get {
+				return _client;
+			}
+			set {
+				_client = value;
+			}
+		}
+	}
+
+	public abstract class BaseEntityServer: BaseEntity
+	{
+		// --------------- Private -------------------------------------------------
+
+		private Laan.GameLibrary.Entity.Server _server = null;
+
+		// --------------- Protected -----------------------------------------------
+
+		protected override void SetName(string value)
+		{
+			base.SetName(value);
+			CommServer.Modify(this.ID, Fields.Name, value);
 		}
 
 		public override Communication Communication()
@@ -189,143 +166,25 @@ namespace Laan.GameLibrary.Entity
 			return _server;
 		}
 
-		public override void Add(BaseEntity entity)
+		protected abstract byte[] ProcessCommand(BinaryStreamReader reader);
+		
+		// --------------- Public --------------------------------------------------
+
+		public BaseEntityServer() : base()
 		{
-			base.Add(entity);
-			_server.Modify(this.ID, Commands.Add, entity.ID);
+			_server = new Laan.GameLibrary.Entity.Server(this);
+			_server.OnProcessCommand += new OnProcessCommandEventHandler(ProcessCommand);
 		}
 
-		public override void Remove(BaseEntity entity)
+		public GameLibrary.Entity.Server CommServer
 		{
-			base.Remove(entity);
-			_server.Modify(this.ID, Commands.Remove, entity.ID);
-		}
-	}
-
-	public class ClientEntityList : EntityList
-	{
-		Client _client;
-
-		public ClientEntityList()
-		{
-			_client = new GameLibrary.Entity.Client();
-			_client.OnModify += new OnServerMessageEventHandler(OnModify);
-		}
-
-        private void OnModify(Byte field, BinaryStreamReader reader)
-        {
-            DoModify(field, reader);
-        }
-
-		public override Communication Communication()
-		{
-			return _client;
-		}
-
-        protected virtual void DoModify(Byte field, BinaryStreamReader reader)
-		{
-			int id = reader.ReadInt32();
-			BaseEntity e = ClientDataStore.Instance.Find(id);
-
-			Debug.Assert(e != null, String.Format("ClientDataStore.Find({0}): not found!", id));
-			switch (field)
-			{
-				case Commands.Add:
-					this.Add(e);
-					break;
-				case Commands.Remove:
-					this.Remove(e);
-					break;
-				default:
-					throw new Exception("ClientEntityList: Command must be Add or Remove");
+			get {
+				return _server;
+			}
+			set {
+				_server = value;
 			}
 		}
 	}
-
-    public abstract class BaseEntityClient: BaseEntity
-    {
-
-		public BaseEntityClient()
-		{
-			_client = new GameLibrary.Entity.Client();
-            _client.OnModify += new OnServerMessageEventHandler(OnModify);
-		}
-
-        // --------------- Private -------------------------------------------------
-
-		private GameLibrary.Entity.Client _client = null;
-
-        private void OnModify(Byte field, BinaryStreamReader reader)
-        {
-            DoModify(field, reader);
-        }
-
-        protected virtual void DoModify(Byte field, BinaryStreamReader reader)
-        {
-                switch (field)
-                {
-                    case Fields.Name:
-                        Name = reader.ReadString();
-                        break;
-                }
-        }
-
-        public override Communication Communication()
-        {
-			return _client;
-		}
-
-        // --------------- Public --------------------------------------------------
-
-        public GameLibrary.Entity.Client CommClient
-        {
-            get {
-                return _client;
-            }
-            set {
-                _client = value;
-            }
-        }
-    }
-
-    public abstract class BaseEntityServer: BaseEntity
-    {
-        // --------------- Private -------------------------------------------------
-
-        private Laan.GameLibrary.Entity.Server _server = null;
-
-        // --------------- Protected -----------------------------------------------
-
-        protected override void SetName(string value)
-        {
-            base.SetName(value);
-            CommServer.Modify(this.ID, Fields.Name, value);
-        }
-
-        public override Communication Communication()
-        {
-            return _server;
-        }
-
-        protected abstract byte[] ProcessCommand(BinaryStreamReader reader);
-        
-        // --------------- Public --------------------------------------------------
-
-        public BaseEntityServer() : base()
-        {
-            _server = new Laan.GameLibrary.Entity.Server(this);
-            _server.OnProcessCommand += new OnProcessCommandEventHandler(ProcessCommand);
-        }
-
-        public GameLibrary.Entity.Server CommServer
-        {
-            get {
-                return _server;
-            }
-            set {
-                _server = value;
-            }
-        }
-    }
 
 }

@@ -54,7 +54,7 @@ namespace Laan.GameLibrary.Data
 
 		public bool ReadBoolean()
 		{
-			bool data = _reader.ReadBoolean();
+			bool data = (_reader.ReadByte() == 1);
 			Log.WriteLine("ReadBoolean: " + data.ToString());
 			return data;
 		}
@@ -115,7 +115,7 @@ namespace Laan.GameLibrary.Data
 
 		public void WriteBoolean(bool value)
 		{
-			_writer.Write((bool)value);
+			_writer.Write((byte)(value ? 1 : 0));
 			Log.WriteLine("WriteBoolean: " + value);
 		}
 
