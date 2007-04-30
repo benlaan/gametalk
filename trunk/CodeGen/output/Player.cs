@@ -22,18 +22,27 @@ namespace Laan.Risk.Player
 
             // --------------- Protected --------------------------------------------
 
-            protected override byte[] ProcessCommand(BinaryStreamReader reader)
+			protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                return null;                
-            }
-            
-            // --------------- Public -----------------------------------------------
+				int command = reader.ReadInt32();
+                switch (command)
+				{
+					case Command.Ready:
+						Ready = reader.ReadBoolean();
+						return null;
+					default:
+						return null;
+				}
+			}
 
-            public Player() : base()
-            {
+			// --------------- Public -----------------------------------------------
 
-            }
-        }
+			public Player() : base()
+			{
+
+			}
+
+		}
     }
 
     namespace Client

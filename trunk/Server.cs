@@ -5,6 +5,7 @@ using Indy.Sockets;
 
 using Laan.Library.Logging;
 using Laan.GameLibrary.Data;
+using Laan.GameLibrary.Entity;
 
 namespace Laan.GameLibrary
 {
@@ -35,86 +36,27 @@ namespace Laan.GameLibrary
     }
 
 	public class GameServer : GameSocket
-    {
-		private GameServer() : base()
-		{
-			_tcpServer.OnDisconnect += new TIdServerThreadEvent(OnClientDisconnected);
-		}
+	{
 
-		/// Private Properties
-
-		private ClientList              _clients;
+		private ClientNodeList          _clients;
 		private Queue                   _messages;
-		private string _name;
+		private Queue                   _storedMessages;
+		private string 					_name;
 		private System.Threading.Thread _processor;
 		private UDPServer               _udpServer;
 
 		static private GameServer _instance = null;
 
-		/// Public Methods
-
-		public void AddMessage(StoredClient client, byte[] message)
+		private GameServer() : base()
 		{
-			if (client != null)
-				client.AddMessage(message);
-			else
-				foreach(StoredClient c in _clients)
-					c.AddMessage(message);
-		}
-
-		public void BeginRendezvous()
-		{
-			_udpServer.Active = true;
-		}
-
-		public void EndRendezvous()
-		{
-			_udpServer.Active = false;
-		}
-
-		protected override byte[] InternalOnServerExecute(Context context)
-		{
-			Log.WriteLine("GameServer: Receiving Client Message");
-
-			byte[] data = base.InternalOnServerExecute(context);
-            ClientMessage message = new ClientMessage(data, context.Connection.Socket);
-
-			using (BinaryStreamReader reader = new BinaryStreamReader(data))
-			{
-				int id = reader.ReadInt32();
-				if (id == Command.Login)
-				{
-					string clientName = reader.ReadString();
-					string hostName = reader.ReadString();
-					int port = reader.ReadInt32();
-
-					Log.WriteLine("Client {0} has connected from {1}:{2}", clientName, hostName, port);
-
-					AddClient(clientName, hostName, port);
-				}
-				else
-				{
-					// queue message to allow server implementation to process it
-					// (i.e. act on the command sent by the client)
-					_messages.Enqueue(message);
-				}
-			}
-			return message.Data;
-		}
-
-		/// Private Methods
-
-		internal void AddUpdateMessage(byte[] message)
-		{
-			foreach(StoredClient client in _clients)
-				if(AllowClientUpdate(client, message))
-					AddMessage(client, message);
+			_tcpServer.OnDisconnect += new TIdServerThreadEvent(OnClientDisconnected);
 		}
 
 		internal void Initialise()
 		{
-			_clients = new ClientList();
+			_clients = new ClientNodeList();
 			_messages = new Queue();
+			_storedMessages = new Queue();
 
 			_processor = new System.Threading.Thread(new ThreadStart(ProcessQueue));
 
@@ -128,17 +70,22 @@ namespace Laan.GameLibrary
 
 		private void AddClient(string clientName, string hostName, int port)
 		{
-			StoredClient c = _clients.Find(clientName);
+			ClientNode c = _clients.Find(clientName);
 			if(c == null)
 			{
-				StoredClient newClient = new StoredClient(clientName, hostName, port);
+				ClientNode newClient = new ClientNode(clientName, hostName, port);
 				_clients.Add(newClient);
 				if (OnNewClientConnectionEvent != null)
 					OnNewClientConnectionEvent(this, _clients);
 			}
 		}
 
-		private bool AllowClientUpdate(StoredClient client, byte[] message)
+		/// <summary>
+		/// Allows the implementor to alter the default behaviour if required
+		/// thus restricting information to clients for business reasons
+		/// (eg. Fog of War)
+		/// </summary>
+		private bool AllowClientUpdate(ClientNode client, byte[] message)
 		{
 			bool IsAllowed = true;
 
@@ -149,6 +96,12 @@ namespace Laan.GameLibrary
 			return IsAllowed;
 		}
 
+		/// <summary>
+		/// Event triggered by UDP received.  Provides a user hook to indicate
+		/// whether the message contains the correct keyword
+		/// If it is successful, sends back a formatted message indicating the server's
+		/// game name, location and port in the format "Name:Host:Port"
+		/// </summary>
 		private void OnRendezvousRead(object sender, byte[] data, SocketHandle binding)
 		{
 			string receivedText = System.Text.Encoding.ASCII.GetString(data);
@@ -183,14 +136,36 @@ namespace Laan.GameLibrary
 			}
 		}
 
+		/// <summary>
+		/// Handles the forwarding of messages to the appropriate entity
+		/// that is located in the data store and returns the required
+		/// response (if required) to the client
+		/// </summary>
 		private void ProcessMessage(ClientMessage message)
 		{
+			using (BinaryStreamReader reader = new BinaryStreamReader(message.Data))
+			{
+				int id = reader.ReadInt32();
+				BaseEntity entity = ServerDataStore.Instance.Find(id);
+
+				if (entity == null)
+					throw new Exception(String.Format("entity {0} not found", id));
+
+				Laan.GameLibrary.Entity.Server server = (entity.Communication() as Laan.GameLibrary.Entity.Server);
+				byte[] response = server.ProcessCommand(reader);
+                if (response != null)
+					WriteToSocket(message.Socket, response);
+			}
+
+			// allow custom processing by the game server instance, if desired
 			if(OnProcessMessageEvent != null)
 				OnProcessMessageEvent(this, message);
 		}
 
-		/// Private Events
-
+		/// <summary>
+		/// Threaded event responsible for processing the pending message queue
+		/// including the notification of results to the clients
+		/// </summary>
 		private void ProcessQueue()
 		{
 			ClientMessage m;
@@ -211,6 +186,7 @@ namespace Laan.GameLibrary
 
 					// allow custom game processing of message to occur
 					ProcessMessage(m);
+
 				}
 				// broadcast any updates that each client may have
 				// back to the client
@@ -223,7 +199,7 @@ namespace Laan.GameLibrary
 		private void UpdateClients()
 		{
 
-			foreach(StoredClient c in _clients)
+			foreach(ClientNode c in _clients)
 			{
 				lock (c.PendingMessages)
 				{
@@ -251,7 +227,61 @@ namespace Laan.GameLibrary
 			}
 		}
 
-		/// Public Properties
+		public void BeginRendezvous()
+		{
+			_udpServer.Active = true;
+		}
+
+		public void EndRendezvous()
+		{
+			_udpServer.Active = false;
+		}
+
+		internal void AddUpdateMessage(byte[] message)
+		{
+			foreach(ClientNode client in _clients)
+				if(AllowClientUpdate(client, message))
+					AddMessage(client, message);
+		}
+
+		protected override byte[] InternalOnServerExecute(Context context)
+		{
+			Log.WriteLine("GameServer: Receiving Client Message");
+
+			byte[] data = base.InternalOnServerExecute(context);
+			ClientMessage message = new ClientMessage(data, context.Connection.Socket);
+
+			using (BinaryStreamReader reader = new BinaryStreamReader(data))
+			{
+				int id = reader.ReadInt32();
+				if (id == Command.Login)
+				{
+					string clientName = reader.ReadString();
+					string hostName = reader.ReadString();
+					int port = reader.ReadInt32();
+
+					Log.WriteLine("Client {0} has connected from {1}:{2}", clientName, hostName, port);
+
+					AddClient(clientName, hostName, port);
+				}
+				else
+				{
+					// queue message to allow server implementation to process it
+					// (i.e. act on the command sent by the client)
+					_messages.Enqueue(message);
+				}
+			}
+			return message.Data;
+		}
+
+		public void AddMessage(ClientNode client, byte[] message)
+		{
+			if (client != null)
+				client.AddMessage(message);
+			else
+				foreach(ClientNode c in _clients)
+					c.AddMessage(message);
+		}
 
 		public bool Active
 		{
@@ -260,11 +290,13 @@ namespace Laan.GameLibrary
 			set {
 				_tcpServer.Active = value;
 
-				if(value) {
+				if(value)
+				{
 					_processor.Start();
 					Log.WriteLine("Listening (TCP) on Port {0}", Port);
 				}
-				else {
+				else
+				{
 					_processor.Abort();
 					Log.WriteLine("Stopped Listening (TCP) on Port {0}", Port);
 				}

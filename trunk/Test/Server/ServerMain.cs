@@ -259,22 +259,22 @@ namespace Laan.Risk.GUI.Server
 
 		private void OnMessageReceivedEvent(object sender, ClientMessage message)
 		{
-			using (BinaryStreamReader reader = new BinaryStreamReader(message.Data))
-			{
-				int id = reader.ReadInt32();
-				BaseEntity entity = ServerDataStore.Instance.Find(id);
-
-				if (entity == null)
-					throw new Exception(String.Format("entity {0} not found", id));
-
-				byte[] result = (entity.Communication() as Laan.GameLibrary.Entity.Server).ProcessCommand(reader);
-                if (result != null)
-                    _server.WriteToSocket(message.Socket, result);
-			}
+//			using (BinaryStreamReader reader = new BinaryStreamReader(message.Data))
+//			{
+//				int id = reader.ReadInt32();
+//				BaseEntity entity = ServerDataStore.Instance.Find(id);
+//
+//				if (entity == null)
+//					throw new Exception(String.Format("entity {0} not found", id));
+//
+//				byte[] result = (entity.Communication() as Laan.GameLibrary.Entity.Server).ProcessCommand(reader);
+//                if (result != null)
+//                    _server.WriteToSocket(message.Socket, result);
+//			}
 			Redraw();
 		}
 
-		private void OnNewClientConnectionEvent(object sender, ClientList clients)
+		private void OnNewClientConnectionEvent(object sender, ClientNodeList clients)
 		{
 			if (clients.Count == 1)
 				Initialise();
@@ -282,7 +282,7 @@ namespace Laan.Risk.GUI.Server
 			edClientCount.Text = clients.Count.ToString();
 		}
 
-		private void OnClientDisconnectionEvent(object sender, ClientList clients)
+		private void OnClientDisconnectionEvent(object sender, ClientNodeList clients)
 		{
 			if (clients.Count == 0)
 				Finalise();
