@@ -9,7 +9,7 @@ The Laan Game Library (LGL) is an attempt to build a distributed object architec
 
 The parts that compose the LGL are:
 
-* Socket Architecture
+* [SocketArchitecture Socket Architecture]
 
   Employing a two way blocking socket model, messages can be sent between the client and server from either direction, without the use of polling. This structure employs the excellent [http://www.indyproject.org/index.en.aspx Indy] networking component library.
 
