@@ -1,0 +1,24 @@
+#summary Laan.GameLibrary Wiki
+
+= Introduction =
+
+The Laan.GameLibrary (LGL) is an attempt to build a distributed object architecture for gaming.  It employs 2 way blocking socket communication between client and server using Indy (Internet Direct) component library.
+
+
+= Details =
+
+The parts that compose the LGL are:
+
+* Socket Architecture
+
+  Employing two way blocking sockets, messages can be sent between the client and server from either direction, without the use of polling.
+
+* Entity Framework
+
+  All entities that can be distributed across the network must use this framework, consisting of either a contained server or client communication class.
+
+  Using the CodeSmith code generation technique, new entities and the entire 'plumbing' infrastructure are built automatically.
+
+* Game Arena / Lobby
+
+  Although still a work in progress, the Lobby allows finding, joining and commencing games using the predefined classes, simplying requiring subclassing for any necessary custom additions.
