@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The Laan Game Library (LGL) is an attempt to build a distributed object architecture for gaming.  It employs 2 way blocking socket communication between client and server using [http://www.indyproject.org/index.en.aspx Indy] (Internet Direct) component library.
+The Laan Game Library (LGL) is an attempt to build a distributed object architecture for gaming.  It employs 2 way blocking socket communication between client and server using Indy (Internet Direct) component library.
 
 
 = Details =
@@ -11,7 +11,7 @@ The parts that compose the LGL are:
 
 * Socket Architecture
 
-  Employing two way blocking sockets, messages can be sent between the client and server from either direction, without the use of polling.
+  Employing a two way blocking socket model, messages can be sent between the client and server from either direction, without the use of polling. This structure employs the excellent [http://www.indyproject.org/index.en.aspx Indy] networking component library.
 
 * Entity Framework
 
