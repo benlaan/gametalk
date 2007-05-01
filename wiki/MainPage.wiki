@@ -17,7 +17,7 @@ The parts that compose the LGL are:
 
   All entities that can be distributed across the network must use this framework, consisting of either a contained server or client communication class.
 
-  Using the [http://www.codesmithtools.com|CodeSmith] code generation technique, new entities and the entire 'plumbing' infrastructure are built automatically.
+  Using the [http://www.codesmithtools.com CodeSmith] code generation technique, new entities and the entire 'plumbing' infrastructure are built automatically.
 
 * Game Arena / Lobby
 
