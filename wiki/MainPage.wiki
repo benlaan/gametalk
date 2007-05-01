@@ -1,13 +1,13 @@
-#summary Laan.GameLibrary Wiki
+#summary Laan Game Library
 
-= Introduction =
+= Overview =
 
 The Laan Game Library (LGL) is an attempt to build a distributed object architecture for gaming.  It employs 2 way blocking socket communication between client and server using Indy (Internet Direct) component library with all server processing done by a threaded message queue.
 
 
-= Details =
+= Framework Components =
 
-The parts that compose the LGL are:
+The Library consists of several components that together provide the gaming network architecture:
 
 * [SocketArchitecture Socket Architecture]
 
