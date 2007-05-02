@@ -1,15 +1,20 @@
-REM ------------ CLIENT 1 --------------
-D:
-CD .\DEBUG\
-START RiskClient.EXE
+@ECHO OFF
 
-REM ------------ CLIENT 2 --------------
+ECHO ------------ CLIENT 1 --------------
 D:
 CD .\DEBUG\
 START RiskClient.EXE
+CD ..
 
-REM ------------ CLIENT 3 --------------
+ECHO ------------ CLIENT 2 --------------
 D:
-CD .\DEBUG\
+CD .\DEBUG1\
 START RiskClient.EXE
+CD ..
+
+ECHO ------------ CLIENT 3 --------------
+D:
+CD .\DEBUG2\
+START RiskClient.EXE
+CD ..
 
