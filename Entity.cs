@@ -62,19 +62,7 @@ namespace Laan.GameLibrary.Entity
         	return this;
 		}
 
-//		public static implicit operator GameLibrary.Entity.Client(BaseEntity entity)
-//        {
-//            // allows the class to be cast to an Entity.Client class
-//            return (Client)entity.GetComms();
-//        }
-//
-//        public static implicit operator GameLibrary.Entity.Server(BaseEntity entity)
-//		{
-//			// allows the class to be cast to an Entity.Server class
-//            return (Server)entity.GetComms();
-//        }
-
-        public string Name
+		public string Name
         {
             get { return _name; }
             set { SetName(value); }
@@ -97,7 +85,7 @@ namespace Laan.GameLibrary.Entity
 		internal int StreamSize
 		{
 			get { return _streamSize; }
-			set { _streamSize = value; }
+			set { _streamSize = value; }                                 
 		}
 	}
 

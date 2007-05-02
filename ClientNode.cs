@@ -15,17 +15,28 @@ namespace Laan.GameLibrary
 			Name = name;
 			Host = host;
 			Port = port;
+			_isHosting = !_hasHost;
+			_hasHost = true;
 		}
+
+		private static bool _hasHost = false;
 
 		public bool Active;
 		public string Host;
 		public string Name;
 		public int    Port;
+		private bool _isHosting;
 		private ArrayList _pendingMessages;
 
 		public void AddMessage(byte[] message)
 		{
 			_pendingMessages.Add(message);
+		}
+
+		public bool IsHosting
+		{
+			get { return _isHosting; }
+			set { _isHosting = value; }
 		}
 
 		public ArrayList PendingMessages

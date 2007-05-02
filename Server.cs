@@ -6,6 +6,7 @@ using Indy.Sockets;
 using Laan.Library.Logging;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
+using System.Diagnostics;
 
 namespace Laan.GameLibrary
 {
@@ -42,40 +43,53 @@ namespace Laan.GameLibrary
 		private Queue                   _messages;
 		private string 					_name;
 		private System.Threading.Thread _processor;
+		private ArrayList _storedMessages;
 		private UDPServer               _udpServer;
 
 		static private GameServer _instance = null;
 
 		private GameServer() : base()
 		{
-			_tcpServer.OnDisconnect += new TIdServerThreadEvent(OnClientDisconnected);
-		}
-
-		internal void Initialise()
-		{
+			// collections
 			_clients = new ClientNodeList();
 			_messages = new Queue();
+			_storedMessages = new ArrayList();
 
+			// Threaded Process Queue
 			_processor = new System.Threading.Thread(new ThreadStart(ProcessQueue));
 
+			// Rendezvous listener
 			_udpServer = new UDPServer();
-
 			_udpServer.DefaultPort = Config.RendezvousPort;
 			_udpServer.BroadcastEnabled = true;
 			_udpServer.ThreadedEvent = true;
 			_udpServer.OnUDPRead += new TUDPReadEvent(OnRendezvousRead);
+
+			// Message listener
+			_tcpServer.OnDisconnect += new TIdServerThreadEvent(OnClientDisconnected);
 		}
 
-		private void AddClient(string clientName, string hostName, int port)
+		/// <summary>
+		/// Adds a client to the list, and pumps all messages to that new
+		/// client that are waiting...
+		/// </summary>
+		private bool AddClient(string clientName, string hostName, int port)
 		{
-			ClientNode c = _clients.Find(clientName);
-			if(c == null)
+			ClientNode newClientNode = _clients.Find(clientName);
+			if(newClientNode == null)
 			{
-				ClientNode newClient = new ClientNode(clientName, hostName, port);
-				_clients.Add(newClient);
+				newClientNode = new ClientNode(clientName, hostName, port);
+				_clients.Add(newClientNode);
 				if (OnNewClientConnectionEvent != null)
 					OnNewClientConnectionEvent(this, _clients);
+
+				Debug.Assert(_storedMessages != null);
+				foreach(byte[] message in _storedMessages)
+					AddMessage(newClientNode, message);
+
+				return newClientNode.IsHosting;
 			}
+			return false;
 		}
 
 		/// <summary>
@@ -237,6 +251,9 @@ namespace Laan.GameLibrary
 
 		internal void AddUpdateMessage(byte[] message)
 		{
+			if (_storedMessages != null)
+				_storedMessages.Add(message);
+
 			foreach(ClientNode client in _clients)
 				if(AllowClientUpdate(client, message))
 					AddMessage(client, message);
@@ -260,7 +277,9 @@ namespace Laan.GameLibrary
 
 					Log.WriteLine("Client {0} has connected from {1}:{2}", clientName, hostName, port);
 
-					AddClient(clientName, hostName, port);
+					bool isHost = AddClient(clientName, hostName, port);
+
+					this.WriteToSocket(context.Connection.Socket, BinaryHelper.Write(isHost));
 				}
 				else
 				{
@@ -279,6 +298,11 @@ namespace Laan.GameLibrary
 			else
 				foreach(ClientNode c in _clients)
 					c.AddMessage(message);
+		}
+
+		public void EmptyStoredMessages()
+		{
+			_storedMessages = null;
 		}
 
 		public bool Active
@@ -305,10 +329,8 @@ namespace Laan.GameLibrary
 		{
 			get {
 				if (_instance == null)
-				{
 					_instance = new GameServer();
-					_instance.Initialise();
-				}
+
 				return _instance;
 			}
 		}

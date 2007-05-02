@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<EntityMap Version="1.0" xmlns="http://www.laanco.com/entitylist"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="RiskMap.xsd">
-	
+<EntityMap
+	Version="1.0"
+	xmlns="http://www.laanco.com/entitylist"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="RiskMap.xsd"
+>
+<!--
 	<Entity Name="Game" Abstract="true" Namespace="Laan.GameLibray.Game">
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Players" Type="PlayerList" List="true"/>
@@ -21,6 +25,22 @@
 	</Entity>
 
 	<Entity Name="RiskPlayer" BaseClass="Player" Namespace="Laan.Risk.Player">
+		<Requirement Namespace="Laan.Risk.Nation"/>
+		<Property Name="Name" Type="String" Inherited="true"/>
+		<Property Name="Colour" Type="Int32" ShortType="Int32"/>
+		<Property Name="Ready" Type="Boolean"/>
+		<Property Name="Nation" Type="Nation"/>
+	</Entity>
+!-->
+	<Entity Name="Game" BaseClass="Game" Namespace="Laan.Risk.Game">
+		<Requirement Namespace="Laan.Risk.Player"/>
+		<Requirement Namespace="Laan.Risk.Region"/>
+		<Property Name="Name" Type="String" Inherited="true"/>
+		<Property Name="Regions" Type="RegionList" List="true"/>
+		<Property Name="Players" Type="PlayerList" List="true"/>
+	</Entity>
+
+	<Entity Name="Player" BaseClass="Player" Namespace="Laan.Risk.Player">
 		<Requirement Namespace="Laan.Risk.Nation"/>
 		<Property Name="Name" Type="String" Inherited="true"/>
 		<Property Name="Colour" Type="Int32" ShortType="Int32"/>

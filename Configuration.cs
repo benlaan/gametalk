@@ -64,13 +64,7 @@ namespace Laan.GameLibrary
             get {
                 return ReadString("OutboundHost", "localhost");
             }
-        }
+		}
 
-        public static string UserName
-        {
-            get {
-                return ReadString("UserName", Environment.UserName);
-            }
-        }
     }
 }
