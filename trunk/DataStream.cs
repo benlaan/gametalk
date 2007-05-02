@@ -1,13 +1,14 @@
+using System;
 using System.IO;
 using System.Drawing;
-
-using Laan.Library.Logging;
 using System.Collections;
 using System.Diagnostics;
 
+using Laan.Library.Logging;
+
 namespace Laan.GameLibrary.Data
 {
-    public class BinaryStreamReader : System.IDisposable
+	public class BinaryStreamReader : IDisposable
     {
         // --------------- Private -------------------------------------------------------
 
@@ -66,6 +67,13 @@ namespace Laan.GameLibrary.Data
 			return data;
 		}
 
+		public DateTime ReadDateTime()
+		{
+			DateTime data = System.Convert.ToDateTime(_reader.ReadString());
+			Log.WriteLine("ReadDateTime: " + data.ToString());
+			return data;
+		}
+
 		public byte[] DataStream
         {
             get {
@@ -74,14 +82,14 @@ namespace Laan.GameLibrary.Data
         }
     }
 
-    public class BinaryStreamWriter : System.IDisposable
+    public class BinaryStreamWriter : IDisposable
     {
         // --------------- Private -------------------------------------------------------
 
         private MemoryStream    _stream;
         private BinaryWriter    _writer;
 
-        // --------------- Public --------------------------------------------------------
+		// --------------- Public --------------------------------------------------------
 
 		public BinaryStreamWriter(int size)
 		{
@@ -90,7 +98,7 @@ namespace Laan.GameLibrary.Data
         }
 
         public void WriteByte(byte value)
-        {
+		{
 			_writer.Write((byte)value);
 			Log.WriteLine("WriteByte: " + value);
 		}
@@ -107,7 +115,7 @@ namespace Laan.GameLibrary.Data
 			Log.WriteLine("WriteString: " + value);
 		}
 
-		public void WriteDateTime(System.DateTime value)
+		public void WriteDateTime(DateTime value)
 		{
 			_writer.Write(value.ToString());
 			Log.WriteLine("WriteDateTime: " + value);
@@ -132,70 +140,90 @@ namespace Laan.GameLibrary.Data
             }
         }
 
-        public void Dispose()
+		public void Dispose()
         {
             _stream.Close();
             _writer.Close();
         }
-    }
+	}
 
-    public class BinaryHelper
+	public enum BinaryType
+	{
+		String,
+		Int,
+		Boolean,
+		Date
+	}
+
+	public struct TypeValue
+	{
+
+		public TypeValue(BinaryType type, object value)
+		{
+			Type = type;
+			Value = value;
+		}
+
+		public BinaryType Type;
+		public object Value;
+	}
+
+	public class BinaryHelper
     {
     
-        public static object[] Read(byte[] message, string[] types)
+		public static object[] Read(byte[] message, params TypeCode[] types)
         {
             object[] result = new object[types.Length];
 
             int index = 0;
             using (BinaryStreamReader reader = new BinaryStreamReader(message))
-            {
-                foreach(string type in types)
-                {
-                    switch(type)
-                    {
-                        case "string":
-                            result[index] = reader.ReadString();
-                            break;
-                        case "int":
-                            result[index] = reader.ReadInt32();
-                            break;
-                        case "bool":
-                            result[index] = reader.ReadBoolean();
-                            break;
-//                        case "date":
-//                            result[index] = reader.Read();
-//                            break;
-                    }
-                    index++;
-                }
-                return result;
+			{
+				foreach(TypeCode type in types)
+				{
+					switch(type)
+					{
+						case TypeCode.Int32:
+							result[index] = reader.ReadInt32();
+							break;
+						case TypeCode.String:
+							result[index] = reader.ReadString();
+							break;
+						case TypeCode.Boolean:
+							result[index] = reader.ReadBoolean();
+							break;
+						case TypeCode.DateTime:
+							result[index] = reader.ReadDateTime();
+							break;
+					}
+					index++;
+				}
+				return result;
             }
         }
 
-        public static byte[] Write(string[] types, object[] values)
+        public static byte[] Write(params object[] values)
         {
-            int index = 0;
-            Debug.Assert(types.Length == values.Length);
+			int index = 0;
 
             using (BinaryStreamWriter writer = new BinaryStreamWriter(3))
-            {
-                foreach(string type in types)
-                {
-                    switch(type)
-                    {
-                        case "string":
-                            writer.WriteString((string)values[index]);
-                            break;
-                        case "int":
-                            writer.WriteInt32((int)values[index]);
-                            break;
-                        case "bool":
-                            writer.WriteBoolean((bool)values[index]);
-                            break;
-                        case "date":
-                            writer.WriteDateTime((System.DateTime)values[index]);
-                            break;
-                    }
+			{
+				foreach(object value in values)
+				{
+					switch(Type.GetTypeCode(value.GetType()))
+					{
+						case TypeCode.Int32:
+							writer.WriteInt32((int)values[index]);
+							break;
+						case TypeCode.String:
+							writer.WriteString((string)values[index]);
+							break;
+						case TypeCode.Boolean:
+							writer.WriteBoolean((bool)values[index]);
+							break;
+						case TypeCode.DateTime:
+							writer.WriteDateTime((DateTime)values[index]);
+							break;
+					}
                     index++;
                 }
                 return writer.DataStream;

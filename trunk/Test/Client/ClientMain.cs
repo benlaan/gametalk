@@ -11,6 +11,7 @@ using Laan.GameLibrary.Entity;
 using GameClasses = Laan.Risk.Game.Client;
 using Laan.Library.ObjectTree;
 using Laan.Library.Logging;
+using System.Configuration;
 
 
 namespace Laan.Risk.GUI.Client
@@ -593,8 +594,9 @@ namespace Laan.Risk.GUI.Client
 		}
 
 		private AvailableGameList _availableGames;
-		private int      	      _playerID       = 0;
-		private bool     	  	  _update         = false;
+		private bool              _isHost          = false;
+		private int      	      _playerID        = 0;
+		private bool     	  	  _update          = false;
 
 		protected override void Dispose(bool disposing)
 		{
@@ -633,7 +635,9 @@ namespace Laan.Risk.GUI.Client
 				btnFindServers.Enabled = !GameClient.Instance.Finding;
 				btnReady.Enabled       = (_playerID != 0);
 				btnJoinServer.Enabled  = (lvAvailableGames.SelectedIndices.Count > 0);
-	
+
+				this.Text = String.Format("Client: {0}", _isHost ? "Host" : "Peer");
+
 				_update = false;
 				this.Invalidate();
 			}
@@ -762,7 +766,17 @@ namespace Laan.Risk.GUI.Client
 		private void frmClient_Load(object sender, System.EventArgs e)
 		{
 			viewer = new ObjectTreeViewer(tvObjectTree, null);
-			edName.Text = Config.UserName;
+			string user = ConfigurationSettings.AppSettings["UserName"];
+			if (user != null)
+				edName.Text = user;
+
+			string name = ConfigurationSettings.AppSettings["NationName"];
+			if (name != null)
+				edNationName.Text = name;
+
+			string shortName = ConfigurationSettings.AppSettings["NationShortName"];
+			if (shortName != null)
+				edNationShortName.Text = shortName;
 		}
 
 		private void frmClient_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -798,7 +812,7 @@ namespace Laan.Risk.GUI.Client
 				Laan.GameLibrary.AvailableGame _game = SelectedGame;
 				if (_game != null)
 				{
-					_client.Connect(_game.Host, _game.Port, edName.Text);
+					_isHost = _client.Connect(_game.Host, _game.Port, edName.Text);
 
 					btnJoinGame.Enabled = true;
 					gbNationDetails.Enabled = true;
@@ -825,7 +839,7 @@ namespace Laan.Risk.GUI.Client
 			(
 				edNationName.Text,
 				edNationShortName.Text,
-                edName.Text,
+				edName.Text,
 				btnColour.BackColor.ToArgb()
 			);
 

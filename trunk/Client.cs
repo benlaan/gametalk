@@ -55,24 +55,25 @@ namespace Laan.GameLibrary
             _timer.Tick += new EventHandler(OnBroadcastRendevous);
 		}
 
-		public void Connect(string Host, int Port, string userName)
+		public bool Connect(string Host, int Port, string userName)
 		{
 			this._tcpClient.Host = Host;
 			this._tcpClient.Port = Port;
 
-			this.Connect(userName);
+			return this.Connect(userName);
         }
 
         // Used to establish the client to server tcp connection, used when
         // sending information to the server
-		public void Connect(string userName)
+		public bool Connect(string userName)
 		{
 			// establish connection to GameServer
 			Log.WriteLine("Client Socket: attempting to connect to.. {0}:{1}", _tcpClient.Host, _tcpClient.Port);
 
 			_tcpClient.Connect();
 			Log.WriteLine("Client Socket: Connected to {0}:{1}", _tcpClient.Host, _tcpClient.Port);
-			SendConnectionProtocol(userName);
+
+			bool result = SendConnectionProtocol(userName);
 			Log.WriteLine("ProtocolSent: {0}", userName);
 
 			// establish listener to get updates from Server
@@ -81,6 +82,8 @@ namespace Laan.GameLibrary
 			Log.WriteLine("Server Socket: Listening on {0}", _tcpServer.DefaultPort);
 
 			_active = true;
+
+			return result;
 		}
 
         public bool Active
@@ -133,20 +136,29 @@ namespace Laan.GameLibrary
 
 		// After a connection is established, inform Server
         // of client details, to allow server to establish Update mechanism
-        private void SendConnectionProtocol(string userName)
+		private bool SendConnectionProtocol(string userName)
 		{
-			using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
+//			using (BinaryStreamWriter writer = new BinaryStreamWriter(12))
 			{
 				// Connection protocol consists of user name,
 				// machine name and inbound message port (ie. for tcpServer)
-				writer.WriteInt32(Command.Login);
-				writer.WriteString(userName);
-				writer.WriteString(Environment.MachineName);
-				writer.WriteInt32(Config.InboundPort);
+				byte[] request = BinaryHelper.Write(
+					Command.Login,
+					userName,
+					Environment.MachineName,
+					Config.InboundPort
+				);
 
-				SendMessage(writer.DataStream, false);
+//				writer.WriteInt32(Command.Login);
+//				writer.WriteString(userName);
+//				writer.WriteString(Environment.MachineName);
+//				writer.WriteInt32(Config.InboundPort);
 
-				Log.WriteLine("MessageSent(Login)");
+				byte[] response = SendMessage(request, true);
+				object[] result = BinaryHelper.Read(response, TypeCode.Boolean);
+
+				Log.WriteLine("MessageSent(Login) = {0}", result[0]);
+				return (bool)result[0];
 			}
 		}
 
