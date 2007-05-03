@@ -9,14 +9,27 @@ namespace Laan.GameLibrary
 	/// </summary>
 	public class ClientNode
     {
+<<<<<<< .mine
+
+        public string Name;
+        public int    Port;
+		public string Host;
+
+		private ArrayList _pendingMessages;
+
+=======
+>>>>>>> .r57
 		public ClientNode(string name, string host, int port)
 		{
 			_pendingMessages = new ArrayList();
 			Name = name;
 			Host = host;
 			Port = port;
+<<<<<<< .mine
+=======
 			_isHosting = !_hasHost;
 			_hasHost = true;
+>>>>>>> .r57
 		}
 
 		private static bool _hasHost = false;
