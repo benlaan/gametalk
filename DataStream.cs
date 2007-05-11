@@ -91,6 +91,11 @@ namespace Laan.GameLibrary.Data
 
 		// --------------- Public --------------------------------------------------------
 
+		public BinaryStreamWriter() : this(3)
+		{
+
+		}
+
 		public BinaryStreamWriter(int size)
 		{
 			_stream = new MemoryStream(size);
@@ -147,27 +152,6 @@ namespace Laan.GameLibrary.Data
         }
 	}
 
-	public enum BinaryType
-	{
-		String,
-		Int,
-		Boolean,
-		Date
-	}
-
-	public struct TypeValue
-	{
-
-		public TypeValue(BinaryType type, object value)
-		{
-			Type = type;
-			Value = value;
-		}
-
-		public BinaryType Type;
-		public object Value;
-	}
-
 	public class BinaryHelper
     {
     
@@ -205,7 +189,7 @@ namespace Laan.GameLibrary.Data
         {
 			int index = 0;
 
-            using (BinaryStreamWriter writer = new BinaryStreamWriter(3))
+            using (BinaryStreamWriter writer = new BinaryStreamWriter())
 			{
 				foreach(object value in values)
 				{
