@@ -13,7 +13,7 @@ The Library consists of several components that together provide the gaming netw
 
   Employing a two way blocking socket model, messages can be sent between the client and server from either direction, without the use of polling. This structure employs the excellent [http://www.indyproject.org/index.en.aspx Indy] networking component library.
 
-* [MesageProcessing Message Processing]
+* [MessageProcessing Message Processing]
 
   All server directed messages are processed within a classic message pump style architecture. As clients send messages to the server, they are queued and prcesses in turn, and as results are cascaded through the entity model, these results are accumulated and dispatched in chunks to the clients.  Only clients that are eligible for updates will receive them.  Thus, [FogOfWar Fog Of War] can easily be implemented.
 
