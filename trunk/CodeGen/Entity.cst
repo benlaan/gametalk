@@ -16,34 +16,38 @@ namespace <%= EntityElement.Namespace %>
 
     namespace Server
     {
-        public class <%= EntityElement.Name %> : Base<%= EntityElement.Name %>
+        public partial class <%= EntityElement.Name %>List { }
+
+        public partial class <%= EntityElement.Name %>
         {
 
             // --------------- Protected --------------------------------------------
 
-            protected override void ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                
+                return null;
             }
             
             // --------------- Public -----------------------------------------------
 
-            public <%= EntityElement.Name %><%= GetConstructor(false) %>
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
         }
     }
 
     namespace Client
     {
-        public class <%= EntityElement.Name %> : Base<%= EntityElement.Name %>
+        public partial class <%= EntityElement.Name %>List { }
+
+        public partial class <%= EntityElement.Name %>
         {
             // --------------- Public -----------------------------------------------
 
-            public <%= EntityElement.Name %><%= GetConstructor(false) %>
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
 		}
     }

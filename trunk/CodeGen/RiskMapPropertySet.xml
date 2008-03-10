@@ -3,5 +3,6 @@
     <propertySet>
         <property name="OutputDirectory">output\</property>
         <property name="EntityMap" file="RiskMap.xml" />
+        <property name="RebuildAll">False</property>
     </propertySet>
 </codeSmith>
