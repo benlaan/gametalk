@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskServer", "Test\Server\R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskClient", "Test\Client\RiskClient.csproj", "{0E1D0670-8559-488C-A3F5-363F43EFA84F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riskier", "gametalk\CodeGen\Riskier.csproj", "{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riskier", "..\CodeGen\Riskier.csproj", "{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
