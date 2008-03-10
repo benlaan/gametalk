@@ -14,8 +14,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCulture("")]
 
+//[assembly: log4net.Config.DOMConfigurator()]
 //
 // Version information for an assembly consists of the following four values:
 //
