@@ -8,6 +8,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
@@ -50,17 +51,9 @@ namespace <%= EntityElement.Namespace %>
         }
     %>
 
-        public class <%= EntityElement.Name %>List : ServerEntityList
-        {
-            public new <%= DeriveClassName(EntityElement, "Server") %> this[int index]
-            {
-                get {
-                    return (<%= DeriveClassName(EntityElement, "Server") %>)base[index];
-                }
-            }
-        }
+        public partial class <%= EntityElement.Name %>List : ServerEntityList<<%= EntityElement.Name %>> { }
 
-        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Server") %>
+        public partial class <%= EntityElement.Name %> : <%= GetBaseClass("Server") %>
         {
             // --------------- Private -------------------------------------------------
 
@@ -115,9 +108,30 @@ namespace <%= EntityElement.Namespace %>
                 %>
             }
 
+            protected override List<EntityProperty> GetEntityProperties()
+            {
+                return new List<EntityProperty>()
+                {
+                    <%
+                        Response.IndentLevel = 5;
+                        foreach (Property property in EntityElement.Properties)
+                        if(!property.Inherited)
+                            if(!IsPrimitiveType(property.Type))
+                                Response.WriteLine(
+                                    String.Format(
+                                        "new EntityProperty() {{ Entity = _{0}, Field = Fields.{1} }},",
+                                        StringUtility.ToCamelCase(property.Name),
+                                        property.Name
+                                )
+                            );
+                        Response.IndentLevel = 0;
+                    %>
+                };
+            }
+        
             // --------------- Public -----------------------------------------------
 
-            public Base<%= EntityElement.Name %><%= GetConstructor() %>
+            public <%= EntityElement.Name %><%= GetConstructor() %>
             {
                 <%
                     Response.IndentLevel = 4;
@@ -134,9 +148,11 @@ namespace <%= EntityElement.Namespace %>
                     
                     Response.IndentLevel = 0;
                 %>
+
+                Initialise();
             }
 
-            public static implicit operator GameLibrary.Entity.Server(Base<%= EntityElement.Name %> <%= StringUtility.ToCamelCase(EntityElement.Name) %>)
+            public static implicit operator GameLibrary.Entity.Server(<%= EntityElement.Name %> <%= StringUtility.ToCamelCase(EntityElement.Name) %>)
             {
                 // allows the class to be cast to an Entity.Server class
                 return <%= StringUtility.ToCamelCase(EntityElement.Name) %>.CommServer;
@@ -172,17 +188,9 @@ namespace <%= EntityElement.Namespace %>
         }
     %>
     
-        public class <%= EntityElement.Name %>List: ClientEntityList
-        {
-            public new <%= DeriveClassName(EntityElement, "Client") %> this[int index]
-            {
-                get {
-                    return (<%= DeriveClassName(EntityElement, "Client") %>)base[index];
-                }
-            }
-        }
+        public partial class <%= EntityElement.Name %>List : ClientEntityList<<%= EntityElement.Name %>> { }
 
-        public abstract class Base<%= EntityElement.Name %> : <%= GetBaseClass("Client") %>
+        public partial class <%= EntityElement.Name %> : <%= GetBaseClass("Client") %>
         {
 
             // ------------ Private ---------------------------------------------------------
@@ -231,7 +239,7 @@ namespace <%= EntityElement.Namespace %>
 
             // ------------ Public ----------------------------------------------------------
 
-            public Base<%= EntityElement.Name %><%= GetConstructor() %>
+            public <%= EntityElement.Name %><%= GetConstructor() %>
             {
             }
 
@@ -263,16 +271,16 @@ namespace <%= EntityElement.Namespace %>
     
                             if(IsPrimitiveType(property.Type))
                             {
-                                Response.WriteLine(String.Format("    _{0} = reader.Read{1}();",
-                                    StringUtility.ToCamelCase(property.Name),
+                                Response.WriteLine(String.Format("    {0} = reader.Read{1}();",
+                                    property.Name,
                                     property.ShortType != null ? property.ShortType : property.Type));
                             }
                             else
                             {
                                 Response.WriteLine(
                                     String.Format(
-                                        "    _{0} = ({1})(ClientDataStore.Instance.Find(reader.ReadInt32()));",
-                                        StringUtility.ToCamelCase(property.Name), GetDeclaredType(property)
+                                        "    {0} = ({1})(ClientDataStore.Instance.Find(reader.ReadInt32()));",
+                                        property.Name, GetDeclaredType(property)
                                     )
                                 );
                             }
@@ -299,6 +307,7 @@ namespace <%= EntityElement.Namespace %>
             public <%=GetDeclaredType(property)%> <%=property.Name %>
             {
                 get { return _<%= StringUtility.ToCamelCase(property.Name)%>; }
+                set { _<%= StringUtility.ToCamelCase(property.Name)%> = value; }
             }
 
         <%      } %>

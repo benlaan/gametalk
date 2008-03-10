@@ -43,7 +43,7 @@ public override void Render(TextWriter writer)
 
     foreach (Entity entity in EntityMap.Entities)
     {
-        string fileName = String.Format("{0}Base{1}.cs", this.OutputDirectory, entity.Name);
+        string fileName = String.Format("{0}{1}.g.cs", this.OutputDirectory, entity.Name);
         if (System.IO.File.Exists(fileName))
         {
             Trace.WriteLine(String.Format("Deleting file {0}...", fileName));
