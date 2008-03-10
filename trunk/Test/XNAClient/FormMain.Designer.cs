@@ -1,4 +1,4 @@
-namespace RiskClient
+namespace Risk.Client.Drawing
 {
     partial class FormMain
     {
@@ -115,7 +115,7 @@ namespace RiskClient
             this.tabMilitary.Location = new System.Drawing.Point(4, 22);
             this.tabMilitary.Name = "tabMilitary";
             this.tabMilitary.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMilitary.Size = new System.Drawing.Size(482, -2);
+            this.tabMilitary.Size = new System.Drawing.Size(482, 0);
             this.tabMilitary.TabIndex = 1;
             this.tabMilitary.Text = "Military";
             this.tabMilitary.UseVisualStyleBackColor = true;
@@ -124,7 +124,7 @@ namespace RiskClient
             // 
             this.tabEconomy.Location = new System.Drawing.Point(4, 22);
             this.tabEconomy.Name = "tabEconomy";
-            this.tabEconomy.Size = new System.Drawing.Size(482, -2);
+            this.tabEconomy.Size = new System.Drawing.Size(482, 0);
             this.tabEconomy.TabIndex = 2;
             this.tabEconomy.Text = "Economy";
             this.tabEconomy.UseVisualStyleBackColor = true;
@@ -133,7 +133,7 @@ namespace RiskClient
             // 
             this.tabPolitical.Location = new System.Drawing.Point(4, 22);
             this.tabPolitical.Name = "tabPolitical";
-            this.tabPolitical.Size = new System.Drawing.Size(482, -2);
+            this.tabPolitical.Size = new System.Drawing.Size(482, 0);
             this.tabPolitical.TabIndex = 3;
             this.tabPolitical.Text = "Political";
             this.tabPolitical.UseVisualStyleBackColor = true;
@@ -157,8 +157,8 @@ namespace RiskClient
             this.Controls.Add(this.pageMapView);
             this.Controls.Add(this.pnlNotification);
             this.Controls.Add(this.pnlDetail);
+            this.MinimizeBox = false;
             this.Name = "FormMain";
-            this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.pnlDetail.ResumeLayout(false);
@@ -178,9 +178,9 @@ namespace RiskClient
         private System.Windows.Forms.TabPage tabEconomy;
         private System.Windows.Forms.TabPage tabPolitical;
         private System.Windows.Forms.Panel pnlMap;
-        private System.Windows.Forms.TextBox txtNotification;
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.TabControl pageMapView;
+        private System.Windows.Forms.TextBox txtNotification;
     }
 }
 

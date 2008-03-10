@@ -3,18 +3,20 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
-using Laan.Library.Logging;
+
+using log4net;
+using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Laan.Library.ObjectTree
 {
-
 	public enum NodeType { Class, Property }
 
 	public class NodeDefinition: System.Object
 	{
-
-		private Object _instance;
+		private Object   _instance;
 		private NodeType _type;
+        private string   _property;
 
 		public NodeDefinition(NodeType type, Object instance, String property)
 		{
@@ -22,7 +24,6 @@ namespace Laan.Library.ObjectTree
 			_instance = instance;
 			_property = property;
 		}
-		private String _property;
 
 		public Object Instance
 		{
@@ -38,25 +39,23 @@ namespace Laan.Library.ObjectTree
 		{
 			get { return _type; }
 		}
-
 	}
 
 	public class ObjectTreeViewer
 	{
-
 		public ObjectTreeViewer(TreeView tree, object rootObject)
 		{
 			_tree = tree;
 			_object = rootObject;
 		}
 
-		private object _object;
+		private object   _object;
 		private TreeView _tree;
 
 		private void AddNode(TreeNode parent, TreeNode newNode)
 		{
-			if (parent != null)
-				parent.Nodes.Add(newNode);
+            if (parent != null)
+                parent.Nodes.Add(newNode);
 			else
 				_tree.Nodes.Add(newNode);
 		}
@@ -100,13 +99,17 @@ namespace Laan.Library.ObjectTree
 		{
 			foreach(PropertyInfo info in item.GetType().GetProperties())
 			{
-//				Log.WriteLine("{0}: {1}", item.GetType(), info.ToString());
+//				Log.Debug("{0}: {1}", item.GetType(), info.ToString());
 
                 if(info.Name == "Item")
                     continue;
 
 				if(info.PropertyType.IsNotPublic)
 					continue;
+
+                object[] browsable = info.GetCustomAttributes(typeof(BrowsableAttribute), true);
+                if (browsable.Length > 0 && !((BrowsableAttribute)browsable[0]).Browsable)
+                    continue;
 
 				// store the current property's value
 				object value = info.GetValue(item, new object[] {});
@@ -143,7 +146,7 @@ namespace Laan.Library.ObjectTree
 				}
 				catch (Exception ex)
 				{
-					Log.WriteLine("Error: " + ex.ToString());
+                    Debug.WriteLine("Error: " + ex.ToString());
 					throw;
 				}
 			}
@@ -156,9 +159,7 @@ namespace Laan.Library.ObjectTree
 		public NodeDefinition SelectedObject
 		{
 			get {
-
 				return (NodeDefinition)_tree.SelectedNode.Tag;
-
 			}
 		}
 

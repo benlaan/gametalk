@@ -4,7 +4,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RiskClient
+namespace Risk.Client.Drawing
 {
     class Ball : Sprite
     {
