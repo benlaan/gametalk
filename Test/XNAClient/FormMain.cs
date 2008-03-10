@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Content;
 
-namespace RiskClient
+namespace Risk.Client.Drawing
 {
 
     public partial class FormMain : Form
@@ -23,8 +23,12 @@ namespace RiskClient
 
         private ComponentCollection _components;
         GraphicsDevice device;
+        Polygon2 _polygon;
+
+        TileMap _map;
 
         public static Random Random = new Random();
+        private System.Drawing.Point _mouse = new System.Drawing.Point();
 
         public FormMain()
         {
@@ -44,6 +48,7 @@ namespace RiskClient
         internal void UpdateComponents()
         {
             _components.Update();
+            this.Text = _polygon.ToString();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -69,18 +74,35 @@ namespace RiskClient
 
             _components = new ComponentCollection(device);
 
-            TileMap _map = new TileMap(pnlMap, device, 2, 3, 100);
-            _components.Add(_map);
+            _map = new TileMap(pnlMap, device);
+            //_components.Add(_map);
 
-//            _components.Add(new MouseBall(this.pnlMap, _device));
-            for(int i = 0; i < 1; i++)
-                _components.Add(new BouncingBall(this.pnlMap, device));       
 
+            List<Vector2> coords = new List<Vector2>()
+            {
+                //new Vector2(-2.5f, -7.5f),
+                //new Vector2(-8, -4),
+                //new Vector2(-2, -4),
+                //new Vector2(-7.5f, -7.5f),
+                //new Vector2(-5, -2),
+                //new Vector2(-2.5f, -7.5f)
+
+                new Vector2(500, 250),
+                new Vector2(475, 425),
+                new Vector2(250, 500),
+                new Vector2(750, 500)
+            };
+            _polygon = new Polygon2(_map, coords, pnlMap, device);
+            _components.Add(_polygon);
+        
         }
 
         private void btnTest_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Test Button Clicked");
+            //_components.Add(new MouseBall(this.pnlMap, device));
+            //for (int i = 0; i < 5; i++)
+            //_components.Add(new BouncingBall(this.pnlMap, device));
         }
 
         internal void AddMessage(string message)
@@ -90,13 +112,15 @@ namespace RiskClient
 
         private void pnlMap_MouseClick(object sender, MouseEventArgs e)
         {
-//          System.Drawing.Point mouse = new System.Drawing.Point(e.X, e.Y);
+            _mouse = new System.Drawing.Point(e.X, e.Y);
+
+            this.Text = _mouse.ToString();
+
 //          foreach (IComponent component in _components)
 //                if (component.Enabled)
 //                    if (component.PointInBoundingBox(mouse))
 //                        Debug.WriteLine(String.Format("selected {0}", component.ID));
         }
-        
     }
 
     public class FormLogger : DefaultTraceListener

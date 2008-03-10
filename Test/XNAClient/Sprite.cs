@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 
-namespace RiskClient
+namespace Risk.Client.Drawing
 {
 
     public abstract partial class Sprite : Component

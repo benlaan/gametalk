@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RiskClient")]
+[assembly: AssemblyTitle("Risk.Client")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HAMB Systems Limited")]
-[assembly: AssemblyProduct("RiskClient")]
-[assembly: AssemblyCopyright("Copyright © HAMB Systems Limited 2007")]
+[assembly: AssemblyCompany("LAANCo. Software")]
+[assembly: AssemblyProduct("Riskier")]
+[assembly: AssemblyCopyright("Copyright © LAANCo. Software 2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
