@@ -108,7 +108,7 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\..\CodeGen\Riskier.csproj">
+    <ProjectReference Include="..\..\CodeGen\Riskier.csproj">
       <Project>{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}</Project>
       <Name>Riskier</Name>
     </ProjectReference>
