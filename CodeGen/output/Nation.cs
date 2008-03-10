@@ -11,35 +11,34 @@ namespace Laan.Risk.Nation
 
     namespace Server
     {
-        public class Nation : BaseNation
+        public partial class Nation
         {
 
             // --------------- Protected --------------------------------------------
 
-            protected override byte[] ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                return null;                
+                return null;
             }
             
             // --------------- Public -----------------------------------------------
 
-            public Nation() : base()
+            public override void Initialise()
             {
-                Prestige = 100;
-                Technology = 100;
+                base.Initialise();
             }
         }
     }
 
     namespace Client
     {
-        public class Nation : BaseNation
+        public partial class Nation
         {
             // --------------- Public -----------------------------------------------
 
-            public Nation() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
 		}
     }

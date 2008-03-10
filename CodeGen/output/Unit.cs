@@ -11,34 +11,34 @@ namespace Laan.Risk.Unit
 
     namespace Server
     {
-        public class Unit : BaseUnit
+        public partial class Unit
         {
 
             // --------------- Protected --------------------------------------------
 
-            protected override byte[] ProcessCommand(BinaryStreamReader reader) 
+            protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                return null;                
+                return null;
             }
             
             // --------------- Public -----------------------------------------------
 
-            public Unit() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
         }
     }
 
     namespace Client
     {
-        public class Unit : BaseUnit
+        public partial class Unit
         {
             // --------------- Public -----------------------------------------------
 
-            public Unit() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
 		}
     }
