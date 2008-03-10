@@ -11,34 +11,34 @@ namespace Laan.Risk.Unit.Armour
 
     namespace Server
     {
-        public class Armour : BaseArmour
+        public partial class Armour
         {
 
             // --------------- Protected --------------------------------------------
 
             protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                return null;                
+                return null;
             }
             
             // --------------- Public -----------------------------------------------
 
-            public Armour() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
         }
     }
 
     namespace Client
     {
-        public class Armour : BaseArmour
+        public partial class Armour
         {
             // --------------- Public -----------------------------------------------
 
-            public Armour() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
 		}
     }

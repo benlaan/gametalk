@@ -11,34 +11,34 @@ namespace Laan.Risk.Unit.Infantry
 
     namespace Server
     {
-        public class Infantry : BaseInfantry
+        public partial class Infantry
         {
 
             // --------------- Protected --------------------------------------------
 
             protected override byte[] ProcessCommand(BinaryStreamReader reader)
             {
-                return null;                
+                return null;
             }
             
             // --------------- Public -----------------------------------------------
 
-            public Infantry() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
         }
     }
 
     namespace Client
     {
-        public class Infantry : BaseInfantry
+        public partial class Infantry
         {
             // --------------- Public -----------------------------------------------
 
-            public Infantry() : base()
+            public override void Initialise()
             {
-
+                base.Initialise();
             }
 		}
     }
