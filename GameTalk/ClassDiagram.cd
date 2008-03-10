@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Laan.GameLibrary.Entity.Communication" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Communication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.Client" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAACAAEAAAAAgAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Communication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.Server" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBIEAAAAAAgBAAAAAAAAAAAAEAAAAABAAAEAIAAAA=</HashCode>
+      <FileName>Communication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.ClientDataStore" Collapsed="true">
+    <Position X="7.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAFogAAAAAAAEABCAAAECAAAQAAAAAAAAAA=</HashCode>
+      <FileName>DataStore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.ServerDataStore" Collapsed="true">
+    <Position X="12.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>DataStore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.Fields" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.MessageCode" Collapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.BaseEntity" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAABIAAAAAAAgAAAAAFAAAQAACAAAABAAAAAQAIAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.BaseEntityClient" Collapsed="true">
+    <Position X="1" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAIAACAAAAAAAAAAQAAAAAAAIAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.BaseEntityServer" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAQAIAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.Commands" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.ServerEntityList&lt;T&gt;" Collapsed="true">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAQAAABAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.ClientEntityList" Collapsed="true">
+    <Position X="10" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAIAACAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laan.GameLibrary.Entity.EntityList&lt;T&gt;" Collapsed="true">
+    <Position X="8.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEJAAEAAAAAAABAQCAAABAQAAAAIAAAASAAAAApQIQA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Delegate Name="Laan.GameLibrary.Entity.OnServerMessageEventHandler" Collapsed="true">
+    <Position X="18.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="Laan.GameLibrary.Entity.OnSerialiseEventHandler" Collapsed="true">
+    <Position X="16.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="Laan.GameLibrary.Entity.OnProcessCommandEventHandler" Collapsed="true">
+    <Position X="18.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="Laan.GameLibrary.Entity.OnNewEntityEventHandler" Collapsed="true">
+    <Position X="16.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="Laan.GameLibrary.Entity.OnRootEntityEventHandler" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="Laan.GameLibrary.Entity.OnModifyEntityEventHandler" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityList.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
