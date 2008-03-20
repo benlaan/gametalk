@@ -87,6 +87,9 @@ namespace SplitTileMap
             _tiles[129] = "07-03";
             _tiles[16] = "07-04";
             _tiles[8] = "07-05";
+
+            _tiles[53] = "07-05";
+            _tiles[13] = "07-06";
         }
 
         public TileMapEngine(Control control) : this()
