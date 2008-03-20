@@ -62,6 +62,7 @@ namespace SplitTileMap
             this.KeyPreview = true;
             this.Name = "FormMain";
             this.Text = "FormMain";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormKeyPressUp);
