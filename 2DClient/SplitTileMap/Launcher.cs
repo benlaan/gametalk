@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace SplitTileMap
 {
@@ -64,6 +65,27 @@ namespace SplitTileMap
             engine.TilePath = tilePath;
             engine.Initialise(48);
             engine.GenerateMapToFile(cOUTPUT_FILE);
+        }
+
+        internal static void ExecuteRenamer()
+        {
+            string fileName = Properties.Settings.Default.PoliticalMap;
+            Size size = new Size();
+            string tilePath = cTILE_PATH;
+            size.Height = 24; // config file
+            size.Width = 32; // config file
+
+            TileMapEngine engine = new TileMapEngine();
+            engine.Bitmap = new TileBitmap(fileName);
+            engine.TilePath = tilePath;
+
+            //foreach (KeyValuePair<int, string> pair in engine._tiles)
+            //{
+            //    // , Convert.ToString(pair.Key, 2).PadLeft(8, '0')
+            //    string toFile = String.Format("tile{0}.png", pair.Key.ToString().PadLeft(3, '0'));
+            //    string fromFile = String.Format("tile{0}.png", pair.Value);
+            //    Debug.WriteLine("MOVE " + fromFile + " " + toFile);
+            //}
         }
     }
 }

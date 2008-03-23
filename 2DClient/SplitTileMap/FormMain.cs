@@ -29,6 +29,10 @@ namespace SplitTileMap
                 case Keys.Subtract:
                     pnlMap.ZoomOut();
                     break;
+
+                case Keys.F5:
+                    pnlMap.ReloadTiles();
+                    break;
             }
         }
 
@@ -42,18 +46,15 @@ namespace SplitTileMap
             pnlMap.Start();
         }
 
-        private void pnlMap_OnFPSUpdate(object sender, EventArgs e)
-        {
-            this.Text = "FPS: " + pnlMap.FPS;
-        }
-
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            pnlMap.MissingIndexes.Sort();
-            foreach (int index in pnlMap.MissingIndexes)
-            {
-                Debug.WriteLine(index);
-            }
+            foreach (KeyValuePair<int, int> pair in pnlMap.MissingIndexes)
+                Debug.WriteLine(String.Format("{0}: {1}", pair.Key, pair.Value));
+        }
+
+        private void pnlMap_OnFPSUpdate(object sender, EventArgs e)
+        {
+            this.Text = String.Format("FPS: {0} Offset: {1} Focused: {2}, MouseTile: {3}", pnlMap.FPS, pnlMap.Offset, pnlMap.FocusedTile, pnlMap.MouseTile);
         }
     }
 }

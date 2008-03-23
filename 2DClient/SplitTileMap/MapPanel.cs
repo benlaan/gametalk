@@ -14,7 +14,7 @@ namespace SplitTileMap
         // Components
         private MapScroller _scroller;
         private TileMapEngine _engine;
-        private Point _mouse;
+        internal Point _mouse;
 
         // Frame Rate Bits
         private TimeSpan _oneSecond = new TimeSpan(0, 0, 0, 1);
@@ -22,9 +22,9 @@ namespace SplitTileMap
         private int _frameCount = 0;
         private DateTime _lastFPSTime;
 
-        private const int cEDGE = 35;
-        private const int cSCALE = 30;
-        private const int cOFFSET = 2;
+        private const int cEDGE = 50;
+        private const int cSCALE = 40;
+        private const int cOFFSET = 4;
 
         public MapPanel() : base()
         {
@@ -84,6 +84,7 @@ namespace SplitTileMap
         protected override void OnMouseMove(MouseEventArgs e)
         {
             _mouse = new Point(e.X, e.Y);
+            Invalidate();
         }
 
         private void CalculateOffset()
@@ -110,10 +111,8 @@ namespace SplitTileMap
             get { return _engine.Offset; }
         }
 
-        internal new void Update()
+        private void CheckMouseEdgeScrolling()
         {
-            CalculateOffset();
-
             if (_mouse.X < cEDGE)
                 _engine.OffsetX -= cOFFSET;
 
@@ -125,6 +124,14 @@ namespace SplitTileMap
 
             if (_mouse.Y > this.Bounds.Height - cEDGE)
                 _engine.OffsetY += cOFFSET;
+        }
+
+        internal new void Update()
+        {
+            CalculateOffset();
+            _engine.Mouse = _mouse;
+
+            CheckMouseEdgeScrolling();
 
             Invalidate();
         }
@@ -139,10 +146,25 @@ namespace SplitTileMap
             _scroller.KeyUp(e);
         }
 
+        public Point FocusedTile
+        {
+            get { return _engine.FocusedTile; }
+        }
+
+        public Point MouseTile
+        {
+            get { return _engine.MouseTile; }
+        }
+
         public int ZoomScale
         {
             get { return _engine.Scale; }
             set { _engine.Scale = value; }
+        }
+
+        public Point Offset
+        {
+            get { return _engine.Offset; }
         }
 
         public float FPS
@@ -152,11 +174,14 @@ namespace SplitTileMap
 
         public event EventHandler OnFPSUpdate;
 
-        public List<int> MissingIndexes
+        public Dictionary<int, int> MissingIndexes
         {
             get { return _engine.MissingIndexes; }
         }
 
-
+        internal void ReloadTiles()
+        {
+            _engine.ReloadTiles();
+        }
     }
 }
