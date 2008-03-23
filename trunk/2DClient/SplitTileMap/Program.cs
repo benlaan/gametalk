@@ -11,6 +11,7 @@ namespace SplitTileMap
         static void Main(string[] args)
         {
             Application.Run(new FormMain());
+            //Launcher.ExecuteRenamer();
 //            Launcher.ExecuteMapper(args);
 //            Launcher.ExecuteSplitter(args);
 /*

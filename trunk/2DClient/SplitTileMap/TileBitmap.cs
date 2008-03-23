@@ -9,15 +9,24 @@ namespace SplitTileMap
     class TileBitmap : IBitmap
     {
         private Image _bitmap;
+        private Color[,] _data;
 
         public TileBitmap(string fileName)
         {
             _bitmap = Bitmap.FromFile(fileName);
+            _data = new Color[_bitmap.Width, _bitmap.Height];
+
+            for (int x = 0; x < _bitmap.Width; x++)
+                for (int y = 0; y < _bitmap.Height; y++)
+                    _data[x, y] = ((Bitmap)_bitmap).GetPixel(x, y);
         }
 
         public Color GetPixel(int x, int y)
         {
-            return ((Bitmap)_bitmap).GetPixel(x, y);
+            if (x < 0 || x >= _bitmap.Width || y < 0 || y >= _bitmap.Height)
+                return Color.Black;
+            else
+                return _data[x, y];
         }
 
         public bool IsLand(int x, int y)

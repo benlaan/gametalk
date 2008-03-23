@@ -6,7 +6,7 @@
       <Value Profile="(Default)">.\..\..\..\Tiles</Value>
     </Setting>
     <Setting Name="PoliticalMap" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.\..\..\..\Map2.png</Value>
+      <Value Profile="(Default)">.\..\..\..\Map.png</Value>
     </Setting>
   </Settings>
 </SettingsFile>
