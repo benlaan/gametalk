@@ -141,7 +141,6 @@ namespace SplitTileMap
         private void HighlightTile(int x, int y, Color highlight)
         {
             RectangleF rect = GetTileRect(x, y);
-            //rect.Inflate(8, 8);
             _graphics.FillRectangle(
                 new SolidBrush(highlight),
                 rect
@@ -150,22 +149,23 @@ namespace SplitTileMap
 
         private void CheckHighlight(int x, int y)
         {
-            Point j = new Point(
+            Point dataPoint = new Point(
                 CalcHorizontalOffset(x + Offset.X),
                 y + Offset.Y
             );
 
-            Color currentColor = _bitmap.GetPixel(j.X, j.Y);
+            Color currentColor = _bitmap.GetPixel(dataPoint.X, dataPoint.Y);
             Point p = FocusedTile;
-            if (Bitmap.GetPixel(p.X, p.Y) == currentColor && Bitmap.IsLand(j.X, j.Y))
-                HighlightTile(x, y, Color.White);
-            else
-                HighlightTile(x, y, Color.FromArgb(50, currentColor));
+            if (Bitmap.GetPixel(p.X, p.Y) == currentColor && Bitmap.IsLand(dataPoint.X, dataPoint.Y))
+                HighlightTile(x, y, currentColor);
         }
 
         private int Add(Color current, Point p, int x, int y, int value)
         {
-            return (Bitmap.GetPixel(p.X + x, p.Y + y) != current) ? value : 0;
+            Color color = Bitmap.GetPixel(p.X + x, p.Y + y);
+            bool bitmapIsLand = Bitmap.IsLand(p.X + x, p.Y + y);
+
+            return (bitmapIsLand && color != current) ? value : 0;
         }
 
         private int GetEdgeCount(Point point)
@@ -194,10 +194,10 @@ namespace SplitTileMap
             int e = GetEdgeCount(new Point(p.X, p.Y));
             
             Color currentColor = _bitmap.GetPixel(p.X, p.Y);
-            Pen pen = new Pen(new SolidBrush(currentColor), 5);
+            Pen pen = new Pen(new SolidBrush(Color.FromArgb(80, currentColor)), 5);
             Rectangle rect = GetTileRect(x, y);
 
-            const int cINSET = 1;
+            const int cINSET = 2;
 
             if ((e & 1) == 1)
                 _graphics.DrawLine(pen, new Point(rect.Left - cINSET, rect.Top + cINSET), new Point(rect.Right + cINSET, rect.Top + cINSET));
@@ -206,7 +206,8 @@ namespace SplitTileMap
             if ((e & 4) == 4)
                 _graphics.DrawLine(pen, new Point(rect.Right - cINSET, rect.Top - cINSET), new Point(rect.Right - cINSET, rect.Bottom + cINSET));
             if ((e & 8) == 8)
-                _graphics.DrawLine(pen, new Point(rect.Left - cINSET, rect.Bottom), new Point(rect.Right - cINSET, rect.Bottom));
+                _graphics.DrawLine(pen, new Point(rect.Left -
+                    cINSET, rect.Bottom - cINSET), new Point(rect.Right - cINSET, rect.Bottom - cINSET));
 
             //_graphics.DrawString(
             //    e.ToString(),
@@ -226,7 +227,7 @@ namespace SplitTileMap
                 else
                     _missing[index]++;
 
-           //     CheckRenderIndexAsText(x, y, index);
+                CheckRenderIndexAsText(x, y, index);
                 return;
             }
 
@@ -237,10 +238,12 @@ namespace SplitTileMap
                 GraphicsUnit.Pixel
             );
 
+            //if (index == 000)
+            //    CheckRenderIndexAsText(x, y, index);
+
             CheckHighlight(x, y);
 
             RenderBorders(x, y);
-
 
             //CheckRenderIndexAsText(x, y, index);
         }
