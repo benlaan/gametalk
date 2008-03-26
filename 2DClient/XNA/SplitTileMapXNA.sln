@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileMapXNA", "TileMapXNA.csproj", "{49118C23-7DE5-4428-95AE-0CA8A1E11128}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49118C23-7DE5-4428-95AE-0CA8A1E11128}.Debug|x86.ActiveCfg = Debug|x86
+		{49118C23-7DE5-4428-95AE-0CA8A1E11128}.Debug|x86.Build.0 = Debug|x86
+		{49118C23-7DE5-4428-95AE-0CA8A1E11128}.Release|x86.ActiveCfg = Release|x86
+		{49118C23-7DE5-4428-95AE-0CA8A1E11128}.Release|x86.Build.0 = Release|x86
+		{B8E37E7B-8C6E-40C6-8DDD-9ECDEB91476A}.Debug|x86.ActiveCfg = Debug|x86
+		{B8E37E7B-8C6E-40C6-8DDD-9ECDEB91476A}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
