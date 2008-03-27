@@ -7,12 +7,11 @@ namespace Laan.Riskier.Client.TileMap
 {
     internal class MapScroller
     {
-
-        private Point _delta;
-        private bool _isDown;
-        private bool _isLeft;
-        private bool _isRight;
-        private bool _isUp;
+        private Point   _delta;
+        private bool    _isDown;
+        private bool    _isLeft;
+        private bool    _isRight;
+        private bool    _isUp;
 
         public MapScroller()
         {
