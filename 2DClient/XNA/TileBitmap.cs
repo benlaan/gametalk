@@ -10,7 +10,7 @@ namespace Laan.Riskier.Client.TileMap
     class TileBitmap : IBitmap
     {
         private Texture2D _bitmap;
-        private Color[,] _data;
+        private Color[,]  _data;
 
         public TileBitmap(Game game, string fileName)
         {
