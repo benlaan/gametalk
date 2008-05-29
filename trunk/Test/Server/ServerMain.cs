@@ -12,12 +12,12 @@ using log4net;
 using Laan.Library.ObjectTree;
 
 using GameClasses = Laan.Risk.Game.Server;
+using log4net.Config;
 
 namespace Laan.Risk.GUI.Server
 {
 	public class frmServer : System.Windows.Forms.Form
     {
-
 		#region Windows Form Designer generated code
 
 		private void InitializeComponent()
@@ -34,6 +34,7 @@ namespace Laan.Risk.GUI.Server
             this.panel1 = new System.Windows.Forms.Panel();
             this.grdDisplay = new System.Windows.Forms.PropertyGrid();
             this.tvObjectTree = new System.Windows.Forms.TreeView();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.pnlHeader.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -137,6 +138,7 @@ namespace Laan.Risk.GUI.Server
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.splitter2);
             this.panel1.Controls.Add(this.grdDisplay);
             this.panel1.Controls.Add(this.tvObjectTree);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -144,6 +146,7 @@ namespace Laan.Risk.GUI.Server
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(584, 309);
             this.panel1.TabIndex = 21;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // grdDisplay
             // 
@@ -152,9 +155,9 @@ namespace Laan.Risk.GUI.Server
             this.grdDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdDisplay.HelpVisible = false;
             this.grdDisplay.LineColor = System.Drawing.SystemColors.ScrollBar;
-            this.grdDisplay.Location = new System.Drawing.Point(240, 0);
+            this.grdDisplay.Location = new System.Drawing.Point(330, 0);
             this.grdDisplay.Name = "grdDisplay";
-            this.grdDisplay.Size = new System.Drawing.Size(344, 309);
+            this.grdDisplay.Size = new System.Drawing.Size(254, 309);
             this.grdDisplay.TabIndex = 30;
             this.grdDisplay.ToolbarVisible = false;
             // 
@@ -167,9 +170,17 @@ namespace Laan.Risk.GUI.Server
             this.tvObjectTree.Location = new System.Drawing.Point(0, 0);
             this.tvObjectTree.Name = "tvObjectTree";
             this.tvObjectTree.ShowPlusMinus = false;
-            this.tvObjectTree.Size = new System.Drawing.Size(240, 309);
+            this.tvObjectTree.Size = new System.Drawing.Size(330, 309);
             this.tvObjectTree.TabIndex = 29;
             this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
+            // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(330, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 309);
+            this.splitter2.TabIndex = 31;
+            this.splitter2.TabStop = false;
             // 
             // frmServer
             // 
@@ -196,15 +207,15 @@ namespace Laan.Risk.GUI.Server
 
         static frmServer()
         {
-            log4net.Config.DOMConfigurator.Configure();
+            XmlConfigurator.Configure();
         }
 
         public frmServer()
 		{
 			InitializeComponent();
 			_debugger = new FormDebugger(this);
-			Debug.Listeners.Add(_debugger);
-		}
+            Debug.Listeners.Add(_debugger);
+        }
 
         private int _clientCount;
         protected ILog Log = log4net.LogManager.GetLogger(Assembly.GetEntryAssembly().ManifestModule.Name);
@@ -220,11 +231,12 @@ namespace Laan.Risk.GUI.Server
 		private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Splitter splitter1;
         private ObjectTreeViewer _viewer;
-		FormDebugger _debugger;
+        private FormDebugger _debugger;
         private Button btnStart;
         private Panel panel1;
         private PropertyGrid grdDisplay;
         private TreeView tvObjectTree;
+        private Splitter splitter2;
 		private System.Windows.Forms.Label label1;
 
         delegate void AddLineHandler(string message);
@@ -431,6 +443,11 @@ namespace Laan.Risk.GUI.Server
         {
             _game.Start();
             Redraw();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 	}
 
