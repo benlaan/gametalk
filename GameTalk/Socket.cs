@@ -26,10 +26,10 @@ namespace Laan.GameLibrary
 
     public abstract class GameSocket
     {
-        
-        /// Public Constructor
-
+       
         protected ILog Log = log4net.LogManager.GetLogger(Assembly.GetEntryAssembly().ManifestModule.Name);
+
+        // ----------------- Public Constructor ---------------------------
 
         public GameSocket()
         {

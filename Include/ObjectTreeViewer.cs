@@ -12,33 +12,11 @@ namespace Laan.Library.ObjectTree
 {
 	public enum NodeType { Class, Property }
 
-	public class NodeDefinition: System.Object
+	public class NodeDefinition
 	{
-		private Object   _instance;
-		private NodeType _type;
-        private string   _property;
-
-		public NodeDefinition(NodeType type, Object instance, String property)
-		{
-			_type = type;
-			_instance = instance;
-			_property = property;
-		}
-
-		public Object Instance
-		{
-			get { return _instance; }
-		}
-
-		public String Property
-		{
-			get { return _property; }
-		}
-
-		public NodeType Type
-		{
-			get { return _type; }
-		}
+        public object   Instance { get; set; }
+        public string   Property { get; set; }
+        public NodeType NodeType { get; set; }
 	}
 
 	public class ObjectTreeViewer
@@ -46,10 +24,8 @@ namespace Laan.Library.ObjectTree
 		public ObjectTreeViewer(TreeView tree, object rootObject)
 		{
 			_tree = tree;
-			_object = rootObject;
+			Object = rootObject;
 		}
-
-		private object   _object;
 		private TreeView _tree;
 
 		private void AddNode(TreeNode parent, TreeNode newNode)
@@ -64,8 +40,11 @@ namespace Laan.Library.ObjectTree
 		{
 //			Debug.WriteLine(item.GetType().Name);
 
-			TreeNode newNode = new TreeNode(item.GetType().Name);
-			newNode.Tag = new NodeDefinition(NodeType.Class, item, "");
+			TreeNode newNode = new TreeNode(item.GetType().Name + " " + item.ToString());
+			newNode.Tag = new NodeDefinition() 
+            { 
+                NodeType = NodeType.Class, Instance = item, Property = "" 
+            };
 
 //			Debug.WriteLine("Add Node");
 			AddNode(parent, newNode);
@@ -77,7 +56,7 @@ namespace Laan.Library.ObjectTree
 		{
 			Type t = list.GetType();
 			TreeNode rootNode = new TreeNode(t.Name);
-			rootNode.Tag = new NodeDefinition(NodeType.Class, list, "");
+			rootNode.Tag = new NodeDefinition() { NodeType = NodeType.Class, Instance = list };
 
 			AddNode(parent, rootNode);
 
@@ -123,7 +102,12 @@ namespace Laan.Library.ObjectTree
                     {
                         string text = String.Format("{0}: {1}", info.Name, value);
                         TreeNode newNode = parent.Nodes.Add(text);
-                        newNode.Tag = new NodeDefinition(NodeType.Property, item, info.Name);
+                        newNode.Tag = new NodeDefinition() 
+                        { 
+                            NodeType = NodeType.Property, 
+                            Instance = item, 
+                            Property = info.Name
+                        };
                     }
                     else
                         Add(value, parent);
@@ -139,7 +123,7 @@ namespace Laan.Library.ObjectTree
 				try
 				{
 					_tree.Nodes.Clear();
-					Add(_object, _tree.TopNode);
+					Add(Object, _tree.TopNode);
 
 					_tree.ExpandAll();
 					_tree.Update();
@@ -156,19 +140,11 @@ namespace Laan.Library.ObjectTree
 			}
 		}
 
-		public NodeDefinition SelectedObject
-		{
-			get {
-				return (NodeDefinition)_tree.SelectedNode.Tag;
-			}
-		}
+        public NodeDefinition SelectedObject
+        {
+            get { return (NodeDefinition)_tree.SelectedNode.Tag; }
+        }
 
-		public object Object
-		{
-			get { return _object; }
-			set { _object = value; }
-		}
-
+        public object Object { get; set; }
 	}
-
 }
