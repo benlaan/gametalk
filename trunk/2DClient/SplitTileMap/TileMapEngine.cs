@@ -11,11 +11,11 @@ namespace SplitTileMap
 {
     public class TileMapEngine
     {
-        private const int   cLAND_TILE  = 999;
-        private const int   cWATER_TILE = 0;
-        private const float cMULTIPLIER = 1f;
+        private const float cSCALE_X_MULTIPLIER = 4f / 3;
+        private const int cLAND_TILE = 999;
+        private const int cWATER_TILE = 0;
+        private const float cMULTIPLIER = 0.7f;
 
-        private bool _renderIndex;
         private Graphics _graphics;
         private Image _output;
         private int _scale;
@@ -33,14 +33,15 @@ namespace SplitTileMap
         private float _offsetX;
         private float _offsetY;
 
-        public TileMapEngine(Control control) : this()
+        public TileMapEngine(Control control)
+            : this()
         {
             _control = control;
         }
 
         public TileMapEngine()
         {
-            _missing    = new Dictionary<int, int>();
+            _missing = new Dictionary<int, int>();
             _tileImages = new Dictionary<int, Image>();
             _indexCache = new Dictionary<Point, int>();
         }
@@ -100,7 +101,6 @@ namespace SplitTileMap
         {
             Rectangle r = GetTileRect(x, y);
 
-            //if (_renderIndex)
             _graphics.DrawString(
                 index.ToString(),
                 new Font("Courier New", 8),
@@ -117,7 +117,7 @@ namespace SplitTileMap
 
             // retrieve from disk
             string fileName = String.Format(
-                "{0}\\tile{1}.png", 
+                "{0}\\tile{1}.png",
                 TilePath, index.ToString().PadLeft(3, '0')
             );
 
@@ -133,7 +133,7 @@ namespace SplitTileMap
 
         private Rectangle GetTileRect(int x, int y)
         {
-            int scaleX = Scale;
+            int scaleX = (int)(Scale * cSCALE_X_MULTIPLIER);
             int scaleY = Scale;
             return new Rectangle(x * scaleX, y * scaleY, scaleX, scaleY);
         }
@@ -142,7 +142,7 @@ namespace SplitTileMap
         {
             RectangleF rect = GetTileRect(x, y);
             _graphics.FillRectangle(
-                new SolidBrush(highlight),
+                new SolidBrush(Color.FromArgb(50, Color.White)),
                 rect
             );
         }
@@ -192,7 +192,7 @@ namespace SplitTileMap
                 return;
 
             int e = GetEdgeCount(new Point(p.X, p.Y));
-            
+
             Color currentColor = _bitmap.GetPixel(p.X, p.Y);
             Pen pen = new Pen(new SolidBrush(Color.FromArgb(80, currentColor)), 5);
             Rectangle rect = GetTileRect(x, y);
@@ -242,10 +242,7 @@ namespace SplitTileMap
             //    CheckRenderIndexAsText(x, y, index);
 
             CheckHighlight(x, y);
-
             RenderBorders(x, y);
-
-            //CheckRenderIndexAsText(x, y, index);
         }
 
         public void GenerateMapToFile(string outFile)
@@ -277,7 +274,7 @@ namespace SplitTileMap
         private void Execute()
         {
             int rowsShowing = 1 + _control.Height / Scale;
-            int colsShowing = 1 + _control.Width  / Scale;
+            int colsShowing = 1 + _control.Width / Scale;
 
             for (int y = 0; y < Math.Min(rowsShowing, Bitmap.Height); y++)
                 for (int x = 0; x < Math.Min(colsShowing, Bitmap.Width); x++)
@@ -290,7 +287,7 @@ namespace SplitTileMap
                     );
                     RenderTile(x, y, tileIndex);
                 }
-            
+
             OffsetX = CalcHorizontalOffset(OffsetX);
         }
 
@@ -328,12 +325,6 @@ namespace SplitTileMap
             }
         }
 
-        public bool RenderIndex
-        {
-            get { return _renderIndex; }
-            set { _renderIndex = value; }
-        }
-
         public int Scale
         {
             get { return _scale; }
@@ -351,7 +342,7 @@ namespace SplitTileMap
                 OffsetX += cMULTIPLIER * sgn;
                 OffsetY += cMULTIPLIER * sgn;
 
-                _control.Invalidate();               
+                _control.Invalidate();
             }
         }
 
@@ -381,8 +372,9 @@ namespace SplitTileMap
         {
             get
             {
+                int scaleX = (int)(Scale * cSCALE_X_MULTIPLIER);
                 return new Point(
-                    CalcHorizontalOffset((int)(_mouse.X / Scale) + Offset.X),
+                    CalcHorizontalOffset((int)(_mouse.X / scaleX) + Offset.X),
                     (int)(_mouse.Y / Scale) + Offset.Y
                 );
             }
@@ -392,11 +384,20 @@ namespace SplitTileMap
         {
             get
             {
+                int scaleX = (int)(Scale * cSCALE_X_MULTIPLIER);
                 return new Point(
-                    (int)(_mouse.X / Scale),
+                    (int)(_mouse.X / scaleX),
                     (int)(_mouse.Y / Scale)
                 );
             }
+        }
+
+        internal Point GetPointWithOffset(int x, int y)
+        {
+            return new Point(
+                CalcHorizontalOffset(x + Offset.X),
+                y + Offset.Y
+            );
         }
     }
 }
