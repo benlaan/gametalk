@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polygons", "Polygons.csproj", "{AEC8BE57-CE41-4663-BDDE-BE9DF1EA411F}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCount", "..\..\..\WordCount\WordCount.csproj", "{0388FA15-1CF8-409E-8742-9273DD7D097B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEC8BE57-CE41-4663-BDDE-BE9DF1EA411F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC8BE57-CE41-4663-BDDE-BE9DF1EA411F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC8BE57-CE41-4663-BDDE-BE9DF1EA411F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC8BE57-CE41-4663-BDDE-BE9DF1EA411F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0388FA15-1CF8-409E-8742-9273DD7D097B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0388FA15-1CF8-409E-8742-9273DD7D097B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0388FA15-1CF8-409E-8742-9273DD7D097B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0388FA15-1CF8-409E-8742-9273DD7D097B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
