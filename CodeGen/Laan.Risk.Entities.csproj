@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.20706</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -19,7 +19,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Riskier</RootNamespace>
+    <RootNamespace>Laan.Risk.Entities</RootNamespace>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -104,7 +104,7 @@
       </Package>
     </ProjectReference>
     <ProjectReference Include="..\gametalk\Laan.GameLibrary.csproj">
-      <Name>GameTalk</Name>
+      <Name>Laan.GameLibrary</Name>
       <Project>{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}</Project>
       <Package>
       </Package>
@@ -129,7 +129,6 @@
     <Compile Include="output\Player.g.cs" />
     <Compile Include="output\Region.g.cs" />
     <Compile Include="output\Unit.g.cs" />
-    <Content Include="Riskier.todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
