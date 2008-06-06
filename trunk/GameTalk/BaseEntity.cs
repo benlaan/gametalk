@@ -40,7 +40,6 @@ namespace Laan.GameLibrary.Entity
         // ------------ Private ----------------------------------------------------------
 
         string  _name = "";
-        int     _id;
 
         // ------------ Protected --------------------------------------------------------
 
@@ -55,18 +54,13 @@ namespace Laan.GameLibrary.Entity
         
         public abstract Communication Communication();
 
-        public int ID
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
+        public int ID { get; set; }
 
 		public BaseEntity()
         {
             _name = "";
-			_streamSize = 32;
+			StreamSize = 32;
         }
-		private int _streamSize;
 
 		public BaseEntity Entity()
 		{
@@ -136,15 +130,16 @@ namespace Laan.GameLibrary.Entity
 
         public virtual void Deserialise(BinaryStreamReader reader)
         {
-            _id = reader.ReadInt32();
+            ID = reader.ReadInt32();
             _name = reader.ReadString();
         }
 
-		internal int StreamSize
-		{
-			get { return _streamSize; }
-			set { _streamSize = value; }
-		}
+        internal int StreamSize { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 
 }
