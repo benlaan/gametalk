@@ -4,15 +4,14 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
 
+using log4net;
+using log4net.Config;
+
 using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
-
-using log4net;
 using Laan.Library.ObjectTree;
-
 using GameClasses = Laan.Risk.Game.Server;
-using log4net.Config;
 
 namespace Laan.Risk.GUI.Server
 {
@@ -32,9 +31,9 @@ namespace Laan.Risk.GUI.Server
             this.edDebug = new System.Windows.Forms.TextBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.grdDisplay = new System.Windows.Forms.PropertyGrid();
             this.tvObjectTree = new System.Windows.Forms.TreeView();
-            this.splitter2 = new System.Windows.Forms.Splitter();
             this.pnlHeader.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +54,7 @@ namespace Laan.Risk.GUI.Server
             // 
             // btnStart
             // 
+            this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStart.Enabled = false;
             this.btnStart.Location = new System.Drawing.Point(343, 8);
             this.btnStart.Name = "btnStart";
@@ -148,6 +148,14 @@ namespace Laan.Risk.GUI.Server
             this.panel1.TabIndex = 21;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(330, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 309);
+            this.splitter2.TabIndex = 31;
+            this.splitter2.TabStop = false;
+            // 
             // grdDisplay
             // 
             this.grdDisplay.BackColor = System.Drawing.Color.Silver;
@@ -173,14 +181,6 @@ namespace Laan.Risk.GUI.Server
             this.tvObjectTree.Size = new System.Drawing.Size(330, 309);
             this.tvObjectTree.TabIndex = 29;
             this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
-            // 
-            // splitter2
-            // 
-            this.splitter2.Location = new System.Drawing.Point(330, 0);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 309);
-            this.splitter2.TabIndex = 31;
-            this.splitter2.TabStop = false;
             // 
             // frmServer
             // 
@@ -426,12 +426,6 @@ namespace Laan.Risk.GUI.Server
             if (def.Property != "")
                 SelectProperty(def.Property);
         }
-
-		[STAThread]
-		static void Main()
-		{
-			Application.Run(new frmServer());
-		}
 
 		public void OnRendezvousReceivedEvent(object sender, string receivedText, ref bool isValid)
 		{

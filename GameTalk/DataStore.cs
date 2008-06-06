@@ -14,7 +14,6 @@ namespace Laan.GameLibrary.Entity
             private bool _isRoot = true;
 
             private ClientDataStore() { }
-            private string _assemblyName;
 
             public static ClientDataStore Instance
             {
@@ -61,7 +60,10 @@ namespace Laan.GameLibrary.Entity
 
                 Log.Debug(String.Format("ClientDataStore.ProcessInsert: {0}", typeName));
 
-                BaseEntity e = (Activator.CreateInstanceFrom(AssemblyName + ".DLL", typeName).Unwrap()) as BaseEntity;
+                BaseEntity e = (Activator.CreateInstanceFrom(
+                    AssemblyName + ".DLL", typeName).Unwrap()
+                ) as BaseEntity;
+
                 if (e == null)
                     throw new Exception("Invalid Type: " + typeName);
 
@@ -117,11 +119,7 @@ namespace Laan.GameLibrary.Entity
                 return null;
             }
 
-            public string AssemblyName
-            {
-                get { return _assemblyName; }
-                set { _assemblyName = value; }
-            }
+            public string AssemblyName { get; set; }
 
         }
 

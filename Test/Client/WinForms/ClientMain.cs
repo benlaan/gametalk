@@ -1,20 +1,20 @@
 using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Data;
+using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
+using System.Reflection;
+using System.Windows.Forms;
+
+using log4net;
+using log4net.Config;
 
 using Laan.GameLibrary;
 using Laan.GameLibrary.Entity;
-using GameClasses = Laan.Risk.Game.Client;
 using Laan.Library.ObjectTree;
-using log4net;
-using System.Configuration;
-using System.Reflection;
 using Laan.Risk.Game.Client;
-using log4net.Config;
+using GameClasses = Laan.Risk.Game.Client;
+using System.Collections.Generic;
+using System.Collections;
 
 
 namespace Laan.Risk.GUI.Client
@@ -41,7 +41,7 @@ namespace Laan.Risk.GUI.Client
             this.colColour = new System.Windows.Forms.ColumnHeader();
             this.colNation = new System.Windows.Forms.ColumnHeader();
             this.colShortName = new System.Windows.Forms.ColumnHeader();
-            this.colReady = new System.Windows.Forms.ColumnHeader();
+            this.colStatus = new System.Windows.Forms.ColumnHeader();
             this.btnReady = new System.Windows.Forms.Button();
             this.btnJoinGame = new System.Windows.Forms.Button();
             this.gbNationDetails = new System.Windows.Forms.GroupBox();
@@ -54,6 +54,7 @@ namespace Laan.Risk.GUI.Client
             this.tabGame = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.grdDisplay = new System.Windows.Forms.PropertyGrid();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.tvObjectTree = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dlgNationColour = new System.Windows.Forms.ColorDialog();
@@ -113,7 +114,6 @@ namespace Laan.Risk.GUI.Client
             this.gbPlayerDetails.Controls.Add(this.lbGameName);
             this.gbPlayerDetails.Controls.Add(this.edName);
             this.gbPlayerDetails.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.gbPlayerDetails.ForeColor = System.Drawing.Color.White;
             this.gbPlayerDetails.Location = new System.Drawing.Point(8, 280);
             this.gbPlayerDetails.Name = "gbPlayerDetails";
             this.gbPlayerDetails.Size = new System.Drawing.Size(480, 56);
@@ -161,7 +161,6 @@ namespace Laan.Risk.GUI.Client
             this.lvAvailableGames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvAvailableGames.BackColor = System.Drawing.SystemColors.Control;
             this.lvAvailableGames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.colHost,
@@ -221,12 +220,11 @@ namespace Laan.Risk.GUI.Client
             this.lvPlayers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvPlayers.BackColor = System.Drawing.SystemColors.Control;
             this.lvPlayers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colColour,
             this.colNation,
             this.colShortName,
-            this.colReady});
+            this.colStatus});
             this.lvPlayers.FullRowSelect = true;
             this.lvPlayers.Location = new System.Drawing.Point(8, 120);
             this.lvPlayers.Name = "lvPlayers";
@@ -250,10 +248,10 @@ namespace Laan.Risk.GUI.Client
             this.colShortName.Text = "Short";
             this.colShortName.Width = 50;
             // 
-            // colReady
+            // colStatus
             // 
-            this.colReady.Text = "Ready";
-            this.colReady.Width = 62;
+            this.colStatus.Text = "Status";
+            this.colStatus.Width = 62;
             // 
             // btnReady
             // 
@@ -382,6 +380,7 @@ namespace Laan.Risk.GUI.Client
             // panel2
             // 
             this.panel2.Controls.Add(this.grdDisplay);
+            this.panel2.Controls.Add(this.splitter2);
             this.panel2.Controls.Add(this.tvObjectTree);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 40);
@@ -396,11 +395,19 @@ namespace Laan.Risk.GUI.Client
             this.grdDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdDisplay.HelpVisible = false;
             this.grdDisplay.LineColor = System.Drawing.SystemColors.ScrollBar;
-            this.grdDisplay.Location = new System.Drawing.Point(240, 0);
+            this.grdDisplay.Location = new System.Drawing.Point(243, 0);
             this.grdDisplay.Name = "grdDisplay";
-            this.grdDisplay.Size = new System.Drawing.Size(256, 308);
-            this.grdDisplay.TabIndex = 30;
+            this.grdDisplay.Size = new System.Drawing.Size(253, 308);
+            this.grdDisplay.TabIndex = 31;
             this.grdDisplay.ToolbarVisible = false;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(240, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 308);
+            this.splitter2.TabIndex = 30;
+            this.splitter2.TabStop = false;
             // 
             // tvObjectTree
             // 
@@ -470,20 +477,15 @@ namespace Laan.Risk.GUI.Client
             XmlConfigurator.Configure();
         }
 
-        [STAThread]
-        static void Main() 
-        {
-            Application.Run(new frmClient());
-		}
-
-		private System.ComponentModel.Container components = null;
+        private System.ComponentModel.IContainer components;
 
         protected ILog Log = log4net.LogManager.GetLogger(Assembly.GetEntryAssembly().ManifestModule.Name);
         
 		private AvailableGameList _availableGames;
 		private bool              _isHost          = false;
 		private int      	      _playerID        = 0;
-		private bool     	  	  _update          = false;
+        private bool              _joined          = false;
+        private bool     	  	  _update          = false;
 
         private GameClient       _client;
 		private ClientDataStore  _dataStore;
@@ -514,21 +516,32 @@ namespace Laan.Risk.GUI.Client
         private System.Windows.Forms.ColumnHeader colNation;
         private System.Windows.Forms.ColumnHeader colShortName;
         private System.Windows.Forms.ColumnHeader colColour;
-        private System.Windows.Forms.ColumnHeader colReady;
+        private System.Windows.Forms.ColumnHeader colStatus;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.TabPage tabFind;
         private System.Windows.Forms.Button btnFindServers;
-        private System.Windows.Forms.ListView lvAvailableGames;
-        private System.Windows.Forms.ColumnHeader colName;
-        private System.Windows.Forms.ColumnHeader colHost;
         private Panel panel2;
-        private PropertyGrid grdDisplay;
         private TreeView tvObjectTree;
-        private System.Windows.Forms.ColumnHeader colPort; 
+        private ListView lvAvailableGames;
+        private ColumnHeader colName;
+        private ColumnHeader colHost;
+        private ColumnHeader colPort;
+        private PropertyGrid grdDisplay;
+        private Splitter splitter2; 
         #endregion
 
         delegate void AddLineHandler(string message);
         delegate void InvokableAction();
+
+        private string GetAssemblyName()
+        {
+            string assemblyFullName = typeof(Game.Client.Game).Assembly.FullName;
+            string[] parts = assemblyFullName.Split(',');
+            if (parts.Length == 0)
+                throw new ArgumentException("Invalid Assembly Name");
+
+            return parts[0];
+        }
 
         internal void Add(string message)
         {
@@ -557,27 +570,27 @@ namespace Laan.Risk.GUI.Client
             this.Invalidate();
         }
 
-		public frmClient()
-		{
-			InitializeComponent();
-            
+        public frmClient()
+        {
+            InitializeComponent();
+
             Debug.Listeners.Add(new FormDebugger(this));
 
             Application.Idle += new EventHandler(OnIdle);
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(OnThreadException);
 
-			_client = GameClient.Instance;
-			_client.OnProcessMessageEvent += new OnProcessMessageEventHandler(OnProcessMessageEvent);
-			_client.OnBroadcastFoundEvent += new OnBroadcastFoundEventHandler(OnBroadcastFoundEvent);
+            _client = GameClient.Instance;
+            _client.OnProcessMessageEvent += new OnProcessMessageEventHandler(OnProcessMessageEvent);
+            _client.OnBroadcastFoundEvent += new OnBroadcastFoundEventHandler(OnBroadcastFoundEvent);
 
-			_dataStore = ClientDataStore.Instance;
-			_dataStore.AssemblyName = "Riskier";
-			_dataStore.OnNewEntityEvent += new OnNewEntityEventHandler(OnNewEntityEvent);
-			_dataStore.OnRootEntityEvent += new OnRootEntityEventHandler(OnRootEntityEvent);
-			_dataStore.OnModifyEntityEvent += new OnModifyEntityEventHandler(OnModifyEntityEvent);
+            _dataStore = ClientDataStore.Instance;
+            _dataStore.AssemblyName = GetAssemblyName();
+            _dataStore.OnNewEntityEvent += new OnNewEntityEventHandler(OnNewEntityEvent);
+            _dataStore.OnRootEntityEvent += new OnRootEntityEventHandler(OnRootEntityEvent);
+            _dataStore.OnModifyEntityEvent += new OnModifyEntityEventHandler(OnModifyEntityEvent);
 
-			_availableGames = new Laan.GameLibrary.AvailableGameList();
-		}
+            _availableGames = new Laan.GameLibrary.AvailableGameList();
+        }
 
         private void OnIdle(object sender, EventArgs e)
         {
@@ -605,15 +618,24 @@ namespace Laan.Risk.GUI.Client
 			this.Invoke((InvokableAction)OnUpdateStatus);
 		}
 
-		private void OnUpdateStatus()
+        private void RedrawDebugObjectTreeList()
+        {
+            if (_viewer != null && _viewer.Object != null)
+                _viewer.Update();
+        }
+
+        private void UpdateCaption()
+        {
+            this.Text = String.Format("Client: {0}", _isHost ? "Host" : "Peer");
+        }
+
+        private void OnUpdateStatus()
 		{
 			if (_update)
 			{
-				// Redraw debug ObjectTreeList
-                if (_viewer != null && _viewer.Object != null)
-					_viewer.Update();
-	
-				// Refresh ListViews
+                RedrawDebugObjectTreeList();	
+
+                // Refresh ListViews
 				UpdatePlayerList();
 				UpdateGameList();
 	
@@ -621,12 +643,12 @@ namespace Laan.Risk.GUI.Client
 				btnFindServers.Enabled  = !GameClient.Instance.Finding;
 				btnReady.Enabled        = (_playerID != 0);
 				btnJoinServer.Enabled   = (lvAvailableGames.SelectedIndices.Count > 0);
-                btnJoinGame.Enabled     = _game != null;
+                btnJoinGame.Enabled     = _game != null && !_joined;
                 gbNationDetails.Enabled = _game != null;
 
-				this.Text = String.Format("Client: {0}", _isHost ? "Host" : "Peer");
+                UpdateCaption();
 
-				_update = false;
+                _update = false;
 				this.Invalidate();
 			}
 		}
@@ -717,63 +739,54 @@ namespace Laan.Risk.GUI.Client
             edNationName.Text = ConfigurationSettings.AppSettings["NationName"] ?? "";
             edNationShortName.Text = ConfigurationSettings.AppSettings["NationShortName"] ?? "";
         }
-        
+
+        private void PopulateListView<T>(
+            IEnumerable list, 
+            ListView listView, 
+            Func<T, string[]> populateAction
+        )
+        {
+            int selected = -1;
+            if (listView.SelectedIndices.Count > 0)
+                selected = listView.SelectedIndices[0];
+
+            listView.Items.Clear();
+            foreach (T item in list)
+                listView.Items.Add(new ListViewItem(populateAction(item)));
+
+            if (selected >= 0)
+                listView.Items[selected].Selected = true;
+
+            listView.Invalidate();
+        }
+
         private void UpdateGameList()
-		{
-			int selected = -1;
-			if (lvAvailableGames.SelectedIndices.Count > 0)
-				selected = lvAvailableGames.SelectedIndices[0];
+        {
+            PopulateListView<AvailableGame>
+            (
+                _availableGames, 
+                lvAvailableGames, 
 
-			lvAvailableGames.Items.Clear();
-            foreach(Laan.GameLibrary.AvailableGame game in _availableGames)
-            {
-                lvAvailableGames.Items.Add(
-                    new ListViewItem(
-                        new string[]
-                        {
-                            game.Name,
-                            game.Host,
-                            game.Port.ToString()
-                        }
-                    )
-                );
-			}
-
-			if (selected >= 0)
-				lvAvailableGames.Items[selected].Selected = true;
-				
-            lvAvailableGames.Invalidate();
+                game => new string[] { game.Name, game.Host, game.Port.ToString() }
+            );
         }
 
 		private void UpdatePlayerList()
         {
             if (_game != null && _game.Players != null && !_game.Players.IsEmpty)
 			{
-				int selected = -1;
-				if (lvPlayers.SelectedIndices.Count > 0)
-					selected = lvPlayers.SelectedIndices[0];
-
-				lvPlayers.Items.Clear();
-
-				foreach(Laan.Risk.Player.Client.Player player in _game.Players)
-				{
-                    if (player.Nation != null)
-					    lvPlayers.Items.Add(
-                            new ListViewItem(
-						        new string[]
-						        {
-							        Color.FromArgb(player.Colour).ToKnownColor().ToString(),
-							        player.Nation.Name.ToString(),
-                                    player.Nation.ShortName.ToString(),
-							        (player.Ready ? "Y" : "N")
-						        }
-					        )
-                        );
-				}
-				if (selected >= 0)
-					lvPlayers.Items[selected].Selected = true;
-
-				lvPlayers.Invalidate();
+                PopulateListView<Player.Client.Player>
+                (
+                    _game.Players,
+                    lvPlayers,
+                    player => new string[] 
+                    { 
+				        Color.FromArgb(player.Colour).ToKnownColor().ToString(),
+				        player.Nation.Name.ToString(),
+                        player.Nation.ShortName.ToString(),
+				        (player.Ready ? "Ready" : "Waiting")
+                    }
+                );
             }
 		}
 
@@ -858,6 +871,8 @@ namespace Laan.Risk.GUI.Client
 
 			// cancel server searching, not required any further
 			GameClient.Instance.StopRendezvous();
+
+            _joined = true;
 		}
 
 		private void btnReady_Click(object sender, System.EventArgs e)

@@ -131,6 +131,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ServerMain.cs">
       <SubType>Form</SubType>
     </Compile>
