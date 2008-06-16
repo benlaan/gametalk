@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Drawing;
 using System.Collections;
@@ -8,6 +9,15 @@ using log4net;
 
 namespace Laan.GameLibrary.Data
 {
+    public enum FieldType
+    {
+        String,
+        Integer,
+        Boolean,
+        Date,
+        Binary
+    }
+
     public class BinaryStreamReader : System.IDisposable
     {
         // --------------- Private -------------------------------------------------------
@@ -70,7 +80,15 @@ namespace Laan.GameLibrary.Data
 			return data;
 		}
 
-		public byte[] DataStream
+        public byte[] ReadBinary()
+        {
+            int count = _reader.ReadInt32();
+            byte[] data = _reader.ReadBytes(count);
+            Log.Debug(String.Format("ReadBinary({0}): {1}", count, data));
+            return data;
+        }
+        
+        public byte[] DataStream
         {
             get {
                 return _stream.GetBuffer();
@@ -135,14 +153,21 @@ namespace Laan.GameLibrary.Data
 		public void WriteColor(Color value)
 		{
 			_writer.Write(value.ToArgb());
-			Log.Debug("WriteColor: " + value);
+            _length += sizeof(int);
+            Log.Debug("WriteColor: " + value);
 		}
+
+        public void WriteBinary(byte[] value)
+        {
+            _writer.Write(value.Length);
+            _writer.Write(value);
+            _length += value.Length + sizeof(int);
+            Log.Debug(String.Format("WriteBinary({0}): {1}", value.Length, value));
+        }
 
 		public byte[] DataStream
         {
-            get {
-                return _stream.GetBuffer();
-            }
+            get { return _stream.GetBuffer(); }
         }
 
         public void Dispose()
@@ -160,29 +185,32 @@ namespace Laan.GameLibrary.Data
     public class BinaryHelper
     {
     
-        public static object[] Read(byte[] message, string[] types)
+        public static object[] Read(byte[] message, FieldType[] types)
         {
             object[] result = new object[types.Length];
 
             int index = 0;
             using (BinaryStreamReader reader = new BinaryStreamReader(message))
             {
-                foreach(string type in types)
+                foreach(FieldType type in types)
                 {
                     switch(type)
                     {
-                        case "string":
+                        case FieldType.String:
                             result[index] = reader.ReadString();
                             break;
-                        case "int":
+                        case FieldType.Integer:
                             result[index] = reader.ReadInt32();
                             break;
-                        case "bool":
+                        case FieldType.Boolean:
                             result[index] = reader.ReadBoolean();
                             break;
-//                        case "date":
+//                        case FieldType.Date:
 //                            result[index] = reader.Read();
 //                            break;
+                        case FieldType.Binary:
+                            result[index] = reader.ReadBinary();
+                            break;
                     }
                     index++;
                 }
@@ -190,28 +218,31 @@ namespace Laan.GameLibrary.Data
             }
         }
 
-        public static byte[] Write(string[] types, object[] values)
+        public static byte[] Write(FieldType[] types, object[] values)
         {
             int index = 0;
             Debug.Assert(types.Length == values.Length);
 
             using (BinaryStreamWriter writer = new BinaryStreamWriter(3))
             {
-                foreach(string type in types)
+                foreach(FieldType type in types)
                 {
                     switch(type)
                     {
-                        case "string":
+                        case FieldType.String:
                             writer.WriteString((string)values[index]);
                             break;
-                        case "int":
+                        case FieldType.Integer:
                             writer.WriteInt32((int)values[index]);
                             break;
-                        case "bool":
+                        case FieldType.Boolean:
                             writer.WriteBoolean((bool)values[index]);
                             break;
-                        case "date":
+                        case FieldType.Date:
                             writer.WriteDateTime((System.DateTime)values[index]);
+                            break;
+                        case FieldType.Binary:
+                            writer.WriteBinary((byte[])values[index]);
                             break;
                     }
                     index++;

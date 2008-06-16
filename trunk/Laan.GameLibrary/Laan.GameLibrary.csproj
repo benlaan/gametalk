@@ -3,7 +3,7 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0E1D0670-8559-488C-A3F5-363F43EFA84F}</ProjectGuid>
+    <ProjectGuid>{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
@@ -18,8 +18,8 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>PersonViewerClient</RootNamespace>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GameTalk</RootNamespace>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -60,7 +60,7 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;LOGGING</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;IndyNew;LOGGING</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DefineDebug>false</DefineDebug>
@@ -72,23 +72,28 @@
     <Optimize>False</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Borland.Delphi">
+      <Name>Borland.Delphi</Name>
+      <HintPath>c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Delphi.dll</HintPath>
+    </Reference>
+    <Reference Include="Borland.VclRtl">
+      <Name>Borland.VclRtl</Name>
+      <HintPath>c:\program files\common files\borland shared\bds\shared assemblies\3.0\Borland.VclRtl.dll</HintPath>
+    </Reference>
     <Reference Include="Indy.Sockets">
       <Name>Indy.Sockets</Name>
       <HintPath>c:\program files\indy 10 for visual studio .net 2003\bin\Indy.Sockets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.1.1.33753, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Components\CSharp\log4net_1_1_1\bin\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Security">
-      <Name>Mono.Security</Name>
-      <HintPath>c:\program files\indy 10 for visual studio .net 2003\bin\Mono.Security.dll</HintPath>
+      <HintPath>..\..\..\..\..\Components\CSharp\log4net_1_1_1\bin\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -108,39 +113,28 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\..\CodeGen\Laan.Risk.Entities.csproj">
-      <Project>{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}</Project>
-      <Name>Laan.Risk.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\gametalk\Laan.GameLibrary.csproj">
-      <Name>Laan.GameLibrary</Name>
-      <Project>{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}</Project>
-      <Package>
-      </Package>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Include\Laan.Library.csproj">
-      <Name>Laan.Library</Name>
-      <Project>{D9915423-744A-4A9A-A97D-58BF2B29ABE1}</Project>
-      <Package>
-      </Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientMain.resx">
-      <DependentUpon>ClientMain.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ClientMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="AvailableGame.cs" />
+    <Compile Include="BaseEntityClient.cs" />
+    <Compile Include="BaseEntityServer.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="ClientEntityList.cs" />
+    <Compile Include="ClientNode.cs" />
+    <Compile Include="Communication.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="DataStore.cs" />
+    <Compile Include="DataStream.cs" />
+    <Compile Include="BaseEntity.cs" />
+    <Compile Include="EntityList.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="ServerEntityList.cs" />
+    <Compile Include="Socket.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

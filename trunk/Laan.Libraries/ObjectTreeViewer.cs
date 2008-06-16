@@ -8,7 +8,7 @@ using log4net;
 using System.ComponentModel;
 using System.Collections.Generic;
 
-namespace Laan.Library.ObjectTree
+namespace Laan.Utilities.ObjectTree
 {
 	public enum NodeType { Class, Property }
 
