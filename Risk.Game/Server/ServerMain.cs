@@ -10,7 +10,7 @@ using log4net.Config;
 using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
-using Laan.Library.ObjectTree;
+using Laan.Utilities.ObjectTree;
 using GameClasses = Laan.Risk.Game.Server;
 
 namespace Laan.Risk.GUI.Server
