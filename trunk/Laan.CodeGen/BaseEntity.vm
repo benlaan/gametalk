@@ -1,0 +1,202 @@
+﻿using System;
+using System.IO;
+using System.Diagnostics;
+using System.Collections.Generic;
+
+using Laan.GameLibrary.Data;
+using Laan.GameLibrary.Entity;
+
+namespace $entity.Namespace
+{
+    class Fields
+    {
+#set ($width = $helper.MaxWidthName($entity))
+#set ($index = 1)
+#foreach ($property in $entity.Properties)
+#if(!$property.Inherited)
+        internal const int $helper.FormattedWidth($property.Name, $width) = $index;
+#end
+#set ($index = $index + 1)
+#end
+    }
+    
+    namespace Server
+    {
+#set ($width = $helper.MaxWidthName($entity))
+#foreach ($req in $entity.Requirements)
+        using $helper.GetTermEntity($req.Namespace)s = ${req.Namespace}.Server;
+#end
+
+        public partial class ${entity.Name}List : ServerEntityList<$entity.Name> { }
+
+        public partial class $entity.Name : $helper.GetBaseClass($entity, "Server")
+        {
+            // --------------- Private -------------------------------------------------
+
+## ----------------- IDs for complex types ----------------------------------------------------------------
+#set ($index = 1)
+#set ($width = $helper.MaxWidthType($entity))
+#foreach ($property in $entity.Properties)
+#if(!$property.Inherited && !${helper.IsPrimitive($property.Type)})
+            internal $helper.FormattedWidth("Int32", $width) ${helper.GetModifyValue($property)};
+#end
+#set ($index = $index + 1)
+#end
+## ----------------- Private Fields -----------------------------------------------------------------------
+##
+
+#set ($index = 1)
+#set ($width = $helper.MaxWidthType($entity))
+#foreach ($property in $entity.Properties)
+#if(!$property.Inherited)
+            internal $helper.FormattedWidth($helper.GetDeclaredType($property), $width) _${helper.ToCamelCase($property.Name)};
+#end
+#set ($index = $index + 1)
+#end
+
+## ----------------- Serialization section ----------------------------------------------------------------
+##
+            public override void Serialise(BinaryStreamWriter writer)
+            {
+                base.Serialise(writer);
+#foreach ($property in $entity.Properties.NonInherited)
+#if(!$property.List)
+                writer.Write${property.Type}(this.${property.Name});
+#end
+#end
+            }
+
+            protected override List<EntityProperty> GetEntityProperties()
+            {
+                return new List<EntityProperty>()
+                {
+#foreach ($property in $entity.Properties.NonInherited)
+#if($property.List)
+                    new EntityProperty() { Entity = _${helper.ToCamelCase($property.Name)}, Field = Fields.${property.Name} },
+#end
+#end
+                };
+            }
+        
+            // --------------- Public -----------------------------------------------
+
+            public $entity.Name $helper.GetConstructor($entity)
+            {
+#foreach ($property in $entity.Properties.NonInherited)
+#if(!${helper.IsPrimitive($property.Type)})
+                $property.Name = new ${property.Type.Replace("List", "")}.Server.${property.Type}();
+#end
+#end
+
+                Initialise();
+            }
+
+            public static implicit operator GameLibrary.Entity.Server($entity.Name $helper.ToCamelCase($entity.Name))
+            {
+                // allows the class to be cast to an Entity.Server class
+                return ${helper.ToCamelCase($entity.Name)}.CommServer;
+            }
+#foreach ($property in $entity.Properties.NonInherited)
+#beforeall
+
+#each
+            public $helper.GetDeclaredType($property) $property.Name
+            {
+                get { return _$helper.ToCamelCase($property.Name); }
+                set {
+                    _$helper.ToCamelCase($property.Name) = value;
+#if (!${helper.IsPrimitive($property.Type)})
+                    $helper.GetModifyUpdate($property)
+#end                    
+
+                    CommServer.Modify(this.ID, Fields.$property.Name, $helper.GetModifyValue($property));
+                }
+            }
+#between
+
+#end
+        }
+    }
+
+    namespace Client
+    {
+
+#set ($width = $helper.MaxWidthName($entity))
+#foreach ($req in $entity.Requirements)
+        using $helper.GetTermEntity($req.Namespace)s = ${req.Namespace}.Server;
+#end
+    
+        public partial class ${entity.Name}List : ClientEntityList<$entity.Name> { }
+
+        public partial class $entity.Name : $helper.GetBaseClass($entity, "Client")
+        {
+
+            // ------------ Private ---------------------------------------------------------
+
+#set ($index = 1)
+#set ($width = $helper.MaxWidthType($entity))
+#foreach ($property in $entity.Properties.NonInherited)
+            internal $helper.FormattedWidth($helper.GetDeclaredType($property), $width) _${helper.ToCamelCase($property.Name)};
+#set ($index = $index + 1)
+#end
+
+            public override void Deserialise(BinaryStreamReader reader)
+            {
+                base.Deserialise(reader);
+
+#foreach ($property in $entity.Properties)
+#if(!$property.Inherited && !$property.List)
+                _${helper.ToCamelCase($property.Name)} = reader.Read${property.Type}();
+#end
+#end
+            }
+
+            // ------------ Public ----------------------------------------------------------
+
+            public $entity.Name $helper.GetConstructor($entity)
+            {
+            }
+
+            // when a change is caught (by the client), ensure the correct field is updated
+            protected override void DoModify(byte field, BinaryStreamReader reader)
+            {
+                base.DoModify(field, reader);
+                
+                // move this to the call site of the delegate that calls this (OnUpdate) event
+                CommClient.UpdateRecency(field);
+
+#foreach ($property in $entity.Properties.NonInherited)
+#beforeall
+                // update the appropriate field
+                switch (field)
+                {
+#each
+                    case Fields.$property.Name:
+#if($helper.IsPrimitive($property.Type))
+                        $property.Name = reader.Read${property.Type}();
+#else
+                        $property.Name = ($helper.GetDeclaredType($property))(ClientDataStore.Instance.Find(reader.ReadInt32()));
+#end
+                        break;
+                        
+#afterall
+//                  default:
+//                      throw new Exception("Illegal field value");
+                }
+#end
+            }
+#foreach ($property in $entity.Properties.NonInherited)
+#beforeall
+
+#each
+            public $helper.GetDeclaredType($property) $property.Name
+            {
+                get { return _${helper.ToCamelCase($property.Name)}; }
+                set { _${helper.ToCamelCase($property.Name)} = value; }
+            }
+#between
+
+#end
+        }
+    }
+}

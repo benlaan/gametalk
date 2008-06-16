@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entityMap Version="1.0">
+    <entities>
+        <entity name="Game" abstract="true" namespace="Laan.Risk.Game">
+            <requirements>
+                <requirement namespace="Laan.Risk.Player"/>
+                <requirement namespace="Laan.Risk.Region"/>
+                <requirement namespace="Laan.Risk.Border"/>
+            </requirements>
+            <properties>
+                <property name="Name" type="String" iinherited="true"/>
+                <property name="Started" type="Boolean" inherited="false" serverProtectedOnly="true" ClientProtectedOnly="true"/>
+                <property name="Players" type="PlayerList" list="true"/>
+                <property name="Regions" type="RegionList" list="true"/>
+                <property name="Borders" type="BorderList" list="true"/>
+            </properties>
+        </entity>
+
+        <entity name="Player" namespace="Laan.Risk.Player">
+            <requirements>
+                <requirement namespace="Laan.Risk.Nation"/>
+            </requirements>
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="Nation" type="Nation"/>
+                <property name="Ready" type="Boolean"/>
+                <property name="Colour" type="Int32"/>
+            </properties>
+        </entity>
+
+        <entity name="Nation" namespace="Laan.Risk.Nation">
+            <requirements>
+                <requirement namespace="Laan.Risk.Region"/>
+                <requirement namespace="Laan.Risk.Unit"/>
+            </requirements>
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="ShortName" type="String"/>
+                <property name="Leader" type="String"/>
+                <property name="Prestige" type="Int32"/>
+                <property name="Technology" type="Int32"/>
+                <property name="OwnedRegions" type="RegionList" list="true"/>
+                <property name="OwnedUnits" type="UnitList" list="true"/>
+            </properties>
+        </entity>
+
+        <entity name="Region" namespace="Laan.Risk.Region">
+            <requirements>
+                <requirement namespace="Laan.Risk.Unit"/>
+            </requirements>
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="Economy" type="Int32"/>
+                <property name="EconomicWeight" type="Int32"/>
+                <property name="Oil" type="Int32"/>
+                <property name="Arms" type="Int32"/>
+                <property name="Defenders" type="UnitList" list="true"/>
+                <property name="Attackers" type="UnitList" list="true"/>
+            </properties>
+        </entity>
+
+        <entity name="Border" namespace="Laan.Risk.Border">
+            <requirements>
+                <requirement namespace="Laan.Risk.Region"/>
+            </requirements>
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="FromRegion" type="Region"/>
+                <property name="ToRegion" type="Region"/>
+                <!--<property name="Connections" type="ConnectionTypeList" list="true"/>-->
+                <property name="Economy" type="Int32"/>
+                <property name="Oil" type="Int32"/>
+                <property name="Arms" type="Int32"/>
+            </properties>
+        </entity>
+
+        <entity name="Unit" abstract="true" namespace="Laan.Risk.Unit">
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="Size" type="Int32"/>
+                <property name="Experience" type="Int32"/>
+                <property name="Location" type="Int32"/>
+            </properties>
+        </entity>
+
+        <entity name="Infantry" baseClass="Unit" namespace="Laan.Risk.Unit.Infantry">
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="Size" type="Int32" inherited="true"/>
+                <property name="Experience" type="Int32" inherited="true"/>
+                <property name="Location" type="Int32" inherited="true"/>
+            </properties>
+        </entity>
+
+        <entity name="Armour" baseClass="Unit" namespace="Laan.Risk.Unit.Armour">
+            <properties>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="Size" type="Int32" inherited="true"/>
+                <property name="Experience" type="Int32" inherited="true"/>
+                <property name="Location" type="Int32" inherited="true"/>
+            </properties>
+        </entity>
+    </entities>
+</entityMap>
