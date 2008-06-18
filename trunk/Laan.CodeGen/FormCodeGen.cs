@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 
-using Laan.Utilities;
+using Laan.Forms;
 using Laan.Library.Debugging;
 
 namespace Laan.CodeGen
@@ -56,7 +56,11 @@ namespace Laan.CodeGen
             if (edMapFile.Text != "" && edOuputPath.Text != null)
                 using (new Hourglass(this))
                 {
-                    CodeGenerator.Run(edMapFile.Text, edOuputPath.Text);
+                    CodeGenerator.Run(
+                        edMapFile.Text, 
+                        edOuputPath.Text, 
+                        cbRebuildEntities.Checked
+                    );
                 }
         }
 

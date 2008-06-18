@@ -118,12 +118,6 @@
       <Package>
       </Package>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Laan.Libraries\Laan.Library.csproj">
-      <Name>Laan.Library</Name>
-      <Project>{D9915423-744A-4A9A-A97D-58BF2B29ABE1}</Project>
-      <Package>
-      </Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ClientMain.resx">

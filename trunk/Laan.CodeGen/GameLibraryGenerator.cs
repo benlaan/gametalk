@@ -42,10 +42,12 @@ namespace Laan.CodeGen
             foreach (Entity entity in map.Entities)
             {
                 GenerateFile(entity, @"..\..\BaseEntity.vm", "{0}.g.cs");
-                GenerateFile(entity, @"..\..\Entity.vm", "{0}.cs");
+                if (RebuildEntities)
+                    GenerateFile(entity, @"..\..\Entity.vm", "{0}.cs");
             }
         }
 
         public string OutputPath { get; set; }
+        public bool RebuildEntities { get; set; }
     }
 }

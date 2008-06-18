@@ -26,7 +26,7 @@ namespace Laan.CodeGen
                 string mapFile = parser.Arguments["map"] ?? "RiskMap.xml";
                 string outputPath = parser.Arguments["output"] ?? @"\..\..\..\CodeGen\output";
 
-                CodeGenerator.Run(mapFile, outputPath);
+                CodeGenerator.Run(mapFile, outputPath, true);
             }
             else
             {

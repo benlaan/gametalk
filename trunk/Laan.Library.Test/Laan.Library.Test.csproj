@@ -54,13 +54,13 @@
     <Content Include="AuthoringTests.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Laan.Libraries\Laan.Library.csproj">
-      <Project>{D9915423-744A-4A9A-A97D-58BF2B29ABE1}</Project>
-      <Name>Laan.Library</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Laan.CodeGen\Laan.CodeGen.csproj">
       <Project>{4618F881-B27D-48AB-B4FA-8DF110E342B1}</Project>
       <Name>Laan.CodeGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Laan.Library\Laan.Library.csproj">
+      <Project>{D9915423-744A-4A9A-A97D-58BF2B29ABE1}</Project>
+      <Name>Laan.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

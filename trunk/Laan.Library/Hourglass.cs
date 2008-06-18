@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Laan.Utilities
+namespace Laan.Forms
 {
     public class Hourglass : IDisposable
     {

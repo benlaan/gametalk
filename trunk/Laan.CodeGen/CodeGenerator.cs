@@ -9,7 +9,7 @@ namespace Laan.CodeGen
 {
     internal class CodeGenerator
     {
-        internal static bool Run(string entityMap, string output)
+        internal static bool Run(string entityMap, string output, bool rebuildEntities)
         {
             bool hasErrors = false;
 
@@ -18,6 +18,7 @@ namespace Laan.CodeGen
             {
                 GameLibraryGenerator generator = new GameLibraryGenerator();
                 generator.OutputPath = output;
+                generator.RebuildEntities = rebuildEntities;
                 generator.Execute(entityMap);
 
                 Debug.WriteLine("end: Execute");
