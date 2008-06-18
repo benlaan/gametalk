@@ -38,6 +38,7 @@
             this.edOutput = new System.Windows.Forms.TextBox();
             this.dlgBrowseFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.dlgMapFile = new System.Windows.Forms.OpenFileDialog();
+            this.cbRebuildEntities = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.gbCodeGen.SuspendLayout();
             this.SuspendLayout();
@@ -54,6 +55,7 @@
             // 
             // gbCodeGen
             // 
+            this.gbCodeGen.Controls.Add(this.cbRebuildEntities);
             this.gbCodeGen.Controls.Add(this.edOuputPath);
             this.gbCodeGen.Controls.Add(this.edMapFile);
             this.gbCodeGen.Controls.Add(this.label2);
@@ -69,18 +71,18 @@
             // 
             // edOuputPath
             // 
-            this.edOuputPath.Location = new System.Drawing.Point(76, 52);
+            this.edOuputPath.Location = new System.Drawing.Point(94, 52);
             this.edOuputPath.Name = "edOuputPath";
-            this.edOuputPath.Size = new System.Drawing.Size(506, 20);
+            this.edOuputPath.Size = new System.Drawing.Size(488, 20);
             this.edOuputPath.TabIndex = 8;
             this.edOuputPath.Text = ".\\..\\..\\..\\CodeGen\\output";
             this.edOuputPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.edOuputPath_MouseDoubleClick);
             // 
             // edMapFile
             // 
-            this.edMapFile.Location = new System.Drawing.Point(76, 26);
+            this.edMapFile.Location = new System.Drawing.Point(94, 26);
             this.edMapFile.Name = "edMapFile";
-            this.edMapFile.Size = new System.Drawing.Size(506, 20);
+            this.edMapFile.Size = new System.Drawing.Size(488, 20);
             this.edMapFile.TabIndex = 7;
             this.edMapFile.Text = ".\\..\\..\\RiskMap.xml";
             this.edMapFile.TextChanged += new System.EventHandler(this.edMapFile_TextChanged);
@@ -89,7 +91,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 55);
+            this.label2.Location = new System.Drawing.Point(24, 55);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 6;
@@ -98,7 +100,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 29);
+            this.label1.Location = new System.Drawing.Point(41, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 13);
             this.label1.TabIndex = 5;
@@ -131,6 +133,17 @@
             // 
             this.dlgMapFile.FileName = "openFileDialog1";
             // 
+            // cbRebuildEntities
+            // 
+            this.cbRebuildEntities.AutoSize = true;
+            this.cbRebuildEntities.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbRebuildEntities.Location = new System.Drawing.Point(9, 78);
+            this.cbRebuildEntities.Name = "cbRebuildEntities";
+            this.cbRebuildEntities.Size = new System.Drawing.Size(99, 17);
+            this.cbRebuildEntities.TabIndex = 9;
+            this.cbRebuildEntities.Text = "Rebuild Entities";
+            this.cbRebuildEntities.UseVisualStyleBackColor = true;
+            // 
             // FormCodeGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,6 +173,7 @@
         private System.Windows.Forms.TextBox edOuputPath;
         private System.Windows.Forms.TextBox edMapFile;
         private System.Windows.Forms.OpenFileDialog dlgMapFile;
+        private System.Windows.Forms.CheckBox cbRebuildEntities;
 
     }
 }

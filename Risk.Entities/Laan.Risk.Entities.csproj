@@ -97,13 +97,13 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Include\Laan.Library.csproj">
+    <ProjectReference Include="..\Laan.Library\Laan.Library.csproj">
       <Name>Laan.Library</Name>
       <Project>{D9915423-744A-4A9A-A97D-58BF2B29ABE1}</Project>
       <Package>
       </Package>
     </ProjectReference>
-    <ProjectReference Include="..\gametalk\Laan.GameLibrary.csproj">
+    <ProjectReference Include="..\Laan.GameLibrary\Laan.GameLibrary.csproj">
       <Name>Laan.GameLibrary</Name>
       <Project>{054B3D6E-E677-4D2D-AEB2-CDE300B124E1}</Project>
       <Package>
