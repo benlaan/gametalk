@@ -8,17 +8,16 @@ using Laan.GameLibrary.Entity;
 
 namespace Laan.Risk.Nation
 {
+
     namespace Server
     {
-        public partial class NationList { }
-
         public partial class Nation
         {
 
             // --------------- Protected --------------------------------------------
 
             protected override byte[] ProcessCommand(BinaryStreamReader reader)
-            { 
+            {
                 return null;
             }
             
@@ -33,8 +32,6 @@ namespace Laan.Risk.Nation
 
     namespace Client
     {
-        public partial class NationList { }
-
         public partial class Nation
         {
             // --------------- Public -----------------------------------------------

@@ -34,9 +34,6 @@ namespace Laan.Risk.Player
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
-                writer.WriteNation(this.Nation);
-                writer.WriteBoolean(this.Ready);
-                writer.WriteInt32(this.Colour);
             }
 
             protected override List<EntityProperty> GetEntityProperties()
@@ -72,6 +69,7 @@ namespace Laan.Risk.Player
                 }
             }
 
+
             public Boolean Ready
             {
                 get { return _ready; }
@@ -82,6 +80,7 @@ namespace Laan.Risk.Player
                 }
             }
 
+
             public Int32 Colour
             {
                 get { return _colour; }
@@ -91,13 +90,14 @@ namespace Laan.Risk.Player
                     CommServer.Modify(this.ID, Fields.Colour, value);
                 }
             }
+
         }
     }
 
     namespace Client
     {
 
-        using Nations = Laan.Risk.Nation.Server;
+        using Nations = Laan.Risk.Nation.Client;
     
         public partial class PlayerList : ClientEntityList<Player> { }
 
@@ -114,9 +114,6 @@ namespace Laan.Risk.Player
             {
                 base.Deserialise(reader);
 
-                _nation = reader.ReadNation();
-                _ready = reader.ReadBoolean();
-                _colour = reader.ReadInt32();
             }
 
             // ------------ Public ----------------------------------------------------------
@@ -159,17 +156,20 @@ namespace Laan.Risk.Player
                 set { _nation = value; }
             }
 
+
             public Boolean Ready
             {
                 get { return _ready; }
                 set { _ready = value; }
             }
 
+
             public Int32 Colour
             {
                 get { return _colour; }
                 set { _colour = value; }
             }
+
         }
     }
 }

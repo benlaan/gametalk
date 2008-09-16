@@ -10,8 +10,8 @@ using log4net.Config;
 using Laan.GameLibrary;
 using Laan.GameLibrary.Data;
 using Laan.GameLibrary.Entity;
-using Laan.Utilities.ObjectTree;
 using GameClasses = Laan.Risk.Game.Server;
+using Laan.Utilities.ObjectTree;
 
 namespace Laan.Risk.GUI.Server
 {
@@ -49,14 +49,14 @@ namespace Laan.Risk.GUI.Server
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(584, 40);
+            this.pnlHeader.Size = new System.Drawing.Size(690, 40);
             this.pnlHeader.TabIndex = 0;
             // 
             // btnStart
             // 
             this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(343, 8);
+            this.btnStart.Location = new System.Drawing.Point(449, 8);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 22;
@@ -87,7 +87,7 @@ namespace Laan.Risk.GUI.Server
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(504, 8);
+            this.btnDelete.Location = new System.Drawing.Point(610, 8);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 1;
@@ -98,7 +98,7 @@ namespace Laan.Risk.GUI.Server
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.Enabled = false;
-            this.btnAdd.Location = new System.Drawing.Point(424, 8);
+            this.btnAdd.Location = new System.Drawing.Point(530, 8);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 0;
@@ -124,7 +124,7 @@ namespace Laan.Risk.GUI.Server
             this.edDebug.Location = new System.Drawing.Point(0, 352);
             this.edDebug.Multiline = true;
             this.edDebug.Name = "edDebug";
-            this.edDebug.Size = new System.Drawing.Size(584, 310);
+            this.edDebug.Size = new System.Drawing.Size(690, 310);
             this.edDebug.TabIndex = 17;
             // 
             // splitter1
@@ -132,7 +132,7 @@ namespace Laan.Risk.GUI.Server
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter1.Location = new System.Drawing.Point(0, 349);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(584, 3);
+            this.splitter1.Size = new System.Drawing.Size(690, 3);
             this.splitter1.TabIndex = 20;
             this.splitter1.TabStop = false;
             // 
@@ -144,7 +144,7 @@ namespace Laan.Risk.GUI.Server
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 40);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(584, 309);
+            this.panel1.Size = new System.Drawing.Size(690, 309);
             this.panel1.TabIndex = 21;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -165,7 +165,7 @@ namespace Laan.Risk.GUI.Server
             this.grdDisplay.LineColor = System.Drawing.SystemColors.ScrollBar;
             this.grdDisplay.Location = new System.Drawing.Point(330, 0);
             this.grdDisplay.Name = "grdDisplay";
-            this.grdDisplay.Size = new System.Drawing.Size(254, 309);
+            this.grdDisplay.Size = new System.Drawing.Size(360, 309);
             this.grdDisplay.TabIndex = 30;
             this.grdDisplay.ToolbarVisible = false;
             // 
@@ -185,7 +185,7 @@ namespace Laan.Risk.GUI.Server
             // frmServer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(584, 662);
+            this.ClientSize = new System.Drawing.Size(690, 662);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.edDebug);

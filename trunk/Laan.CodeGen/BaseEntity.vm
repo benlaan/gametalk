@@ -60,7 +60,7 @@ namespace $entity.Namespace
             {
                 base.Serialise(writer);
 #foreach ($property in $entity.Properties.NonInherited)
-#if(!$property.List)
+#if($helper.IsPrimitive($property.Name))
                 writer.Write${property.Type}(this.${property.Name});
 #end
 #end
@@ -97,6 +97,7 @@ namespace $entity.Namespace
                 return ${helper.ToCamelCase($entity.Name)}.CommServer;
             }
 #foreach ($property in $entity.Properties.NonInherited)
+#if (!$property.ServerProtectedOnly)
 #beforeall
 
 #each
@@ -115,6 +116,7 @@ namespace $entity.Namespace
 #between
 
 #end
+#end
         }
     }
 
@@ -123,7 +125,7 @@ namespace $entity.Namespace
 
 #set ($width = $helper.MaxWidthName($entity))
 #foreach ($req in $entity.Requirements)
-        using $helper.GetTermEntity($req.Namespace)s = ${req.Namespace}.Server;
+        using $helper.GetTermEntity($req.Namespace)s = ${req.Namespace}.Client;
 #end
     
         public partial class ${entity.Name}List : ClientEntityList<$entity.Name> { }
@@ -145,7 +147,7 @@ namespace $entity.Namespace
                 base.Deserialise(reader);
 
 #foreach ($property in $entity.Properties)
-#if(!$property.Inherited && !$property.List)
+#if(!$property.Inherited && $helper.IsPrimitive($property.Name))
                 _${helper.ToCamelCase($property.Name)} = reader.Read${property.Type}();
 #end
 #end
@@ -186,6 +188,7 @@ namespace $entity.Namespace
 #end
             }
 #foreach ($property in $entity.Properties.NonInherited)
+#if (!$property.ClientProtectedOnly)
 #beforeall
 
 #each
@@ -196,6 +199,7 @@ namespace $entity.Namespace
             }
 #between
 
+#end
 #end
         }
     }

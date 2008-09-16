@@ -10,12 +10,12 @@ namespace Laan.Risk.Border
 {
     class Fields
     {
-        internal const int FromRegion      = 2;
-        internal const int ToRegion        = 3;
-        internal const int ConnectionTypes = 4;
-        internal const int Economy         = 5;
-        internal const int Oil             = 6;
-        internal const int Arms            = 7;
+        internal const int FromRegion  = 2;
+        internal const int ToRegion    = 3;
+        internal const int Connections = 4;
+        internal const int Economy     = 5;
+        internal const int Oil         = 6;
+        internal const int Arms        = 7;
     }
     
     namespace Server
@@ -28,32 +28,25 @@ namespace Laan.Risk.Border
         {
             // --------------- Private -------------------------------------------------
 
-            internal Int32                              _fromRegionID;
-            internal Int32                              _toRegionID;
-            internal Int32                              _connectionTypesID;
+            internal Int32          _fromRegionID;
+            internal Int32          _toRegionID;
 
-            internal Regions.Region                     _fromRegion;
-            internal Regions.Region                     _toRegion;
-            internal ConnectionTypes.ConnectionTypeList _connectionTypes;
-            internal Int32                              _economy;
-            internal Int32                              _oil;
-            internal Int32                              _arms;
+            internal Regions.Region _fromRegion;
+            internal Regions.Region _toRegion;
+            internal Connection[]   _connections;
+            internal Int32          _economy;
+            internal Int32          _oil;
+            internal Int32          _arms;
 
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
-                writer.WriteRegion(this.FromRegion);
-                writer.WriteRegion(this.ToRegion);
-                writer.WriteInt32(this.Economy);
-                writer.WriteInt32(this.Oil);
-                writer.WriteInt32(this.Arms);
             }
 
             protected override List<EntityProperty> GetEntityProperties()
             {
                 return new List<EntityProperty>()
                 {
-                    new EntityProperty() { Entity = _connectionTypes, Field = Fields.ConnectionTypes },
                 };
             }
         
@@ -63,7 +56,6 @@ namespace Laan.Risk.Border
             {
                 FromRegion = new Region.Server.Region();
                 ToRegion = new Region.Server.Region();
-                ConnectionTypes = new ConnectionType.Server.ConnectionTypeList();
 
                 Initialise();
             }
@@ -85,6 +77,7 @@ namespace Laan.Risk.Border
                 }
             }
 
+
             public Regions.Region ToRegion
             {
                 get { return _toRegion; }
@@ -96,16 +89,15 @@ namespace Laan.Risk.Border
                 }
             }
 
-            public ConnectionTypes.ConnectionTypeList ConnectionTypes
-            {
-                get { return _connectionTypes; }
-                set {
-                    _connectionTypes = value;
-                    _connectionTypesID = value.ID;
+            //public Connection[] Connections
+            //{
+            //    get { return _connections; }
+            //    set {
+            //        _connections = value;
 
-                    CommServer.Modify(this.ID, Fields.ConnectionTypes, _connectionTypesID);
-                }
-            }
+            //        CommServer.Modify(this.ID, Fields.Connections, value);
+            //    }
+            //}
 
             public Int32 Economy
             {
@@ -117,6 +109,7 @@ namespace Laan.Risk.Border
                 }
             }
 
+
             public Int32 Oil
             {
                 get { return _oil; }
@@ -127,6 +120,7 @@ namespace Laan.Risk.Border
                 }
             }
 
+
             public Int32 Arms
             {
                 get { return _arms; }
@@ -136,13 +130,14 @@ namespace Laan.Risk.Border
                     CommServer.Modify(this.ID, Fields.Arms, value);
                 }
             }
+
         }
     }
 
     namespace Client
     {
 
-        using Regions = Laan.Risk.Region.Server;
+        using Regions = Laan.Risk.Region.Client;
     
         public partial class BorderList : ClientEntityList<Border> { }
 
@@ -151,22 +146,17 @@ namespace Laan.Risk.Border
 
             // ------------ Private ---------------------------------------------------------
 
-            internal Regions.Region                     _fromRegion;
-            internal Regions.Region                     _toRegion;
-            internal ConnectionTypes.ConnectionTypeList _connectionTypes;
-            internal Int32                              _economy;
-            internal Int32                              _oil;
-            internal Int32                              _arms;
+            internal Regions.Region _fromRegion;
+            internal Regions.Region _toRegion;
+            //internal Connection[]   _connections;
+            internal Int32          _economy;
+            internal Int32          _oil;
+            internal Int32          _arms;
 
             public override void Deserialise(BinaryStreamReader reader)
             {
                 base.Deserialise(reader);
 
-                _fromRegion = reader.ReadRegion();
-                _toRegion = reader.ReadRegion();
-                _economy = reader.ReadInt32();
-                _oil = reader.ReadInt32();
-                _arms = reader.ReadInt32();
             }
 
             // ------------ Public ----------------------------------------------------------
@@ -194,8 +184,8 @@ namespace Laan.Risk.Border
                         ToRegion = (Regions.Region)(ClientDataStore.Instance.Find(reader.ReadInt32()));
                         break;
                         
-                    case Fields.ConnectionTypes:
-                        ConnectionTypes = (ConnectionTypes.ConnectionTypeList)(ClientDataStore.Instance.Find(reader.ReadInt32()));
+                    case Fields.Connections:
+//                        Connections = reader.ReadConnection[]();
                         break;
                         
                     case Fields.Economy:
@@ -221,17 +211,20 @@ namespace Laan.Risk.Border
                 set { _fromRegion = value; }
             }
 
+
             public Regions.Region ToRegion
             {
                 get { return _toRegion; }
                 set { _toRegion = value; }
             }
 
-            public ConnectionTypes.ConnectionTypeList ConnectionTypes
-            {
-                get { return _connectionTypes; }
-                set { _connectionTypes = value; }
-            }
+
+            //public Connection[] Connections
+            //{
+            //    get { return _connections; }
+            //    set { _connections = value; }
+            //}
+
 
             public Int32 Economy
             {
@@ -239,17 +232,20 @@ namespace Laan.Risk.Border
                 set { _economy = value; }
             }
 
+
             public Int32 Oil
             {
                 get { return _oil; }
                 set { _oil = value; }
             }
 
+
             public Int32 Arms
             {
                 get { return _arms; }
                 set { _arms = value; }
             }
+
         }
     }
 }

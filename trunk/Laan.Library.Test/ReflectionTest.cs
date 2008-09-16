@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Laan.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -93,8 +94,8 @@ namespace Laan.Library.Test
             IList<T> expected = new List<T>();
             expected.Add(new T());
 
-            IList<T> actual = Reflection.FindByAssembly<T>(cASSEMBLY_PATH);
-            CompareListsContainSameTypes<T>(expected, actual);
+            IEnumerable<T> actual = Reflection.FindByAssembly<T>(cASSEMBLY_PATH);
+            CompareListsContainSameTypes<T>(expected.ToList<T>(), actual.ToList<T>());
         }
 
         /// <summary>

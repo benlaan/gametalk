@@ -108,7 +108,11 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\CodeGen\Laan.Risk.Entities.csproj">
+    <ProjectReference Include="..\..\Laan.Library\Laan.Library.csproj">
+      <Project>{D9915423-744A-4A9A-A97D-58BF2B29ABE1}</Project>
+      <Name>Laan.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Risk.Entities\Laan.Risk.Entities.csproj">
       <Project>{45BE5C59-6D16-4190-A3DC-B83394CF2FBA}</Project>
       <Name>Laan.Risk.Entities</Name>
     </ProjectReference>

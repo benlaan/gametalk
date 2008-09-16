@@ -10,7 +10,6 @@ namespace Laan.Risk.Game
 {
     class Fields
     {
-        internal const int Name    = 1;
         internal const int Started = 2;
         internal const int Players = 3;
         internal const int Regions = 4;
@@ -33,17 +32,14 @@ namespace Laan.Risk.Game
             internal Int32              _regionsID;
             internal Int32              _bordersID;
 
-            internal String             _name;
             internal Boolean            _started;
             internal Players.PlayerList _players;
             internal Regions.RegionList _regions;
             internal Borders.BorderList _borders;
 
             public override void Serialise(BinaryStreamWriter writer)
-            {
+            { 
                 base.Serialise(writer);
-                writer.WriteString(this.Name);
-                writer.WriteBoolean(this.Started);
             }
 
             protected override List<EntityProperty> GetEntityProperties()
@@ -71,26 +67,6 @@ namespace Laan.Risk.Game
             {
                 // allows the class to be cast to an Entity.Server class
                 return game.CommServer;
-            }
-
-            public String Name
-            {
-                get { return _name; }
-                set {
-                    _name = value;
-
-                    CommServer.Modify(this.ID, Fields.Name, value);
-                }
-            }
-
-            public Boolean Started
-            {
-                get { return _started; }
-                set {
-                    _started = value;
-
-                    CommServer.Modify(this.ID, Fields.Started, value);
-                }
             }
 
             public Players.PlayerList Players
@@ -125,15 +101,16 @@ namespace Laan.Risk.Game
                     CommServer.Modify(this.ID, Fields.Borders, _bordersID);
                 }
             }
+
         }
     }
 
     namespace Client
     {
 
-        using Players = Laan.Risk.Player.Server;
-        using Regions = Laan.Risk.Region.Server;
-        using Borders = Laan.Risk.Border.Server;
+        using Players = Laan.Risk.Player.Client;
+        using Regions = Laan.Risk.Region.Client;
+        using Borders = Laan.Risk.Border.Client;
     
         public partial class GameList : ClientEntityList<Game> { }
 
@@ -142,7 +119,6 @@ namespace Laan.Risk.Game
 
             // ------------ Private ---------------------------------------------------------
 
-            internal String             _name;
             internal Boolean            _started;
             internal Players.PlayerList _players;
             internal Regions.RegionList _regions;
@@ -152,8 +128,6 @@ namespace Laan.Risk.Game
             {
                 base.Deserialise(reader);
 
-                _name = reader.ReadString();
-                _started = reader.ReadBoolean();
             }
 
             // ------------ Public ----------------------------------------------------------
@@ -173,10 +147,6 @@ namespace Laan.Risk.Game
                 // update the appropriate field
                 switch (field)
                 {
-                    case Fields.Name:
-                        Name = reader.ReadString();
-                        break;
-                        
                     case Fields.Started:
                         Started = reader.ReadBoolean();
                         break;
@@ -198,23 +168,12 @@ namespace Laan.Risk.Game
                 }
             }
 
-            public String Name
-            {
-                get { return _name; }
-                set { _name = value; }
-            }
-
-            public Boolean Started
-            {
-                get { return _started; }
-                set { _started = value; }
-            }
-
             public Players.PlayerList Players
             {
                 get { return _players; }
                 set { _players = value; }
             }
+
 
             public Regions.RegionList Regions
             {
@@ -222,11 +181,13 @@ namespace Laan.Risk.Game
                 set { _regions = value; }
             }
 
+
             public Borders.BorderList Borders
             {
                 get { return _borders; }
                 set { _borders = value; }
             }
+
         }
     }
 }
