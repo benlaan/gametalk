@@ -8,17 +8,16 @@ using Laan.GameLibrary.Entity;
 
 namespace Laan.Risk.Unit.Armour
 {
+
     namespace Server
     {
-        public partial class ArmourList { }
-
         public partial class Armour
         {
 
             // --------------- Protected --------------------------------------------
 
             protected override byte[] ProcessCommand(BinaryStreamReader reader)
-            { 
+            {
                 return null;
             }
             
@@ -33,8 +32,6 @@ namespace Laan.Risk.Unit.Armour
 
     namespace Client
     {
-        public partial class ArmourList { }
-
         public partial class Armour
         {
             // --------------- Public -----------------------------------------------

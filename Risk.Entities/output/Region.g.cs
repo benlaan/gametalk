@@ -41,10 +41,6 @@ namespace Laan.Risk.Region
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
-                writer.WriteInt32(this.Economy);
-                writer.WriteInt32(this.EconomicWeight);
-                writer.WriteInt32(this.Oil);
-                writer.WriteInt32(this.Arms);
             }
 
             protected override List<EntityProperty> GetEntityProperties()
@@ -82,6 +78,7 @@ namespace Laan.Risk.Region
                 }
             }
 
+
             public Int32 EconomicWeight
             {
                 get { return _economicWeight; }
@@ -91,6 +88,7 @@ namespace Laan.Risk.Region
                     CommServer.Modify(this.ID, Fields.EconomicWeight, value);
                 }
             }
+
 
             public Int32 Oil
             {
@@ -102,6 +100,7 @@ namespace Laan.Risk.Region
                 }
             }
 
+
             public Int32 Arms
             {
                 get { return _arms; }
@@ -111,6 +110,7 @@ namespace Laan.Risk.Region
                     CommServer.Modify(this.ID, Fields.Arms, value);
                 }
             }
+
 
             public Units.UnitList Defenders
             {
@@ -123,6 +123,7 @@ namespace Laan.Risk.Region
                 }
             }
 
+
             public Units.UnitList Attackers
             {
                 get { return _attackers; }
@@ -133,13 +134,14 @@ namespace Laan.Risk.Region
                     CommServer.Modify(this.ID, Fields.Attackers, _attackersID);
                 }
             }
+
         }
     }
 
     namespace Client
     {
 
-        using Units = Laan.Risk.Unit.Server;
+        using Units = Laan.Risk.Unit.Client;
     
         public partial class RegionList : ClientEntityList<Region> { }
 
@@ -159,10 +161,6 @@ namespace Laan.Risk.Region
             {
                 base.Deserialise(reader);
 
-                _economy = reader.ReadInt32();
-                _economicWeight = reader.ReadInt32();
-                _oil = reader.ReadInt32();
-                _arms = reader.ReadInt32();
             }
 
             // ------------ Public ----------------------------------------------------------
@@ -217,11 +215,13 @@ namespace Laan.Risk.Region
                 set { _economy = value; }
             }
 
+
             public Int32 EconomicWeight
             {
                 get { return _economicWeight; }
                 set { _economicWeight = value; }
             }
+
 
             public Int32 Oil
             {
@@ -229,11 +229,13 @@ namespace Laan.Risk.Region
                 set { _oil = value; }
             }
 
+
             public Int32 Arms
             {
                 get { return _arms; }
                 set { _arms = value; }
             }
+
 
             public Units.UnitList Defenders
             {
@@ -241,11 +243,13 @@ namespace Laan.Risk.Region
                 set { _defenders = value; }
             }
 
+
             public Units.UnitList Attackers
             {
                 get { return _attackers; }
                 set { _attackers = value; }
             }
+
         }
     }
 }

@@ -30,6 +30,7 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.gbCodeGen = new System.Windows.Forms.GroupBox();
+            this.cbRebuildEntities = new System.Windows.Forms.CheckBox();
             this.edOuputPath = new System.Windows.Forms.TextBox();
             this.edMapFile = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -38,7 +39,6 @@
             this.edOutput = new System.Windows.Forms.TextBox();
             this.dlgBrowseFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.dlgMapFile = new System.Windows.Forms.OpenFileDialog();
-            this.cbRebuildEntities = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.gbCodeGen.SuspendLayout();
             this.SuspendLayout();
@@ -69,13 +69,24 @@
             this.gbCodeGen.TabStop = false;
             this.gbCodeGen.Text = " Parameters ";
             // 
+            // cbRebuildEntities
+            // 
+            this.cbRebuildEntities.AutoSize = true;
+            this.cbRebuildEntities.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbRebuildEntities.Location = new System.Drawing.Point(9, 78);
+            this.cbRebuildEntities.Name = "cbRebuildEntities";
+            this.cbRebuildEntities.Size = new System.Drawing.Size(99, 17);
+            this.cbRebuildEntities.TabIndex = 9;
+            this.cbRebuildEntities.Text = "Rebuild Entities";
+            this.cbRebuildEntities.UseVisualStyleBackColor = true;
+            // 
             // edOuputPath
             // 
             this.edOuputPath.Location = new System.Drawing.Point(94, 52);
             this.edOuputPath.Name = "edOuputPath";
             this.edOuputPath.Size = new System.Drawing.Size(488, 20);
             this.edOuputPath.TabIndex = 8;
-            this.edOuputPath.Text = ".\\..\\..\\..\\CodeGen\\output";
+            this.edOuputPath.Text = ".\\..\\..\\..\\Risk.Entities\\output";
             this.edOuputPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.edOuputPath_MouseDoubleClick);
             // 
             // edMapFile
@@ -132,17 +143,6 @@
             // dlgMapFile
             // 
             this.dlgMapFile.FileName = "openFileDialog1";
-            // 
-            // cbRebuildEntities
-            // 
-            this.cbRebuildEntities.AutoSize = true;
-            this.cbRebuildEntities.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbRebuildEntities.Location = new System.Drawing.Point(9, 78);
-            this.cbRebuildEntities.Name = "cbRebuildEntities";
-            this.cbRebuildEntities.Size = new System.Drawing.Size(99, 17);
-            this.cbRebuildEntities.TabIndex = 9;
-            this.cbRebuildEntities.Text = "Rebuild Entities";
-            this.cbRebuildEntities.UseVisualStyleBackColor = true;
             // 
             // FormCodeGen
             // 

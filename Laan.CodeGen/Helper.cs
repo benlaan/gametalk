@@ -116,6 +116,9 @@ namespace Laan.Risk.Entities.CodeGen
 
         public bool IsPrimitive(string typeName)
         {
+            if (typeName.Contains("[]"))
+                return true;
+
             switch (typeName)
             {
                 case "Int32":

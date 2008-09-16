@@ -42,10 +42,6 @@ namespace Laan.Risk.Nation
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
-                writer.WriteString(this.ShortName);
-                writer.WriteString(this.Leader);
-                writer.WriteInt32(this.Prestige);
-                writer.WriteInt32(this.Technology);
             }
 
             protected override List<EntityProperty> GetEntityProperties()
@@ -83,6 +79,7 @@ namespace Laan.Risk.Nation
                 }
             }
 
+
             public String Leader
             {
                 get { return _leader; }
@@ -92,6 +89,7 @@ namespace Laan.Risk.Nation
                     CommServer.Modify(this.ID, Fields.Leader, value);
                 }
             }
+
 
             public Int32 Prestige
             {
@@ -103,6 +101,7 @@ namespace Laan.Risk.Nation
                 }
             }
 
+
             public Int32 Technology
             {
                 get { return _technology; }
@@ -112,6 +111,7 @@ namespace Laan.Risk.Nation
                     CommServer.Modify(this.ID, Fields.Technology, value);
                 }
             }
+
 
             public Regions.RegionList OwnedRegions
             {
@@ -124,6 +124,7 @@ namespace Laan.Risk.Nation
                 }
             }
 
+
             public Units.UnitList OwnedUnits
             {
                 get { return _ownedUnits; }
@@ -134,14 +135,15 @@ namespace Laan.Risk.Nation
                     CommServer.Modify(this.ID, Fields.OwnedUnits, _ownedUnitsID);
                 }
             }
+
         }
     }
 
     namespace Client
     {
 
-        using Regions = Laan.Risk.Region.Server;
-        using Units = Laan.Risk.Unit.Server;
+        using Regions = Laan.Risk.Region.Client;
+        using Units = Laan.Risk.Unit.Client;
     
         public partial class NationList : ClientEntityList<Nation> { }
 
@@ -161,10 +163,6 @@ namespace Laan.Risk.Nation
             {
                 base.Deserialise(reader);
 
-                _shortName = reader.ReadString();
-                _leader = reader.ReadString();
-                _prestige = reader.ReadInt32();
-                _technology = reader.ReadInt32();
             }
 
             // ------------ Public ----------------------------------------------------------
@@ -219,11 +217,13 @@ namespace Laan.Risk.Nation
                 set { _shortName = value; }
             }
 
+
             public String Leader
             {
                 get { return _leader; }
                 set { _leader = value; }
             }
+
 
             public Int32 Prestige
             {
@@ -231,11 +231,13 @@ namespace Laan.Risk.Nation
                 set { _prestige = value; }
             }
 
+
             public Int32 Technology
             {
                 get { return _technology; }
                 set { _technology = value; }
             }
+
 
             public Regions.RegionList OwnedRegions
             {
@@ -243,11 +245,13 @@ namespace Laan.Risk.Nation
                 set { _ownedRegions = value; }
             }
 
+
             public Units.UnitList OwnedUnits
             {
                 get { return _ownedUnits; }
                 set { _ownedUnits = value; }
             }
+
         }
     }
 }

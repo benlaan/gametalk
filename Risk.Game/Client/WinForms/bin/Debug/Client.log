@@ -1,0 +1,49 @@
+2008-06-18 18:48:15,688 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : Client Socket: Connected to HSL-PC056:50001
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : WriteInt32: 0
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : WriteString: Caesar Praetorium
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : WriteString: HSL-PC056
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : WriteInt32: 6660
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : Client: Sending Message: Laan.GameLibrary.GameClient: 256: 0-0-0-0-17-67-97-101-115-97-114-32-80-114-97-101-116-111-114-105-117-109-9-72-83-76-45-80-67-48-53-54-4-26-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0)
+2008-06-18 18:48:18,110 DEBUG RiskClient.exe : Client: Message Sent
+2008-06-18 18:48:18,110 INFO  RiskClient.exe : MessageSent(Login)
+2008-06-18 18:48:18,626 INFO  RiskClient.exe : GameSocket: Receiving Message
+2008-06-18 18:48:18,642 DEBUG RiskClient.exe : GameSocket: Message Received: 33: 0-26-76-97-97-110-46-82-105-115-107-46-71-97-109-101-46-83-101-114-118-101-114-46-71-97-109-101-16-39-0-0-0
+2008-06-18 18:48:18,642 DEBUG RiskClient.exe : ProcessMessage: 33: 0-26-76-97-97-110-46-82-105-115-107-46-71-97-109-101-46-83-101-114-118-101-114-46-71-97-109-101-16-39-0-0-0
+2008-06-18 18:48:18,642 DEBUG RiskClient.exe : ReadByte: 0
+2008-06-18 18:48:18,642 DEBUG RiskClient.exe : ReadString: Laan.Risk.Game.Server.Game
+2008-06-18 18:48:18,642 DEBUG RiskClient.exe : ClientDataStore.ProcessInsert: Laan.Risk.Game.Client.Game
+2008-06-18 18:48:19,985 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:25,470 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:25,470 INFO  RiskClient.exe : OnRootEntityEvent()
+2008-06-18 18:48:25,470 INFO  RiskClient.exe : OnNewEntityEvent()
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : ReadInt32: 10000
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : ReadString: 
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : Created BaseEntity 10000:
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : WriteInt32: 10000
+2008-06-18 18:48:25,470 INFO  RiskClient.exe : GameSocket: Receiving Message
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : GameSocket: Message Received: 41: 0-34-76-97-97-110-46-82-105-115-107-46-80-108-97-121-101-114-46-83-101-114-118-101-114-46-80-108-97-121-101-114-76-105-115-116-17-39-0-0-0
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : ProcessMessage: 41: 0-34-76-97-97-110-46-82-105-115-107-46-80-108-97-121-101-114-46-83-101-114-118-101-114-46-80-108-97-121-101-114-76-105-115-116-17-39-0-0-0
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : ReadByte: 0
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : ReadString: Laan.Risk.Player.Server.PlayerList
+2008-06-18 18:48:25,470 DEBUG RiskClient.exe : ClientDataStore.ProcessInsert: Laan.Risk.Player.Client.PlayerList
+2008-06-18 18:48:30,861 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:34,267 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:34,798 INFO  RiskClient.exe : OnNewEntityEvent()
+2008-06-18 18:48:36,955 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:39,814 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:39,814 DEBUG RiskClient.exe : ReadInt32: 10001
+2008-06-18 18:48:40,236 DEBUG RiskClient.exe : ReadString: 
+2008-06-18 18:48:43,080 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:43,080 DEBUG RiskClient.exe : Created BaseEntity 10001:
+2008-06-18 18:48:48,923 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:48:50,533 DEBUG RiskClient.exe : WriteInt32: 10001
+2008-06-18 18:48:51,736 INFO  RiskClient.exe : Broadcasting..
+2008-06-18 18:49:03,893 INFO  RiskClient.exe : GameSocket: Receiving Message
+2008-06-18 18:49:03,893 DEBUG RiskClient.exe : GameSocket: Message Received: 10: 1-16-39-0-0-3-17-39-0-0
+2008-06-18 18:49:12,627 DEBUG RiskClient.exe : ProcessMessage: 10: 1-16-39-0-0-3-17-39-0-0
+2008-06-18 18:49:12,627 DEBUG RiskClient.exe : ReadByte: 1
+2008-06-18 18:49:15,393 INFO  RiskClient.exe : ClientDataStore.ProcessModify
+2008-06-18 18:49:16,049 DEBUG RiskClient.exe : ReadInt32: 10000
+2008-06-18 18:49:24,237 INFO  RiskClient.exe : Client.Modify()
+2008-06-18 18:49:24,737 DEBUG RiskClient.exe : ReadByte: 3

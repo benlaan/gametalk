@@ -477,7 +477,7 @@ namespace Laan.Risk.GUI.Client
             XmlConfigurator.Configure();
         }
 
-        private System.ComponentModel.IContainer components;
+        //private System.ComponentModel.IContainer components;
 
         protected ILog Log = log4net.LogManager.GetLogger(Assembly.GetEntryAssembly().ManifestModule.Name);
         
@@ -604,8 +604,8 @@ namespace Laan.Risk.GUI.Client
 
 		protected override void Dispose(bool disposing)
 		{
-            if (disposing && components != null)
-                components.Dispose();
+            //if (disposing && components != null)
+            //    components.Dispose();
 			base.Dispose(disposing);
 		}
 

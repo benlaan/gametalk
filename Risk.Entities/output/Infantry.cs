@@ -8,17 +8,16 @@ using Laan.GameLibrary.Entity;
 
 namespace Laan.Risk.Unit.Infantry
 {
+
     namespace Server
     {
-        public partial class InfantryList { }
-
         public partial class Infantry
         {
 
             // --------------- Protected --------------------------------------------
 
             protected override byte[] ProcessCommand(BinaryStreamReader reader)
-            { 
+            {
                 return null;
             }
             
@@ -33,8 +32,6 @@ namespace Laan.Risk.Unit.Infantry
 
     namespace Client
     {
-        public partial class InfantryList { }
-
         public partial class Infantry
         {
             // --------------- Public -----------------------------------------------

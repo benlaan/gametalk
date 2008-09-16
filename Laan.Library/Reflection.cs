@@ -9,21 +9,17 @@ namespace Laan.Utilities
 {
     public class Reflection
     {
+        private const string cDLL = "*.DLL";
         public static IList<T> FindByAssembly<T>(string path)
         {
             List<T> result = new List<T>();
 
-            foreach (string file in Directory.GetFiles(path, "*.DLL"))
+            foreach (string file in Directory.GetFiles(path, cDLL))
             {
                 Assembly assembly = Assembly.LoadFile(file);
-                foreach (Type instance in assembly.GetTypes())
-                {
-                    foreach (Type item in instance.GetInterfaces())
-                    {
-                        if (item == typeof(T))
-                            result.Add((T)Activator.CreateInstance(instance));
-                    }
-                }
+                foreach (Type type in assembly.GetTypes())
+                    if (type.GetInterface(typeof(T).FullName) != null)
+                        result.Add((T)Activator.CreateInstance(type));
             }
             return result;
         }
@@ -31,11 +27,10 @@ namespace Laan.Utilities
         public static IList<T> FindByAssemblyByLing<T>(string path) where T : class
         {
             var items =
-                from assembly in Directory.GetFiles(path, "*.DLL")
-                from instance in Assembly.LoadFile(assembly).GetTypes()
-                from item in instance.GetInterfaces()
-                where item == typeof(T)
-                select (T)Activator.CreateInstance(instance);
+                from assembly in Directory.GetFiles(path, cDLL)
+                from type in Assembly.LoadFile(assembly).GetTypes()
+                where type.GetInterface(typeof(T).FullName) != null
+                select (T)Activator.CreateInstance(type);
 
             return items.ToList<T>();
         }

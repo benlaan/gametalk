@@ -8,8 +8,8 @@
                 <requirement namespace="Laan.Risk.Border"/>
             </requirements>
             <properties>
-                <property name="Name" type="String" iinherited="true"/>
-                <property name="Started" type="Boolean" inherited="false" serverProtectedOnly="true" ClientProtectedOnly="true"/>
+                <property name="Name" type="String" inherited="true"/>
+                <property name="Started" type="Boolean" inherited="false" serverProtectedOnly="false" ClientProtectedOnly="true"/>
                 <property name="Players" type="PlayerList" list="true"/>
                 <property name="Regions" type="RegionList" list="true"/>
                 <property name="Borders" type="BorderList" list="true"/>
@@ -67,7 +67,7 @@
                 <property name="Name" type="String" inherited="true"/>
                 <property name="FromRegion" type="Region"/>
                 <property name="ToRegion" type="Region"/>
-                <!--<property name="Connections" type="ConnectionTypeList" list="true"/>-->
+                <property name="Connections" type="Connection[]"/>
                 <property name="Economy" type="Int32"/>
                 <property name="Oil" type="Int32"/>
                 <property name="Arms" type="Int32"/>

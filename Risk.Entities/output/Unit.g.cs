@@ -32,9 +32,6 @@ namespace Laan.Risk.Unit
             public override void Serialise(BinaryStreamWriter writer)
             {
                 base.Serialise(writer);
-                writer.WriteInt32(this.Size);
-                writer.WriteInt32(this.Experience);
-                writer.WriteInt32(this.Location);
             }
 
             protected override List<EntityProperty> GetEntityProperties()
@@ -68,6 +65,7 @@ namespace Laan.Risk.Unit
                 }
             }
 
+
             public Int32 Experience
             {
                 get { return _experience; }
@@ -78,6 +76,7 @@ namespace Laan.Risk.Unit
                 }
             }
 
+
             public Int32 Location
             {
                 get { return _location; }
@@ -87,6 +86,7 @@ namespace Laan.Risk.Unit
                     CommServer.Modify(this.ID, Fields.Location, value);
                 }
             }
+
         }
     }
 
@@ -109,9 +109,6 @@ namespace Laan.Risk.Unit
             {
                 base.Deserialise(reader);
 
-                _size = reader.ReadInt32();
-                _experience = reader.ReadInt32();
-                _location = reader.ReadInt32();
             }
 
             // ------------ Public ----------------------------------------------------------
@@ -154,17 +151,20 @@ namespace Laan.Risk.Unit
                 set { _size = value; }
             }
 
+
             public Int32 Experience
             {
                 get { return _experience; }
                 set { _experience = value; }
             }
 
+
             public Int32 Location
             {
                 get { return _location; }
                 set { _location = value; }
             }
+
         }
     }
 }
