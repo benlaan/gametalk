@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5988d22b-b67c-49a6-a939-d1af08d90744" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8731/Design_Time_Addresses/Laan.ObjectSync.Server/MessageServer/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="ef2195ee-6b63-47dd-bb2b-17eb3dee7620" SourceId="1" SourceUrl="http://localhost:8731/Design_Time_Addresses/Laan.ObjectSync.Server/MessageServer/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="cf855c3b-bb6b-4213-9261-d3ac56a1b6aa" SourceId="1" SourceUrl="http://localhost:8731/Design_Time_Addresses/Laan.ObjectSync.Server/MessageServer/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="08842d50-821b-47d5-a1ea-c957510b582c" SourceId="1" SourceUrl="http://localhost:8731/Design_Time_Addresses/Laan.ObjectSync.Server/MessageServer/mex" />
+    <MetadataFile FileName="Laan.ObjectSync.xsd" MetadataType="Schema" ID="ca7c8e3b-c75e-4ce0-ba50-e511511d236b" SourceId="1" SourceUrl="http://localhost:8731/Design_Time_Addresses/Laan.ObjectSync.Server/MessageServer/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="10b6ba40-4d38-4888-9925-8fe4495f1ecc" SourceId="1" SourceUrl="http://localhost:8731/Design_Time_Addresses/Laan.ObjectSync.Server/MessageServer/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
